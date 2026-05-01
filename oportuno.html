@@ -1,3 +1,4 @@
+reemplázalo:
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -100,7 +101,7 @@
 
         /* ====== BOTONES ====== */
         .btn { padding: 8px 14px; font-size: 0.85rem; font-weight: 600; border: none; border-radius: 6px; cursor: pointer; transition: all 0.2s; display: inline-flex; align-items: center; justify-content: center; gap: 6px; }
-        .btn-sm { padding: 6px 10px; font-size: 0.75rem; }
+        .btn-sm { padding: 6px 10px; font-size: 0.8rem; }
         .btn-primary { background-color: var(--primary-color); color: #FFF; width: 100%; padding: 14px; font-size: 1rem;}
         .btn-primary:hover { opacity: 0.9; }
         .btn-secondary { background-color: var(--surface-color); color: var(--text-main); border: 1px solid var(--border-color); }
@@ -122,8 +123,9 @@
         
         /* ====== MODALES ====== */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 9999; display: none; justify-content: center; align-items: center; backdrop-filter: blur(5px); }
-        .modal-content { background: var(--surface-color); width: 90%; max-width: 600px; border-radius: 12px; padding: 30px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); max-height: 90vh; overflow-y: auto; position: relative;}
-        .close-modal { position: absolute; top: 15px; right: 15px; background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--text-muted);}
+        .modal-content { background: var(--surface-color); width: 90%; max-width: 650px; border-radius: 12px; padding: 30px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); max-height: 90vh; overflow-y: auto; position: relative;}
+        .close-modal { position: absolute; top: 15px; right: 15px; background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--text-muted); transition: color 0.2s;}
+        .close-modal:hover { color: var(--danger-color); }
 
         /* ====== DISEÑO "REPROFESIONAL" PANEL BIENVENIDA ====== */
         .welcome-panel { background-color: var(--primary-color); color: #FFF; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 50px 40px; text-align: center; border-radius: 12px; box-shadow: inset 0 0 30px rgba(0,0,0,0.15); box-sizing: border-box; min-height: calc(100vh - var(--navbar-height) - 40px); }
@@ -159,7 +161,13 @@
         .directory-table tr:last-child td { border-bottom: none; }
         .directory-table tr:hover { background-color: var(--highlight-bg); }
         .directory-table .badge { margin-top: 0; }
-        .table-actions { display: flex; gap: 5px; }
+        .table-actions { display: flex; gap: 8px; flex-wrap: nowrap;}
+
+        /* Detalles Modal Grid */
+        .modal-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; font-size: 0.95rem; margin-top: 15px;}
+        .modal-grid > div { background: var(--bg-color); padding: 12px; border-radius: 8px; border: 1px solid var(--border-color);}
+        .modal-grid .full-width { grid-column: 1 / -1; }
+        .modal-grid .highlight { background: var(--success-bg); color: var(--success-color); border-color: var(--success-color); font-weight: bold; text-align: center; font-size: 1.1rem;}
 
     </style>
 </head>
@@ -335,12 +343,14 @@
         </div>
     </div>
 
-    <!-- MODAL DE OBSERVACIONES -->
-    <div class="modal-overlay" id="modalObs">
+    <!-- MODAL DE DETALLES COMPLETOS DEL CASO -->
+    <div class="modal-overlay" id="modalDetalle">
         <div class="modal-content">
-            <button class="close-modal" onclick="document.getElementById('modalObs').style.display='none'">✖</button>
-            <h3 style="color: var(--primary-color); margin-top:0;">📝 Observaciones del Caso</h3>
-            <p id="modalObsTexto" style="line-height: 1.6; white-space: pre-wrap; color: var(--text-main); font-size: 0.95rem;"></p>
+            <button class="close-modal" title="Cerrar ventana" onclick="document.getElementById('modalDetalle').style.display='none'">✖</button>
+            <h3 style="color: var(--primary-color); margin-top:0; border-bottom: 2px solid var(--border-color); padding-bottom: 10px;">🗂️ Detalles del Caso Guardado</h3>
+            <div id="modalDetalleContenido">
+                <!-- Se inyecta la cuadrícula por JS -->
+            </div>
         </div>
     </div>
 
@@ -392,9 +402,33 @@
             }
         }
 
-        function abrirModalObs(texto) {
-            document.getElementById("modalObsTexto").innerText = texto || "Sin observaciones.";
-            document.getElementById("modalObs").style.display = "flex";
+        // NUEVA FUNCIÓN: ABRIR MODAL CON TODOS LOS DETALLES
+        function abrirModalDetalle(caso) {
+            const fechaFormat = caso.fechaCreacion ? new Date(caso.fechaCreacion).toLocaleDateString() : "Sin fecha";
+            const sexoStr = caso.sexo === 'M' ? 'Masculino' : (caso.sexo === 'F' ? 'Femenino' : 'N/A');
+            
+            const htmlDetalle = `
+                <div class="modal-grid">
+                    <div><strong>👤 Nombre:</strong><br>${caso.nombre || 'Anónimo'}</div>
+                    <div><strong>📌 Referencia:</strong><br>${caso.referencia || 'N/A'}</div>
+                    <div><strong>📅 Fecha de Guardado:</strong><br>${fechaFormat}</div>
+                    <div><strong>🚻 Sexo:</strong><br>${sexoStr}</div>
+                    <div><strong>🎂 Edad Traslado:</strong><br>${caso.edadTraslado || 0} años</div>
+                    <div><strong>⏳ Semanas Traslado:</strong><br>${caso.semanasTraslado || 0} sem.</div>
+                    <div><strong>🏦 Mesada RPM:</strong><br>${formatter.format(caso.mesadaRPM || 0)}</div>
+                    <div><strong>📉 Mesada RAIS:</strong><br>${formatter.format(caso.mesadaRAIS || 0)}</div>
+                    <div class="full-width highlight">
+                        💰 Indemnización Total Calculada: <br>${formatter.format(caso.indemnizacionTotal || 0)}
+                    </div>
+                    <div class="full-width">
+                        <strong>📝 Observaciones / Notas:</strong><br>
+                        <span style="color: var(--text-muted); white-space: pre-wrap;">${caso.observaciones || 'Sin anotaciones registradas.'}</span>
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById("modalDetalleContenido").innerHTML = htmlDetalle;
+            document.getElementById("modalDetalle").style.display = "flex";
         }
 
         /* ========================================================
@@ -585,7 +619,7 @@
             }
 
             if (vistaActual === "list") {
-                // VISTA TABLA DIRECTORIO (Sin repetir campos a los lados)
+                // VISTA TABLA DIRECTORIO
                 let tableHTML = `
                 <table class="directory-table">
                     <thead>
@@ -604,8 +638,8 @@
 
                 filtrados.forEach(caso => {
                     const fechaFormat = caso.fechaCreacion ? new Date(caso.fechaCreacion).toLocaleDateString() : "N/A";
+                    // Se pasa todo el objeto caso para la nueva ventana modal
                     const dataStr = JSON.stringify(caso).replace(/'/g, "&apos;");
-                    const obsStr = JSON.stringify(caso.observaciones || "").replace(/'/g, "&apos;");
 
                     tableHTML += `
                         <tr>
@@ -617,8 +651,8 @@
                             <td><span class="badge">${formatter.format(caso.indemnizacionTotal || 0)}</span></td>
                             <td>
                                 <div class="table-actions">
-                                    <button class="btn btn-primary btn-sm" onclick='cargarJSONalFormulario(${dataStr})' title="Cargar">📥</button>
-                                    <button class="btn btn-secondary btn-sm" onclick='abrirModalObs(${obsStr})' title="Ver Notas">👁️</button>
+                                    <button class="btn btn-primary btn-sm" onclick='cargarJSONalFormulario(${dataStr})' title="Cargar este caso">📂 Cargar</button>
+                                    <button class="btn btn-secondary btn-sm" onclick='abrirModalDetalle(${dataStr})' title="Ver detalles del caso">👁️ Ver</button>
                                 </div>
                             </td>
                         </tr>
@@ -629,11 +663,11 @@
                 contenedor.innerHTML = tableHTML;
 
             } else {
-                // VISTA CUADRÍCULA (Tarjetas normales)
+                // VISTA CUADRÍCULA (Tarjetas)
                 filtrados.forEach((caso) => {
                     const fechaFormat = caso.fechaCreacion ? new Date(caso.fechaCreacion).toLocaleDateString() : "Sin fecha";
                     const dataStr = JSON.stringify(caso).replace(/'/g, "&apos;");
-                    const obsStr = JSON.stringify(caso.observaciones || "").replace(/'/g, "&apos;");
+                    
                     const card = document.createElement("div");
                     card.className = "case-card";
                     card.innerHTML = `
@@ -644,8 +678,8 @@
                             <div class="badge">${formatter.format(caso.indemnizacionTotal || 0)}</div>
                         </div>
                         <div class="case-actions">
-                            <button class="btn btn-primary btn-sm" style="flex:1;" onclick='cargarJSONalFormulario(${dataStr})'>📥 Cargar</button>
-                            <button class="btn btn-secondary btn-sm" style="flex:1;" onclick='abrirModalObs(${obsStr})'>👁️ Notas</button>
+                            <button class="btn btn-primary btn-sm" style="flex:1;" onclick='cargarJSONalFormulario(${dataStr})'>📂 Cargar</button>
+                            <button class="btn btn-secondary btn-sm" style="flex:1;" onclick='abrirModalDetalle(${dataStr})'>👁️ Ver Ficha</button>
                         </div>
                     `;
                     contenedor.appendChild(card);
@@ -670,6 +704,9 @@
             document.getElementById("resultadoWrapper").style.display = "none";
             document.getElementById("welcomePanel").style.display = "flex";
             document.getElementById("sidebar").classList.remove("collapsed");
+            
+            // Si el modal de detalle estaba abierto, lo cerramos
+            document.getElementById("modalDetalle").style.display = "none";
             
             alert(`✅ Datos de ${data.nombre} cargados en el formulario.\nHaz clic en "Generar Dictamen" para recalcular la indemnización.`);
         }
