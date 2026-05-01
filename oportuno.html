@@ -1,3 +1,4 @@
+oportuno.html:
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -227,7 +228,7 @@
                 
                 <button class="btn btn-secondary" onclick="toggleTheme()">🌗 Tema</button>
                 
-                <!-- NUEVO BOTÓN: CERRAR SESIÓN -->
+                <!-- BOTÓN CERRAR SESIÓN MODIFICADO -->
                 <button class="btn btn-danger" onclick="cerrarSesion()">🚪 Cerrar Sesión</button>
             </div>
         </div>
@@ -547,12 +548,16 @@
     <!-- SCRIPT DE BASE DE DATOS Y LOGICA -->
     <script>
         
-        // FUNCIÓN PARA CERRAR SESIÓN
+        // FUNCIÓN PARA CERRAR SESIÓN MODIFICADA
         function cerrarSesion() {
             if(confirm("¿Estás seguro de que deseas cerrar la sesión?")) {
-                // Aquí podrías agregar limpieza de variables o localStorage si se requiere
-                alert("Sesión cerrada correctamente.");
-                window.location.reload(); // Recarga la página
+                // Limpiar variables de estado para mayor seguridad
+                window.indemnizacionActual = null;
+                window.fechaCreacionOriginal = null;
+                listaCasosGlobal = [];
+                
+                // Redirigir y terminar al menú index.html
+                window.location.href = "index.html";
             }
         }
 
