@@ -137,14 +137,33 @@
         .stat-box h4 { margin: 0; font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase;}
         .stat-box .number { font-size: 1.8rem; font-weight: 700; color: var(--primary-color); margin-top: 5px;}
         
-        .search-bar { width: 100%; padding: 12px 16px; font-size: 1rem; border: 1px solid var(--primary-color); border-radius: 8px; margin-bottom: 10px; background: var(--surface-color); color: var(--text-main);}
+        .dashboard-controls { display: flex; gap: 10px; align-items: center; margin-bottom: 10px; flex-wrap: wrap;}
+        .search-bar { flex: 1; padding: 12px 16px; font-size: 1rem; border: 1px solid var(--primary-color); border-radius: 8px; background: var(--surface-color); color: var(--text-main); min-width: 250px;}
         
-        .case-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 15px; }
-        .case-card { background: var(--surface-color); border: 1px solid var(--border-color); border-radius: 8px; padding: 16px; box-shadow: 0 2px 4px rgba(0,0,0,0.02); display: flex; flex-direction: column; justify-content: space-between;}
+        /* ESTILOS DE VISTAS (CUADRÍCULA Y LISTA) */
+        .case-card { background: var(--surface-color); border: 1px solid var(--border-color); border-radius: 8px; padding: 16px; box-shadow: 0 2px 4px rgba(0,0,0,0.02); display: flex; flex-direction: column; justify-content: space-between; transition: all 0.2s;}
         .case-card h3 { margin: 0 0 5px 0; color: var(--primary-color); font-size: 1.1rem;}
         .case-card p { margin: 3px 0; font-size: 0.85rem; color: var(--text-muted); }
         .case-card .badge { display: inline-block; background: var(--success-bg); color: var(--success-color); padding: 3px 8px; border-radius: 12px; font-size: 0.75rem; font-weight: 600; margin-top: 8px;}
         .case-actions { margin-top: 15px; display: flex; gap: 8px; }
+
+        /* VISTA CUADRÍCULA (GRID) */
+        .case-list.grid-view { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 15px; }
+
+        /* VISTA LISTA (LIST) */
+        .case-list.list-view { display: flex; flex-direction: column; gap: 10px; }
+        .case-list.list-view .case-card { flex-direction: row; align-items: center; justify-content: space-between; padding: 12px 20px;}
+        .case-list.list-view .case-card > div:first-child { display: flex; flex: 1; align-items: center; gap: 20px; flex-wrap: wrap;}
+        .case-list.list-view .case-card h3 { min-width: 200px; margin: 0;}
+        .case-list.list-view .case-card p { margin: 0; }
+        .case-list.list-view .case-card .badge { margin-top: 0; }
+        .case-list.list-view .case-actions { margin-top: 0; margin-left: 15px;}
+
+        /* Responsividad para la vista lista en pantallas pequeñas */
+        @media (max-width: 900px) {
+            .case-list.list-view .case-card { flex-direction: column; align-items: flex-start; }
+            .case-list.list-view .case-actions { margin-top: 15px; margin-left: 0; width: 100%; justify-content: flex-start;}
+        }
     </style>
 </head>
 <body>
@@ -306,9 +325,12 @@
                     <!-- Estadísticas inyectadas por JS -->
                 </div>
 
-                <input type="text" id="buscadorCasos" class="search-bar" placeholder="🔍 Buscar por nombre, referencia, observaciones, mesada..." onkeyup="renderizarDirectorio()">
+                <div class="dashboard-controls">
+                    <input type="text" id="buscadorCasos" class="search-bar" placeholder="🔍 Buscar por nombre, referencia, observaciones, mesada..." onkeyup="renderizarDirectorio()">
+                    <button class="btn btn-secondary" onclick="cambiarVistaDashboard()" id="btnVista">📄 Vista Lista</button>
+                </div>
 
-                <div class="case-list" id="contenedorCasos">
+                <div class="case-list grid-view" id="contenedorCasos">
                     <!-- Tarjetas inyectadas por JS -->
                 </div>
             </div>
@@ -325,14 +347,23 @@
         </div>
     </div>
 
-    <!-- SCRIPT DE BASE DE DATOS (IndexedDB) Y LOGICA -->
+    <!-- SCRIPT DE BASE DE DATOS Y LOGICA -->
     <script>
         /* ========================================================
-           1. LOGICA DE NAVEGACION
+           1. LOGICA DE NAVEGACION Y VISTAS
            ======================================================== */
+        let vistaActual = "grid"; // 'grid' o 'list'
+
         function toggleSidebar() { document.getElementById("sidebar").classList.toggle("collapsed"); }
         function cerrarSesion() { sessionStorage.removeItem("acceso_oportuno"); window.location.replace("index.html"); }
         function toggleTheme() { document.body.setAttribute("data-theme", document.body.getAttribute("data-theme") === "dark" ? "light" : "dark"); }
+
+        function cambiarVistaDashboard() {
+            vistaActual = vistaActual === "grid" ? "list" : "grid";
+            const btn = document.getElementById("btnVista");
+            btn.innerHTML = vistaActual === "grid" ? "📄 Vista Lista" : "🔲 Vista Cuadrícula";
+            renderizarDirectorio(); 
+        }
 
         function mostrarDashboard() {
             document.getElementById("welcomePanel").style.display = "none";
@@ -370,13 +401,12 @@
         }
 
         /* ========================================================
-           2. SISTEMA DE ARCHIVOS LOCAL (File System Access API + IndexedDB)
+           2. SISTEMA DE ARCHIVOS LOCAL (File System Access API)
            ======================================================== */
         let directorioHandle = null;
         let listaCasosGlobal = [];
-        window.indemnizacionActual = null; // Guarda el valor calculado temporalmente
+        window.indemnizacionActual = null; 
 
-        // Promesa envoltorio para IndexedDB (Guardar el permiso de la carpeta)
         const idb = {
             db: null,
             init: function() {
@@ -403,7 +433,6 @@
             }
         };
 
-        // Inicializar DB al cargar
         window.onload = async () => {
             await idb.init();
             directorioHandle = await idb.get("carpetaTrabajo");
@@ -437,9 +466,8 @@
             return true;
         }
 
-        /* GUARDAR JSON */
+        /* GUARDAR JSON (CON VENTANA PARA CAMBIAR NOMBRE O REEMPLAZAR) */
         async function guardarDictamen() {
-            // Validar que se haya liquidado antes para tener la indemnización
             const nombre = document.getElementById("nombre").value.trim() || "SinNombre";
             if (!window.indemnizacionActual) {
                 alert("⚠️ Por favor, genera el dictamen primero para poder guardar el valor de la indemnización.");
@@ -448,30 +476,58 @@
 
             if (!(await verificarPermisoDirectorio())) return;
 
-            const data = {
-                fechaCreacion: new Date().toISOString(),
-                nombre: document.getElementById("nombre").value,
-                referencia: document.getElementById("referencia").value,
-                sexo: document.getElementById("sexo").value,
-                edadTraslado: document.getElementById("edadTraslado").value,
-                semanasTraslado: document.getElementById("semanasTraslado").value,
-                mesadaRPM: document.getElementById("mesadaRPM").value,
-                mesadaRAIS: document.getElementById("mesadaRAIS").value,
-                edadNomina: document.getElementById("edadNomina").value,
-                observaciones: document.getElementById("observaciones").value,
-                indemnizacionTotal: window.indemnizacionActual
-            };
+            const safeName = nombre.replace(/[^a-z0-9]/gi, '_').toLowerCase();
+            let nombreSugerido = `Oportuno_${safeName}.json`;
+
+            // Prompt nativo para emular un "Guardar Como" dentro de la carpeta elegida
+            let nombreFinal = prompt("💾 Guardar Caso\n\nPuedes modificar el nombre del archivo. Si usas un nombre existente, el sistema lo reemplazará:", nombreSugerido);
+            
+            if (!nombreFinal) return; // El usuario canceló
+            
+            if (!nombreFinal.toLowerCase().endsWith('.json')) {
+                nombreFinal += '.json';
+            }
 
             try {
-                const safeName = nombre.replace(/[^a-z0-9]/gi, '_').toLowerCase();
-                const fileHandle = await directorioHandle.getFileHandle(`Oportuno_${safeName}_${Date.now()}.json`, { create: true });
+                let fileHandle;
+                
+                // Intentamos obtener el archivo. Si existe, pedimos confirmación de sobreescritura
+                try {
+                    fileHandle = await directorioHandle.getFileHandle(nombreFinal);
+                    if (!confirm(`⚠️ El archivo "${nombreFinal}" ya existe en tu carpeta.\n¿Deseas sobreescribirlo y reemplazar el caso anterior?`)) {
+                        return; 
+                    }
+                } catch (e) {
+                    // Si tira error, significa que no existe, así que lo creamos
+                    fileHandle = await directorioHandle.getFileHandle(nombreFinal, { create: true });
+                }
+
+                const data = {
+                    fechaCreacion: new Date().toISOString(),
+                    nombre: document.getElementById("nombre").value,
+                    referencia: document.getElementById("referencia").value,
+                    sexo: document.getElementById("sexo").value,
+                    edadTraslado: document.getElementById("edadTraslado").value,
+                    semanasTraslado: document.getElementById("semanasTraslado").value,
+                    mesadaRPM: document.getElementById("mesadaRPM").value,
+                    mesadaRAIS: document.getElementById("mesadaRAIS").value,
+                    edadNomina: document.getElementById("edadNomina").value,
+                    observaciones: document.getElementById("observaciones").value,
+                    indemnizacionTotal: window.indemnizacionActual
+                };
+
                 const writable = await fileHandle.createWritable();
                 await writable.write(JSON.stringify(data, null, 2));
                 await writable.close();
-                alert(`✅ Caso guardado exitosamente en tu carpeta de trabajo.`);
+                alert(`✅ Caso guardado exitosamente como:\n"${nombreFinal}"`);
+
+                if(document.getElementById("dashboardPanel").style.display === "flex") {
+                    cargarCasosDesdeDirectorio();
+                }
+
             } catch (err) {
                 console.error(err);
-                alert("❌ Error al guardar el archivo.");
+                alert("❌ Error al guardar el archivo en la carpeta.");
             }
         }
 
@@ -489,11 +545,10 @@
                             const json = JSON.parse(text);
                             json.archivoOriginal = entry.name;
                             listaCasosGlobal.push(json);
-                        } catch(e) { console.log("Archivo ignorado (no es un JSON válido de Oportuno):", entry.name); }
+                        } catch(e) { console.log("Archivo ignorado:", entry.name); }
                     }
                 }
                 
-                // Ordenar del más reciente al más antiguo
                 listaCasosGlobal.sort((a,b) => new Date(b.fechaCreacion) - new Date(a.fechaCreacion));
                 generarEstadisticas();
                 renderizarDirectorio();
@@ -506,8 +561,6 @@
         function generarEstadisticas() {
             const panel = document.getElementById("estadisticasPanel");
             const total = listaCasosGlobal.length;
-            
-            // Agrupar por mes actual
             const mesActual = new Date().getMonth();
             const añoActual = new Date().getFullYear();
             const casosMes = listaCasosGlobal.filter(c => {
@@ -516,7 +569,6 @@
                 return d.getMonth() === mesActual && d.getFullYear() === añoActual;
             }).length;
 
-            // Calcular suma total de indemnizaciones
             const sumatoria = listaCasosGlobal.reduce((acc, val) => acc + (parseFloat(val.indemnizacionTotal) || 0), 0);
 
             panel.innerHTML = `
@@ -528,6 +580,8 @@
 
         function renderizarDirectorio() {
             const contenedor = document.getElementById("contenedorCasos");
+            contenedor.className = "case-list " + vistaActual + "-view"; // Aplica la vista actual
+            
             const filtro = document.getElementById("buscadorCasos").value.toLowerCase();
             contenedor.innerHTML = "";
 
@@ -561,7 +615,6 @@
             });
         }
 
-        // Carga los datos al formulario pero NO incluye la indemnización (se debe recalcular)
         function cargarJSONalFormulario(data) {
             document.getElementById("nombre").value = data.nombre || ''; 
             document.getElementById("referencia").value = data.referencia || ''; 
@@ -573,7 +626,7 @@
             document.getElementById("edadNomina").value = data.edadNomina || '';
             document.getElementById("observaciones").value = data.observaciones || '';
             
-            window.indemnizacionActual = null; // Borrar la temporal
+            window.indemnizacionActual = null; 
 
             document.getElementById("dashboardPanel").style.display = "none";
             document.getElementById("resultadoWrapper").style.display = "none";
@@ -619,7 +672,6 @@
             const bolsaTotal = diferenciaMensual * pagosFuturos;
             const indemnizacionTotal = bolsaTotal * (PP_porcentaje / 100);
 
-            // Guardar globalmente para poder exportarlo en el JSON
             window.indemnizacionActual = indemnizacionTotal;
 
             document.getElementById("resNombre").innerText = nombre;
@@ -647,7 +699,7 @@ PRETENSIONES: Que se condene a la AFP a pagar un único desembolso global y defi
         }
 
         /* ========================================================
-           4. FUNCIONES DE EXPORTACIÓN (Con Oportuno_Nombre)
+           4. FUNCIONES DE EXPORTACIÓN
            ======================================================== */
         function obtenerNombreArchivo() {
             let nom = document.getElementById("nombre").value.trim().replace(/[^a-z0-9]/gi, '_');
