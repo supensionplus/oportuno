@@ -1,4 +1,4 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -21,6 +21,7 @@
             --success-color: #059669;
             --success-bg: #D1FAE5;
             --danger-color: #EF4444;
+            --danger-bg: #FEE2E2;
             --navbar-height: 70px;
         }
 
@@ -36,6 +37,7 @@
             --success-color: #34D399;
             --success-bg: #064E3B;
             --danger-color: #F87171;
+            --danger-bg: #7F1D1D;
         }
 
         body {
@@ -98,6 +100,8 @@
         .btn-secondary:hover { border-color: var(--primary-color); background-color: var(--highlight-bg); }
         .btn-danger { background-color: var(--danger-color); color: #FFF; border: none; border-radius: 6px;}
         .btn-danger:hover { opacity: 0.9; }
+        .btn-success { background-color: var(--success-color); color: white; width: 100%; padding: 12px; font-size: 1rem; margin-bottom: 15px; border-radius: 8px; border: none; font-weight: bold; cursor: pointer; box-shadow: 0 4px 6px rgba(5, 150, 105, 0.2); transition: all 0.2s;}
+        .btn-success:hover { background-color: #047857; transform: translateY(-2px);}
         
         .btn-help { background-color: var(--accent-color); color: white; border: none; border-radius: 50%; width: 18px; height: 18px; font-size: 0.7rem; font-weight: bold; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; margin-left: 8px; padding: 0; box-shadow: 0 2px 4px rgba(0,0,0,0.1); transition: transform 0.2s;}
         .btn-help:hover { transform: scale(1.1); background-color: var(--primary-color); }
@@ -118,6 +122,7 @@
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 9999; display: none; justify-content: center; align-items: center; backdrop-filter: blur(5px); }
         .modal-content { background: var(--surface-color); width: 90%; max-width: 650px; border-radius: 12px; padding: 30px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); max-height: 90vh; overflow-y: auto; position: relative;}
         .modal-content.small-modal { max-width: 450px; padding: 25px;}
+        .modal-content.large-modal { max-width: 800px; padding: 35px;}
         .close-modal { position: absolute; top: 15px; right: 15px; background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--text-muted); transition: color 0.2s;}
         .close-modal:hover { color: var(--danger-color); }
 
@@ -125,6 +130,24 @@
         .validacion-item { margin-bottom: 12px; padding: 12px; background: var(--bg-color); border-left: 4px solid var(--danger-color); border-radius: 4px;}
         .validacion-item strong { color: var(--danger-color); display: block; margin-bottom: 5px; font-size: 1rem;}
         .validacion-item span { display: block; font-size: 0.85rem; color: var(--text-muted); line-height: 1.4; }
+
+        /* ====== KIT DE LITIGIO CHECKLIST ====== */
+        .checklist-group { margin-bottom: 25px; }
+        .checklist-group h4 { color: var(--primary-color); border-bottom: 2px solid var(--border-color); padding-bottom: 8px; margin-bottom: 15px; font-size: 1.1rem; }
+        .check-item { display: flex; justify-content: space-between; align-items: flex-start; gap: 15px; margin-bottom: 15px; padding: 15px; background: var(--bg-color); border-radius: 8px; border: 1px solid var(--border-color); transition: border-color 0.3s;}
+        .check-item:hover { border-color: var(--primary-color); }
+        .check-text { flex: 1; }
+        .check-text strong { display: block; color: var(--text-main); font-size: 0.95rem; margin-bottom: 4px;}
+        .check-text p { margin: 0; font-size: 0.85rem; color: var(--text-muted); line-height: 1.4;}
+        .check-options { display: flex; gap: 10px; align-items: center; }
+        .check-options label { font-size: 0.9rem; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 4px; padding: 6px 12px; border-radius: 6px; border: 1px solid var(--border-color); background: var(--surface-color); transition: all 0.2s;}
+        .check-options input[type="radio"] { cursor: pointer; }
+        
+        /* Radios personalizados */
+        .radio-green:has(input:checked) { background: var(--success-bg); border-color: var(--success-color); color: var(--success-color); }
+        .radio-red:has(input:checked) { background: var(--danger-bg); border-color: var(--danger-color); color: var(--danger-color); }
+
+        .diagnostico-alerta { display: none; padding: 15px; margin-top: 20px; border-radius: 8px; font-weight: 600; font-size: 0.95rem; line-height: 1.5; border-left: 5px solid;}
 
         /* ====== DISEÑO PANEL BIENVENIDA ====== */
         .welcome-panel { background-color: var(--primary-color); color: #FFF; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 50px 40px; text-align: center; border-radius: 12px; box-shadow: inset 0 0 30px rgba(0,0,0,0.15); box-sizing: border-box; min-height: calc(100vh - var(--navbar-height) - 40px); }
@@ -196,7 +219,12 @@
         <!-- PANEL IZQUIERDO -->
         <div class="sidebar-panel" id="sidebar">
 
-            <!-- BOTÓN DE VALIDACIÓN MANUAL SIEMPRE VISIBLE AL INICIO -->
+            <!-- NUEVO BOTÓN: KIT DE LITIGIO / DIAGNÓSTICO -->
+            <button type="button" class="btn-success" onclick="abrirKitLitigio()">
+                🩺 Kit de Litigio (Diagnóstico CSJ)
+            </button>
+
+            <!-- BOTÓN DE VALIDACIÓN MANUAL -->
             <button type="button" class="btn-danger" style="width: 100%; margin-top: 0; margin-bottom: 15px; padding: 10px;" onclick="mostrarValidacionInicio()">
                 ⚖️ Ver Reglas de Validación (CSJ 2026)
             </button>
@@ -364,14 +392,16 @@
         </div>
     </div>
 
+    <!-- ==========================================
+         MODALES SECUNDARIOS
+         ========================================== -->
+
     <!-- MODAL DE DETALLES COMPLETOS DEL CASO -->
     <div class="modal-overlay" id="modalDetalle">
         <div class="modal-content">
             <button class="close-modal" title="Cerrar ventana" onclick="document.getElementById('modalDetalle').style.display='none'">✖</button>
             <h3 style="color: var(--primary-color); margin-top:0; border-bottom: 2px solid var(--border-color); padding-bottom: 10px;">🗂️ Detalles del Caso Guardado</h3>
-            <div id="modalDetalleContenido">
-                <!-- Se inyecta la cuadrícula por JS -->
-            </div>
+            <div id="modalDetalleContenido"></div>
         </div>
     </div>
 
@@ -385,7 +415,7 @@
         </div>
     </div>
 
-    <!-- MODAL DE VALIDACIÓN JUDICIAL (RECUPERADO Y AL INICIO) -->
+    <!-- MODAL DE VALIDACIÓN JUDICIAL (AL INICIO) -->
     <div class="modal-overlay" id="modalValidacion">
         <div class="modal-content" style="border-top: 5px solid var(--danger-color); max-width: 550px;">
             <button class="close-modal" title="Cerrar" onclick="document.getElementById('modalValidacion').style.display='none'">✖</button>
@@ -396,10 +426,110 @@
         </div>
     </div>
 
+    <!-- MODAL: KIT DE LITIGIO 2.0 (CHECKLIST) -->
+    <div class="modal-overlay" id="modalKitLitigio">
+        <div class="modal-content large-modal" style="border-top: 5px solid var(--success-color);">
+            <button class="close-modal" title="Cerrar" onclick="document.getElementById('modalKitLitigio').style.display='none'">✖</button>
+            
+            <h2 style="color: var(--primary-color); margin-top:0; display:flex; align-items:center; gap:10px;">
+                🩺 Kit de Litigio Previsional 2.0
+            </h2>
+            <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 25px;">
+                Responde este breve Checklist de Diagnóstico para evaluar la viabilidad de la demanda de Pérdida de Oportunidad basado en las sentencias de la Corte Suprema (2026).
+            </p>
+
+            <form id="formChecklist" onchange="evaluarChecklist()">
+                
+                <!-- SECCIÓN 1: DIAGNÓSTICO BÁSICO -->
+                <div class="checklist-group">
+                    <h4>📋 Diagnóstico Básico</h4>
+                    
+                    <div class="check-item">
+                        <div class="check-text">
+                            <strong>1. Estatus Pensional</strong>
+                            <p>¿Tu cliente ya adquirió el estatus de pensionado en el fondo privado y ya fue incluido en nómina (está cobrando)?</p>
+                        </div>
+                        <div class="check-options">
+                            <label class="radio-green"><input type="radio" name="chk_estatus" value="SI"> SÍ</label>
+                            <label class="radio-red"><input type="radio" name="chk_estatus" value="NO"> NO</label>
+                        </div>
+                    </div>
+
+                    <div class="check-item">
+                        <div class="check-text">
+                            <strong>2. Prescripción</strong>
+                            <p>¿Han pasado MENOS de 3 años desde el momento exacto en que tu cliente empezó a percibir (inclusión en nómina) su primera mesada?</p>
+                        </div>
+                        <div class="check-options">
+                            <label class="radio-green"><input type="radio" name="chk_prescripcion" value="SI"> SÍ</label>
+                            <label class="radio-red"><input type="radio" name="chk_prescripcion" value="NO"> NO</label>
+                        </div>
+                    </div>
+
+                    <div class="check-item">
+                        <div class="check-text">
+                            <strong>3. Deber de Información</strong>
+                            <p>Al trasladarse, ¿tu cliente firmó sin recibir una proyección clara y comparativa de su futura pensión en ambos regímenes?</p>
+                        </div>
+                        <div class="check-options">
+                            <label class="radio-green"><input type="radio" name="chk_informacion" value="SI"> SÍ</label>
+                            <label class="radio-red"><input type="radio" name="chk_informacion" value="NO"> NO</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SECCIÓN 2: LÍNEAS ROJAS -->
+                <div class="checklist-group" style="margin-bottom: 10px;">
+                    <h4 style="color: var(--danger-color); border-color: var(--danger-color);">🚨 LÍNEAS ROJAS (Trampas de la AFP para no pagar)</h4>
+                    <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 15px;">La Corte Suprema definió estos puntos como "Eximentes de Responsabilidad" (Hecho Exclusivo de la Víctima).</p>
+
+                    <div class="check-item">
+                        <div class="check-text">
+                            <strong>4. Pensión Mínima Maliciosa</strong>
+                            <p>¿Aceptó la garantía de pensión mínima sabiendo claramente que NO le alcanzaban las 1300 semanas en Colpensiones? (Si tenía 1300 sem, marca NO).</p>
+                        </div>
+                        <div class="check-options">
+                            <label class="radio-red"><input type="radio" name="chk_minima" value="SI"> SÍ</label>
+                            <label class="radio-green"><input type="radio" name="chk_minima" value="NO"> NO</label>
+                        </div>
+                    </div>
+
+                    <div class="check-item">
+                        <div class="check-text">
+                            <strong>5. Retiro de Excedentes</strong>
+                            <p>¿Tu cliente solicitó y se gastó los excedentes de libre disponibilidad de su cuenta de ahorro individual?</p>
+                        </div>
+                        <div class="check-options">
+                            <label class="radio-red"><input type="radio" name="chk_excedentes" value="SI"> SÍ</label>
+                            <label class="radio-green"><input type="radio" name="chk_excedentes" value="NO"> NO</label>
+                        </div>
+                    </div>
+
+                    <div class="check-item">
+                        <div class="check-text">
+                            <strong>6. Pensión Anticipada</strong>
+                            <p>¿Tu cliente se pensionó ANTES de la edad de ley (57/62) negociando anticipadamente su bono pensional?</p>
+                        </div>
+                        <div class="check-options">
+                            <label class="radio-red"><input type="radio" name="chk_anticipada" value="SI"> SÍ</label>
+                            <label class="radio-green"><input type="radio" name="chk_anticipada" value="NO"> NO</label>
+                        </div>
+                    </div>
+                </div>
+
+            </form>
+
+            <div id="alertaDiagnostico" class="diagnostico-alerta"></div>
+            
+            <button class="btn btn-secondary" style="width: 100%; margin-top: 10px;" onclick="document.getElementById('modalKitLitigio').style.display='none'">Cerrar Diagnóstico</button>
+        </div>
+    </div>
+
+
     <!-- SCRIPT DE BASE DE DATOS Y LOGICA -->
     <script>
         /* ========================================================
-           1. LOGICA DE NAVEGACION, VISTAS Y AYUDAS
+           1. LOGICA DE NAVEGACION Y AYUDAS
            ======================================================== */
         let vistaActual = "grid";
 
@@ -412,7 +542,7 @@
             document.getElementById("modalAyuda").style.display = "flex";
         }
 
-        /* 🟢 LA VENTANA DE VALIDACIÓN SOLICITADA AL INICIO 🟢 */
+        /* 🟢 LA VENTANA DE VALIDACIÓN AL INICIO 🟢 */
         function mostrarValidacionInicio() {
             let htmlValidacion = `
                 <div class="validacion-item">
@@ -424,6 +554,67 @@
             document.getElementById("modalValidacionTitulo").innerText = "⚠️ Reglas de Validación (CSJ)";
             document.getElementById("modalValidacion").style.display = "flex";
         }
+
+        /* ========================================================
+           NOVEDAD: KIT DE LITIGIO 2.0 (CHECKLIST)
+           ======================================================== */
+        function abrirKitLitigio() {
+            document.getElementById('formChecklist').reset();
+            document.getElementById('alertaDiagnostico').style.display = 'none';
+            document.getElementById('modalKitLitigio').style.display = 'flex';
+        }
+
+        function evaluarChecklist() {
+            const form = document.getElementById('formChecklist');
+            const estatus = form.chk_estatus.value;
+            const prescripcion = form.chk_prescripcion.value;
+            const informacion = form.chk_informacion.value;
+            const minima = form.chk_minima.value;
+            const excedentes = form.chk_excedentes.value;
+            const anticipada = form.chk_anticipada.value;
+
+            const alerta = document.getElementById('alertaDiagnostico');
+            alerta.style.display = 'block';
+
+            // Evaluar Bloqueantes Básicos
+            if (estatus === "NO") {
+                alerta.style.backgroundColor = "var(--danger-bg)";
+                alerta.style.borderColor = "var(--danger-color)";
+                alerta.style.color = "var(--danger-color)";
+                alerta.innerHTML = "🛑 <b>ALERTA: VÍA DE INEFICACIA.</b><br>Como tu cliente NO está pensionado aún, la vía judicial idónea no es la indemnización, sino demandar la <b>Ineficacia del Traslado</b> para buscar su retorno a Colpensiones.";
+                return;
+            }
+
+            if (prescripcion === "NO") {
+                alerta.style.backgroundColor = "var(--danger-bg)";
+                alerta.style.borderColor = "var(--danger-color)";
+                alerta.style.color = "var(--danger-color)";
+                alerta.innerHTML = "🛑 <b>ALERTA: PRESCRIPCIÓN.</b><br>La Corte estableció que el término para demandar es de 3 años contados desde que el pensionado empezó a percibir su primera mesada en nómina. El derecho de tu cliente estaría prescrito.";
+                return;
+            }
+
+            // Evaluar Líneas Rojas (Eximentes)
+            if (minima === "SI" || excedentes === "SI" || anticipada === "SI") {
+                alerta.style.backgroundColor = "var(--danger-bg)";
+                alerta.style.borderColor = "var(--danger-color)";
+                alerta.style.color = "var(--danger-color)";
+                alerta.innerHTML = "🚨 <b>PELIGRO: EXIMENTE DE RESPONSABILIDAD (Hecho Exclusivo de la Víctima).</b><br>La Corte Suprema (Ej: SL168-2026, SL169-2026) determinó que si el pensionado aceptó pensión mínima maliciosa, retiró excedentes o se pensionó anticipadamente negociando su bono, se configura un aprovechamiento intencional del RAIS. <b>La AFP no estará obligada a indemnizar. El caso tiene altísimo riesgo de pérdida.</b>";
+                return;
+            }
+
+            // Si todo está OK
+            if (estatus === "SI" && prescripcion === "SI" && informacion === "SI" && minima === "NO" && excedentes === "NO" && anticipada === "NO") {
+                alerta.style.backgroundColor = "var(--success-bg)";
+                alerta.style.borderColor = "var(--success-color)";
+                alerta.style.color = "var(--success-color)";
+                alerta.innerHTML = "✅ <b>CASO VIABLE PARA INDEMNIZACIÓN.</b><br>Tu cliente cumple con todos los requisitos jurisprudenciales de la CSJ (2026). No cae en eximentes de responsabilidad y la carga de probar que SÍ se dio la información recaerá sobre la AFP (Negación Indefinida). <b>¡Puedes proceder con el cálculo del Liquidador!</b>";
+                return;
+            }
+            
+            // Estado intermedio (llenando)
+            alerta.style.display = 'none';
+        }
+
 
         function cambiarVistaDashboard() {
             vistaActual = vistaActual === "grid" ? "list" : "grid";
@@ -463,36 +654,6 @@
                 document.getElementById("sidebar").classList.add("collapsed");
                 document.getElementById("dashboardPanel").style.display = "none";
             }
-        }
-
-        function abrirModalDetalle(caso) {
-            const fechaGuardadoFormat = caso.fechaCreacion ? new Date(caso.fechaCreacion).toLocaleDateString() : "Sin fecha";
-            const sexoStr = caso.sexo === 'M' ? 'Masculino' : (caso.sexo === 'F' ? 'Femenino' : 'N/A');
-            
-            const htmlDetalle = `
-                <div class="modal-grid">
-                    <div><strong>👤 Nombre:</strong><br>${caso.nombre || 'Anónimo'}</div>
-                    <div><strong>📌 Referencia:</strong><br>${caso.referencia || 'N/A'}</div>
-                    <div><strong>📅 Fecha de Guardado:</strong><br>${fechaGuardadoFormat}</div>
-                    <div><strong>🚻 Sexo:</strong><br>${sexoStr}</div>
-                    <div><strong>🎂 Nacimiento:</strong><br>${caso.fechaNacimiento || 'N/A'}</div>
-                    <div><strong>⏳ Semanas Traslado:</strong><br>${caso.semanasTraslado || 0} sem.</div>
-                    <div><strong>🗓️ F. Traslado (E):</strong><br>${caso.fechaTraslado || 'N/A'} (${caso.edadTraslado || 0} años)</div>
-                    <div><strong>📅 F. Nómina (F.E.P):</strong><br>${caso.fechaNomina || 'N/A'} (${caso.edadNomina || 0} años)</div>
-                    <div><strong>🏦 Mesada RPM:</strong><br>${formatter.format(caso.mesadaRPM || 0)}</div>
-                    <div><strong>📉 Mesada RAIS:</strong><br>${formatter.format(caso.mesadaRAIS || 0)}</div>
-                    <div class="full-width highlight">
-                        💰 Indemnización Total Calculada: <br>${formatter.format(caso.indemnizacionTotal || 0)}
-                    </div>
-                    <div class="full-width">
-                        <strong>📝 Observaciones / Notas:</strong><br>
-                        <span style="color: var(--text-muted); white-space: pre-wrap;">${caso.observaciones || 'Sin anotaciones registradas.'}</span>
-                    </div>
-                </div>
-            `;
-            
-            document.getElementById("modalDetalleContenido").innerHTML = htmlDetalle;
-            document.getElementById("modalDetalle").style.display = "flex";
         }
 
         /* ========================================================
@@ -561,9 +722,9 @@
                 await idb.init();
                 directorioHandle = await idb.get("carpetaTrabajo");
             } catch(e) {
-                console.warn("IndexedDB sin acceso local, pero continuará.", e);
+                console.warn("IndexedDB sin acceso local.", e);
             }
-            // 🟢 SE MUESTRA LA VENTANA DE VALIDACIÓN AL INICIO 🟢
+            // 🟢 VENTANA DE VALIDACIÓN AL INICIO (Mantenida)
             mostrarValidacionInicio();
         };
 
@@ -571,24 +732,24 @@
             try {
                 directorioHandle = await window.showDirectoryPicker({ mode: "readwrite" });
                 await idb.set("carpetaTrabajo", directorioHandle);
-                alert("✅ Carpeta de trabajo vinculada correctamente.");
+                alert("✅ Carpeta de trabajo vinculada.");
                 if(document.getElementById("dashboardPanel").style.display === "flex") {
                     cargarCasosDesdeDirectorio();
                 }
             } catch (err) {
-                console.log("Selección de carpeta cancelada o fallida.", err);
+                console.log("Selección cancelada.", err);
             }
         }
 
         async function verificarPermisoDirectorio() {
             if (!directorioHandle) {
-                alert("⚠️ Primero debes seleccionar una carpeta en tu PC para guardar/leer los casos.");
+                alert("⚠️ Selecciona una carpeta en tu PC para guardar/leer los casos.");
                 await cambiarCarpetaTrabajo();
                 if (!directorioHandle) return false;
             }
             if ((await directorioHandle.queryPermission({ mode: "readwrite" })) !== "granted") {
                 if ((await directorioHandle.requestPermission({ mode: "readwrite" })) !== "granted") {
-                    alert("❌ Permiso denegado para acceder a la carpeta.");
+                    alert("❌ Permiso denegado.");
                     return false;
                 }
             }
@@ -599,10 +760,9 @@
         async function guardarDictamen() {
             const nombre = document.getElementById("nombre").value.trim() || "SinNombre";
             if (!window.indemnizacionActual) {
-                alert("⚠️ Por favor, genera el dictamen primero para poder guardar el valor de la indemnización.");
+                alert("⚠️ Genera el dictamen primero.");
                 return;
             }
-
             if (!(await verificarPermisoDirectorio())) return;
 
             const safeName = nombre.replace(/[^a-z0-9]/gi, '_').toLowerCase();
@@ -611,9 +771,8 @@
             try {
                 const options = {
                     suggestedName: nombreSugerido,
-                    types: [{ description: 'Archivo de Oportuno (JSON)', accept: {'application/json': ['.json']} }],
+                    types: [{ description: 'Archivo JSON', accept: {'application/json': ['.json']} }],
                 };
-
                 if (directorioHandle) options.startIn = directorioHandle;
 
                 const fileHandle = await window.showSaveFilePicker(options);
@@ -643,23 +802,17 @@
                 
                 window.fechaCreacionOriginal = fechaGuardado; 
                 alert(`✅ Caso guardado exitosamente.`);
-
                 if(document.getElementById("dashboardPanel").style.display === "flex") {
                     cargarCasosDesdeDirectorio();
                 }
-
             } catch (err) {
-                if (err.name !== 'AbortError') {
-                    console.error(err);
-                    alert("❌ Error al guardar el archivo.");
-                }
+                if (err.name !== 'AbortError') alert("❌ Error al guardar.");
             }
         }
 
         /* LEER JSONS Y RENDERIZAR */
         async function cargarCasosDesdeDirectorio() {
             if (!(await verificarPermisoDirectorio())) return;
-            
             listaCasosGlobal = [];
             try {
                 for await (const entry of directorioHandle.values()) {
@@ -670,16 +823,14 @@
                             const json = JSON.parse(text);
                             json.archivoOriginal = entry.name;
                             listaCasosGlobal.push(json);
-                        } catch(e) { console.log("Archivo ignorado:", entry.name); }
+                        } catch(e) {}
                     }
                 }
-                
                 listaCasosGlobal.sort((a,b) => new Date(b.fechaCreacion) - new Date(a.fechaCreacion));
                 generarEstadisticas();
                 renderizarDirectorio();
             } catch (err) {
-                console.error(err);
-                alert("❌ Error al leer la carpeta de trabajo.");
+                alert("❌ Error al leer la carpeta.");
             }
         }
 
@@ -709,7 +860,6 @@
         function renderizarDirectorio() {
             const contenedor = document.getElementById("contenedorCasos");
             contenedor.className = "case-list " + vistaActual + "-view"; 
-            
             const filtro = document.getElementById("buscadorCasos").value.toLowerCase();
             contenedor.innerHTML = "";
 
@@ -719,7 +869,7 @@
             });
 
             if(filtrados.length === 0) {
-                contenedor.innerHTML = `<p style="grid-column: 1/-1; text-align:center; color: var(--text-muted);">No se encontraron registros que coincidan con la búsqueda.</p>`;
+                contenedor.innerHTML = `<p style="grid-column: 1/-1; text-align:center; color: var(--text-muted);">No se encontraron registros.</p>`;
                 return;
             }
 
@@ -742,7 +892,6 @@
 
                 filtrados.forEach(caso => {
                     const dataStr = JSON.stringify(caso).replace(/'/g, "&apos;");
-
                     tableHTML += `
                         <tr>
                             <td><strong>${caso.nombre || 'Anónimo'}</strong></td>
@@ -753,21 +902,18 @@
                             <td><span class="badge">${formatter.format(caso.indemnizacionTotal || 0)}</span></td>
                             <td>
                                 <div class="table-actions">
-                                    <button class="btn btn-primary btn-sm" onclick='cargarJSONalFormulario(${dataStr})' title="Cargar este caso">📂</button>
-                                    <button class="btn btn-secondary btn-sm" onclick='abrirModalDetalle(${dataStr})' title="Ver detalles del caso">👁️</button>
+                                    <button class="btn btn-primary btn-sm" onclick='cargarJSONalFormulario(${dataStr})' title="Cargar">📂</button>
+                                    <button class="btn btn-secondary btn-sm" onclick='abrirModalDetalle(${dataStr})' title="Ver">👁️</button>
                                 </div>
                             </td>
                         </tr>
                     `;
                 });
-
                 tableHTML += `</tbody></table>`;
                 contenedor.innerHTML = tableHTML;
-
             } else {
                 filtrados.forEach((caso) => {
                     const dataStr = JSON.stringify(caso).replace(/'/g, "&apos;");
-                    
                     const card = document.createElement("div");
                     card.className = "case-card";
                     card.innerHTML = `
@@ -785,6 +931,35 @@
                     contenedor.appendChild(card);
                 });
             }
+        }
+
+        function abrirModalDetalle(caso) {
+            const fechaGuardadoFormat = caso.fechaCreacion ? new Date(caso.fechaCreacion).toLocaleDateString() : "Sin fecha";
+            const sexoStr = caso.sexo === 'M' ? 'Masculino' : (caso.sexo === 'F' ? 'Femenino' : 'N/A');
+            
+            const htmlDetalle = `
+                <div class="modal-grid">
+                    <div><strong>👤 Nombre:</strong><br>${caso.nombre || 'Anónimo'}</div>
+                    <div><strong>📌 Referencia:</strong><br>${caso.referencia || 'N/A'}</div>
+                    <div><strong>📅 Fecha de Guardado:</strong><br>${fechaGuardadoFormat}</div>
+                    <div><strong>🚻 Sexo:</strong><br>${sexoStr}</div>
+                    <div><strong>🎂 Nacimiento:</strong><br>${caso.fechaNacimiento || 'N/A'}</div>
+                    <div><strong>⏳ Semanas Traslado:</strong><br>${caso.semanasTraslado || 0} sem.</div>
+                    <div><strong>🗓️ F. Traslado (E):</strong><br>${caso.fechaTraslado || 'N/A'} (${caso.edadTraslado || 0} años)</div>
+                    <div><strong>📅 F. Nómina (F.E.P):</strong><br>${caso.fechaNomina || 'N/A'} (${caso.edadNomina || 0} años)</div>
+                    <div><strong>🏦 Mesada RPM:</strong><br>${formatter.format(caso.mesadaRPM || 0)}</div>
+                    <div><strong>📉 Mesada RAIS:</strong><br>${formatter.format(caso.mesadaRAIS || 0)}</div>
+                    <div class="full-width highlight">
+                        💰 Indemnización Total Calculada: <br>${formatter.format(caso.indemnizacionTotal || 0)}
+                    </div>
+                    <div class="full-width">
+                        <strong>📝 Observaciones / Notas:</strong><br>
+                        <span style="color: var(--text-muted); white-space: pre-wrap;">${caso.observaciones || 'Sin anotaciones registradas.'}</span>
+                    </div>
+                </div>
+            `;
+            document.getElementById("modalDetalleContenido").innerHTML = htmlDetalle;
+            document.getElementById("modalDetalle").style.display = "flex";
         }
 
         function cargarJSONalFormulario(data) {
@@ -810,12 +985,11 @@
             document.getElementById("sidebar").classList.remove("collapsed");
             document.getElementById("modalDetalle").style.display = "none";
             
-            // VALIDACIÓN AL CARGAR UN JSON VIEJO
             if(!data.fechaNacimiento || !data.fechaTraslado || !data.fechaNomina) {
                 let htmlValidacion = `
                     <div class="validacion-item">
                         <strong>⚠️ Versión Anterior Detectada</strong>
-                        <span>Has cargado un caso antiguo que no contiene las fechas exactas obligatorias. La jurisprudencia actual de la Corte Suprema exige el uso de las fechas precisas (Nacimiento, Traslado e Inclusión en Nómina) para calcular sin margen de error la indemnización. Por favor, actualiza este caso ingresando las fechas requeridas en el formulario para poder recalcular la pérdida de oportunidad.</span>
+                        <span>Has cargado un caso antiguo sin fechas exactas. La CSJ exige el uso de fechas precisas para calcular sin margen de error. Actualiza este caso ingresando las fechas en el formulario.</span>
                     </div>
                 `;
                 document.getElementById("listaValidacion").innerHTML = htmlValidacion;
@@ -851,16 +1025,14 @@
             const mesadaRPM = parseFloat(document.getElementById("mesadaRPM").value);
             const mesadaRAIS = parseFloat(document.getElementById("mesadaRAIS").value);
 
-            // 🛑 MOTOR DE VALIDACIÓN JUDICIAL RECUPERADO Y BLINDADO 🛑
             let erroresHTML = "";
-
-            if(!fechaNac) erroresHTML += `<div class="validacion-item"><strong>📅 Fecha de Nacimiento</strong><span><b>Justificación CSJ 2026:</b> Indispensable para determinar en números enteros exactos (sin redondear) la edad al momento del traslado y de nómina.</span></div>`;
-            if(!fechaTraslado) erroresHTML += `<div class="validacion-item"><strong>🗓️ Fecha Traslado al RAIS</strong><span><b>Justificación CSJ 2026:</b> Marca el hito temporal originario donde se cercenó el derecho de información y se materializó el daño. (SL168-2026).</span></div>`;
-            if(isNaN(S) || S <= 0) erroresHTML += `<div class="validacion-item"><strong>⏳ Semanas al Traslado (S)</strong><span><b>Justificación CSJ 2026:</b> Es el pilar del cálculo probabilístico. Define qué proporción del capital para pensionarse existía en el régimen público frente a las 1300 sem requeridas. (SL175-2026).</span></div>`;
-            if(isNaN(mesadaRPM) || mesadaRPM <= 0) erroresHTML += `<div class="validacion-item"><strong>🏦 Mesada Hipotética RPM</strong><span><b>Justificación CSJ 2026:</b> Bajo el principio de compensación, marca el límite patrimonial máximo que se frustró para la víctima (Pérdida de Oportunidad).</span></div>`;
-            if(isNaN(mesadaRAIS) || mesadaRAIS <= 0) erroresHTML += `<div class="validacion-item"><strong>📉 Mesada Real RAIS</strong><span><b>Justificación CSJ 2026:</b> El disvalor periódico se estima a partir de la brecha nominal de ambas pensiones.</span></div>`;
-            if(!fechaNomina) erroresHTML += `<div class="validacion-item"><strong>📅 Ingreso a Nómina (F.E.P.)</strong><span><b>Justificación CSJ 2026:</b> Es el instante preciso en que el daño se vuelve irreversible y cuantificable en la vía judicial (impidiendo la ineficacia). (SL169-2026, SL170-2026).</span></div>`;
-            if(!isNaN(edadNomina) && !tablaEV[edadNomina]) erroresHTML += `<div class="validacion-item"><strong>🎂 Edad en Nómina (${edadNomina})</strong><span><b>Justificación Técnica:</b> La edad obtenida tras el ingreso a nómina escapa de los límites de la tabla de Expectativa de Vida (Res 1555).</span></div>`;
+            if(!fechaNac) erroresHTML += `<div class="validacion-item"><strong>📅 Fecha de Nacimiento</strong><span><b>Justificación CSJ:</b> Indispensable para determinar en números enteros exactos (sin redondear) la edad al momento del traslado y de nómina.</span></div>`;
+            if(!fechaTraslado) erroresHTML += `<div class="validacion-item"><strong>🗓️ Fecha Traslado al RAIS</strong><span><b>Justificación CSJ:</b> Marca el hito temporal originario donde se cercenó el derecho de información y se materializó el daño.</span></div>`;
+            if(isNaN(S) || S <= 0) erroresHTML += `<div class="validacion-item"><strong>⏳ Semanas al Traslado (S)</strong><span><b>Justificación CSJ:</b> Pilar del cálculo probabilístico. Define qué proporción del capital existía en el régimen público frente a las 1300 sem requeridas.</span></div>`;
+            if(isNaN(mesadaRPM) || mesadaRPM <= 0) erroresHTML += `<div class="validacion-item"><strong>🏦 Mesada Hipotética RPM</strong><span><b>Justificación CSJ:</b> Bajo el principio de compensación, marca el límite patrimonial máximo que se frustró para la víctima (Pérdida de Oportunidad).</span></div>`;
+            if(isNaN(mesadaRAIS) || mesadaRAIS <= 0) erroresHTML += `<div class="validacion-item"><strong>📉 Mesada Real RAIS</strong><span><b>Justificación CSJ:</b> El disvalor periódico se estima a partir de la brecha nominal de ambas pensiones.</span></div>`;
+            if(!fechaNomina) erroresHTML += `<div class="validacion-item"><strong>📅 Ingreso a Nómina (F.E.P.)</strong><span><b>Justificación CSJ:</b> Instante preciso en que el daño se vuelve irreversible y cuantificable, contando prescripción.</span></div>`;
+            if(!isNaN(edadNomina) && !tablaEV[edadNomina]) erroresHTML += `<div class="validacion-item"><strong>🎂 Edad en Nómina (${edadNomina})</strong><span><b>Justificación Técnica:</b> La edad obtenida escapa de los límites de la tabla de Expectativa de Vida (Res 1555).</span></div>`;
 
             if(erroresHTML !== "") {
                 document.getElementById("listaValidacion").innerHTML = erroresHTML;
@@ -869,7 +1041,6 @@
                 return false;
             }
 
-            // Fórmula CSJ 2026 (Pérdida de Oportunidad)
             const Er = (sexo === 'M') ? 62 : 57;
             const factorSemanas = Math.pow(S / 1300, 0.5);
             const factorEdad = Math.pow(2, -Math.abs(E - Er) / 100);
@@ -884,7 +1055,6 @@
 
             window.indemnizacionActual = indemnizacionTotal;
 
-            // Inyectar en reporte
             document.getElementById("resNombre").innerText = nombre;
             document.getElementById("resReferencia").innerText = referencia;
             document.getElementById("resFechaNac").innerText = fechaNac;
@@ -905,7 +1075,7 @@
             document.getElementById("copyPasteText").innerText = 
 `REF: ${referencia}
 HECHO: Al momento de efectuarse el traslado desinformado el ${fechaTraslado}, mi poderdante se encontraba en una posición fáctica idónea con una edad calculada en números enteros de ${E} años, y un capital de ${S} semanas en el régimen público.
-HECHO: De no haber mediado el incumplimiento del deber de información de la AFP, mi poderdante habría conservado la probabilidad de pensionarse con una mesada aproximada de ${formatter.format(mesadaRPM)}. Al pensionarse en el RAIS y ser incluido en nómina el ${fechaNomina}, contando con ${edadNomina} años exactos, el daño se hizo irreversible y cuantificable en la vía judicial (SL169-2026), percibiendo una mesada inferior de ${formatter.format(mesadaRAIS)}.
+HECHO: De no haber mediado el incumplimiento del deber de información de la AFP, mi poderdante habría conservado la probabilidad de pensionarse con una mesada aproximada de ${formatter.format(mesadaRPM)}. Al pensionarse en el RAIS y ser incluido en nómina el ${fechaNomina}, contando con ${edadNomina} años exactos, el daño se hizo irreversible y cuantificable en la vía judicial, percibiendo una mesada inferior de ${formatter.format(mesadaRAIS)}.
 PRETENSIONES: Que se condene a la AFP a pagar un único desembolso global y definitivo por la suma de ${formatter.format(indemnizacionTotal)} a título de reparación por la Pérdida de Oportunidad, aplicando la probabilidad pensional truncada del ${PP_porcentaje}%.`;
 
             document.getElementById("welcomePanel").style.display = "none";
@@ -913,9 +1083,6 @@ PRETENSIONES: Que se condene a la AFP a pagar un único desembolso global y defi
             return true;
         }
 
-        /* ========================================================
-           5. FUNCIONES DE EXPORTACIÓN
-           ======================================================== */
         function obtenerNombreArchivo() {
             let nom = document.getElementById("nombre").value.trim().replace(/[^a-z0-9]/gi, '_');
             return nom ? `Oportuno_${nom}` : `Oportuno_Dictamen`;
