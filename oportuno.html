@@ -1,3 +1,4 @@
+completo y reemplaza tu archivo oportuno.html:
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -159,7 +160,6 @@
         .case-list.list-view .case-card .badge { margin-top: 0; }
         .case-list.list-view .case-actions { margin-top: 0; margin-left: 15px;}
 
-        /* Responsividad para la vista lista en pantallas pequeñas */
         @media (max-width: 900px) {
             .case-list.list-view .case-card { flex-direction: column; align-items: flex-start; }
             .case-list.list-view .case-actions { margin-top: 15px; margin-left: 0; width: 100%; justify-content: flex-start;}
@@ -169,7 +169,7 @@
 <body>
 
     <!-- ==========================================
-         TOP NAVBAR (BARRA DE NAVEGACIÓN SUPERIOR)
+         TOP NAVBAR
          ========================================== -->
     <div class="top-navbar">
         <div class="nav-left">
@@ -194,7 +194,7 @@
          ========================================== -->
     <div class="app-container">
         
-        <!-- PANEL IZQUIERDO (FORMULARIO) -->
+        <!-- PANEL IZQUIERDO -->
         <div class="sidebar-panel" id="sidebar">
             <div class="card" style="margin-top: 0;">
                 <div class="card-header">1. Datos del Caso</div>
@@ -352,7 +352,7 @@
         /* ========================================================
            1. LOGICA DE NAVEGACION Y VISTAS
            ======================================================== */
-        let vistaActual = "grid"; // 'grid' o 'list'
+        let vistaActual = "grid";
 
         function toggleSidebar() { document.getElementById("sidebar").classList.toggle("collapsed"); }
         function cerrarSesion() { sessionStorage.removeItem("acceso_oportuno"); window.location.replace("index.html"); }
@@ -466,7 +466,9 @@
             return true;
         }
 
-        /* GUARDAR JSON (CON VENTANA PARA CAMBIAR NOMBRE O REEMPLAZAR) */
+        /* ========================================================
+           GUARDAR JSON (VENTANA NATIVA DEL SISTEMA OPERATIVO)
+           ======================================================== */
         async function guardarDictamen() {
             const nombre = document.getElementById("nombre").value.trim() || "SinNombre";
             if (!window.indemnizacionActual) {
@@ -479,28 +481,24 @@
             const safeName = nombre.replace(/[^a-z0-9]/gi, '_').toLowerCase();
             let nombreSugerido = `Oportuno_${safeName}.json`;
 
-            // Prompt nativo para emular un "Guardar Como" dentro de la carpeta elegida
-            let nombreFinal = prompt("💾 Guardar Caso\n\nPuedes modificar el nombre del archivo. Si usas un nombre existente, el sistema lo reemplazará:", nombreSugerido);
-            
-            if (!nombreFinal) return; // El usuario canceló
-            
-            if (!nombreFinal.toLowerCase().endsWith('.json')) {
-                nombreFinal += '.json';
-            }
-
             try {
-                let fileHandle;
-                
-                // Intentamos obtener el archivo. Si existe, pedimos confirmación de sobreescritura
-                try {
-                    fileHandle = await directorioHandle.getFileHandle(nombreFinal);
-                    if (!confirm(`⚠️ El archivo "${nombreFinal}" ya existe en tu carpeta.\n¿Deseas sobreescribirlo y reemplazar el caso anterior?`)) {
-                        return; 
-                    }
-                } catch (e) {
-                    // Si tira error, significa que no existe, así que lo creamos
-                    fileHandle = await directorioHandle.getFileHandle(nombreFinal, { create: true });
+                // Configura las opciones para abrir la ventana nativa "Guardar como"
+                const options = {
+                    suggestedName: nombreSugerido,
+                    types: [{
+                        description: 'Archivo de Oportuno (JSON)',
+                        accept: {'application/json': ['.json']},
+                    }],
+                };
+
+                // Si ya vinculaste una carpeta, sugiere abrir allí directamente
+                if (directorioHandle) {
+                    options.startIn = directorioHandle;
                 }
+
+                // Abre la ventana de diálogo del sistema operativo (maneja los reemplazos nativamente)
+                const fileHandle = await window.showSaveFilePicker(options);
+                const writable = await fileHandle.createWritable();
 
                 const data = {
                     fechaCreacion: new Date().toISOString(),
@@ -516,18 +514,20 @@
                     indemnizacionTotal: window.indemnizacionActual
                 };
 
-                const writable = await fileHandle.createWritable();
                 await writable.write(JSON.stringify(data, null, 2));
                 await writable.close();
-                alert(`✅ Caso guardado exitosamente como:\n"${nombreFinal}"`);
+                alert(`✅ Caso guardado exitosamente.`);
 
                 if(document.getElementById("dashboardPanel").style.display === "flex") {
                     cargarCasosDesdeDirectorio();
                 }
 
             } catch (err) {
-                console.error(err);
-                alert("❌ Error al guardar el archivo en la carpeta.");
+                // El error 'AbortError' ocurre simplemente si el usuario le da en "Cancelar" en la ventana de guardar
+                if (err.name !== 'AbortError') {
+                    console.error(err);
+                    alert("❌ Error al guardar el archivo en la carpeta seleccionada.");
+                }
             }
         }
 
@@ -580,7 +580,7 @@
 
         function renderizarDirectorio() {
             const contenedor = document.getElementById("contenedorCasos");
-            contenedor.className = "case-list " + vistaActual + "-view"; // Aplica la vista actual
+            contenedor.className = "case-list " + vistaActual + "-view"; 
             
             const filtro = document.getElementById("buscadorCasos").value.toLowerCase();
             contenedor.innerHTML = "";
