@@ -1,4 +1,5 @@
- <!DOCTYPE html>
+ nunca!
+<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -127,7 +128,7 @@
         /* ====== MODALES ====== */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 9999; display: none; justify-content: center; align-items: center; backdrop-filter: blur(5px); }
         .modal-content { background: var(--surface-color); width: 90%; max-width: 650px; border-radius: 12px; padding: 30px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); max-height: 90vh; overflow-y: auto; position: relative;}
-        .modal-content.small-modal { max-width: 400px; padding: 25px; text-align: center;}
+        .modal-content.small-modal { max-width: 450px; padding: 25px;}
         .close-modal { position: absolute; top: 15px; right: 15px; background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--text-muted); transition: color 0.2s;}
         .close-modal:hover { color: var(--danger-color); }
 
@@ -169,6 +170,11 @@
         .modal-grid .full-width { grid-column: 1 / -1; }
         .modal-grid .highlight { background: var(--success-bg); color: var(--success-color); border-color: var(--success-color); font-weight: bold; text-align: center; font-size: 1.1rem;}
 
+        /* Lista Validaciones */
+        .validacion-item { margin-bottom: 12px; padding: 10px; background: var(--bg-color); border-left: 4px solid var(--danger-color); border-radius: 4px;}
+        .validacion-item strong { color: var(--danger-color); }
+        .validacion-item span { display: block; margin-top: 4px; font-size: 0.85rem; color: var(--text-muted); }
+
     </style>
 </head>
 <body>
@@ -204,22 +210,22 @@
             <div class="card" style="margin-top: 0;">
                 <div class="card-header">1. Datos del Caso</div>
                 <div class="form-group">
-                    <label>Nombre del Cliente <button type="button" class="btn-help" onclick="mostrarAyuda('Nombre del Cliente', 'Nombre completo de tu cliente. Este nombre se usará también para sugerir el nombre del archivo al guardar.')">?</button></label>
+                    <label>Nombre del Cliente <button type="button" class="btn-help" onclick="mostrarAyuda('Nombre del Cliente', 'Nombre de tu cliente. Este nombre se usará para sugerir el nombre del archivo al guardar y mantener organizado el directorio.')">?</button></label>
                     <input type="text" id="nombre" class="form-control" placeholder="Ej: Martha Briceño">
                 </div>
                 <div class="form-group">
-                    <label>Referencia (Radicado) <button type="button" class="btn-help" onclick="mostrarAyuda('Referencia', 'El número de radicado del proceso o expediente interno de tu oficina para vincular este cálculo a tu base de datos documental.')">?</button></label>
+                    <label>Referencia (Radicado) <button type="button" class="btn-help" onclick="mostrarAyuda('Referencia', 'Número de radicado o expediente interno para vincular este cálculo a tu base de datos documental jurídica.')">?</button></label>
                     <input type="text" id="referencia" class="form-control" placeholder="Ej: Rad 2023-00404">
                 </div>
                 <div class="form-group">
-                    <label>Sexo <button type="button" class="btn-help" onclick="mostrarAyuda('Sexo (Edad Ley)', 'Define la Edad Ley requerida para pensionarse en el RSPMPD. Según la ley, 62 años para hombres y 57 para mujeres.')">?</button></label>
+                    <label>Sexo <button type="button" class="btn-help" onclick="mostrarAyuda('Sexo (Edad Ley)', 'Justificación Jurídica: Define la Edad Ley requerida para pensionarse en el RSPMPD. Según la norma, 62 años para hombres y 57 para mujeres. Es la variable (Er) en la fórmula de probabilidad pensional.')">?</button></label>
                     <select id="sexo" class="form-control">
                         <option value="M">Masculino (Edad Ley: 62)</option>
                         <option value="F">Femenino (Edad Ley: 57)</option>
                     </select>
                 </div>
                 <div class="form-group">
-                    <label>Fecha de Nacimiento <button type="button" class="btn-help" onclick="mostrarAyuda('Fecha de Nacimiento', 'La fecha exacta en la que nació tu cliente. El sistema utilizará esta fecha base para calcular de forma automática la edad exacta en años cumplidos para el momento del traslado y de la inclusión en nómina, tal como lo hace la Corte Suprema.')">?</button></label>
+                    <label>Fecha de Nacimiento <button type="button" class="btn-help" onclick="mostrarAyuda('Fecha de Nacimiento', 'Justificación Jurídica: La jurisprudencia exige usar números enteros exactos para la edad. El sistema usará esta fecha para calcular y truncar de forma automática (sin redondeos engañosos) la edad al momento del traslado y de la inclusión en nómina.')">?</button></label>
                     <input type="date" id="fechaNacimiento" class="form-control" onchange="actualizarEdades()">
                 </div>
             </div>
@@ -227,15 +233,15 @@
             <div class="card">
                 <div class="card-header">2. Variables de Traslado (PP)</div>
                 <div class="form-group">
-                    <label>Fecha Traslado al RAIS <button type="button" class="btn-help" onclick="mostrarAyuda('Fecha Traslado al RAIS', 'El momento exacto en que se hizo efectivo el cambio de régimen al fondo privado.')">?</button></label>
+                    <label>Fecha Traslado al RAIS <button type="button" class="btn-help" onclick="mostrarAyuda('Fecha Traslado al RAIS', 'Justificación Jurídica: Es indispensable porque la Corte Suprema de Justicia establece que el daño previsional originario se concreta y materializa justo en el instante del traslado desinformado. Determina la variable (E) en la fórmula.')">?</button></label>
                     <input type="date" id="fechaTraslado" class="form-control" onchange="actualizarEdades()">
                 </div>
                 <div class="form-group">
-                    <label>Edad al Traslado (E) <button type="button" class="btn-help" onclick="mostrarAyuda('Edad al Traslado', 'Calculada automáticamente. Según la jurisprudencia, se usan números enteros exactos. Por ejemplo, si tenía 38 años y 11 meses, para la fórmula su edad es 38.')">?</button></label>
+                    <label>Edad al Traslado (E) <button type="button" class="btn-help" onclick="mostrarAyuda('Edad al Traslado', 'Justificación Jurídica: Es la variable (E). Calculada automáticamente truncando decimales. La CSJ usa números enteros exactos. Por ejemplo, 38 años y 11 meses, equivale a 38 para la fórmula.')">?</button></label>
                     <input type="number" id="edadTraslado" class="form-control" readonly placeholder="Calculado automáticamente">
                 </div>
                 <div class="form-group">
-                    <label>Semanas cotizadas al traslado (S) <button type="button" class="btn-help" onclick="mostrarAyuda('Semanas Cotizadas (Traslado)', 'El total de semanas que el cliente tenía cotizadas en Colpensiones/ISS justo antes de pasarse al RAIS.')">?</button></label>
+                    <label>Semanas al traslado (S) <button type="button" class="btn-help" onclick="mostrarAyuda('Semanas Cotizadas (Traslado)', 'Justificación Jurídica: Variable (S). Fundamental porque establece la proporción del capital cotizado al momento del engaño, ponderando la fórmula de Probabilidad Pensional (PP) frente a las 1300 semanas requeridas por el régimen público.')">?</button></label>
                     <input type="number" step="0.01" id="semanasTraslado" class="form-control" placeholder="Ej: 766.71">
                 </div>
             </div>
@@ -243,19 +249,19 @@
             <div class="card">
                 <div class="card-header">3. Variables Financieras</div>
                 <div class="form-group">
-                    <label>Mesada Hipotética RPM <button type="button" class="btn-help" onclick="mostrarAyuda('Mesada Hipotética RPM', 'El valor de la mesada que Colpensiones (RSPMPD) le hubiese pagado al cliente. Debes haberla calculado previamente con tu equipo.')">?</button></label>
+                    <label>Mesada Hipotética RPM <button type="button" class="btn-help" onclick="mostrarAyuda('Mesada Hipotética RPM', 'Justificación Jurídica: Principio de compensatio lucri cum damno. Establece en equidad el tope de lo que la víctima pudo realmente recibir de haberse quedado en el régimen público.')">?</button></label>
                     <input type="number" id="mesadaRPM" class="form-control" placeholder="Ej: 1409812">
                 </div>
                 <div class="form-group">
-                    <label>Mesada Real RAIS <button type="button" class="btn-help" onclick="mostrarAyuda('Mesada Real RAIS', 'El valor real de la mesada pensional que el fondo privado (RAIS) le empezó a pagar al cliente en la fecha de inclusión en nómina.')">?</button></label>
+                    <label>Mesada Real RAIS <button type="button" class="btn-help" onclick="mostrarAyuda('Mesada Real RAIS', 'Justificación Jurídica: El perjuicio patrimonial (lucro cesante o disvalor periódico) surge de la diferencia pura entre lo concedido en el RAIS y la hipotética del RPM.')">?</button></label>
                     <input type="number" id="mesadaRAIS" class="form-control" placeholder="Ej: 877803">
                 </div>
                 <div class="form-group">
-                    <label>Fecha Ingreso a Nómina (F.E.P.) <button type="button" class="btn-help" onclick="mostrarAyuda('Fecha Ingreso Nómina (F.E.P.)', 'Fecha de Estatus de Pensionado (inclusión en nómina en el RAIS). Define el momento en que se concreta el daño y sirve para calcular la edad exacta para la expectativa de vida.')">?</button></label>
+                    <label>Ingreso a Nómina (F.E.P.) <button type="button" class="btn-help" onclick="mostrarAyuda('Fecha Ingreso Nómina (F.E.P.)', 'Justificación Jurídica: Fecha de Estatus de Pensionado. Es el momento crítico donde el daño se hace irreversible, se materializa la pérdida y, además, sirve para cruzar la edad con las tablas de expectativa de vida de la SuperFinanciera.')">?</button></label>
                     <input type="date" id="fechaNomina" class="form-control" onchange="actualizarEdades()">
                 </div>
                 <div class="form-group">
-                    <label>Edad Ingreso Nómina <button type="button" class="btn-help" onclick="mostrarAyuda('Edad Ingreso Nómina', 'Calculada automáticamente. Es la edad entera que tenía el cliente en la fecha en que el fondo privado lo incluyó en la nómina de pensionados.')">?</button></label>
+                    <label>Edad Ingreso Nómina <button type="button" class="btn-help" onclick="mostrarAyuda('Edad Ingreso Nómina', 'Justificación Jurídica: Requerida para buscar el factor (EV) en la Resolución 1555 de 2010. Dictamina por cuántos años futuros se proyectará el perjuicio económico.')">?</button></label>
                     <input type="number" id="edadNomina" class="form-control" readonly placeholder="Calculado automáticamente">
                 </div>
             </div>
@@ -263,7 +269,7 @@
             <div class="card">
                 <div class="card-header">4. Anotaciones</div>
                 <div class="form-group">
-                    <label>Observaciones del Caso <button type="button" class="btn-help" onclick="mostrarAyuda('Observaciones', 'Usa este espacio libre para anotar detalles del expediente, justificaciones de los valores ingresados o cualquier comentario estratégico de tu equipo legal.')">?</button></label>
+                    <label>Observaciones del Caso <button type="button" class="btn-help" onclick="mostrarAyuda('Observaciones', 'Usa este espacio libre para anotar detalles estratégicos de tu equipo legal, justificaciones de valores ingresados o historial del litigio.')">?</button></label>
                     <textarea id="observaciones" class="form-control" rows="3" placeholder="Anotaciones, detalles de la demanda, etc..."></textarea>
                 </div>
                 <button class="btn btn-primary" onclick="liquidarYOcultarSidebar()">Generar Dictamen</button>
@@ -277,7 +283,7 @@
             <div id="welcomePanel" class="welcome-panel">
                 <img src="https://i.ibb.co/R49Ybz9S/Logo-Oportuno.webp" alt="Logo Oportuno">
                 <h2>Liquidador Pericial CSJ 2026</h2>
-                <p>Usa el menú lateral (☰) para ingresar las fechas y datos. El sistema calculará las edades automáticamente según la jurisprudencia. Al calcular, la pantalla se expandirá para brindarte la mejor lectura pericial.</p>
+                <p>Usa el menú lateral (☰) para ingresar las fechas y datos. El sistema cuenta con un motor de validación basado en la jurisprudencia de la Corte. Al calcular, la pantalla se expandirá.</p>
             </div>
 
             <!-- RESULTADOS DEL DICTAMEN -->
@@ -352,7 +358,7 @@
 
                 <div class="dashboard-controls">
                     <input type="text" id="buscadorCasos" class="search-bar" placeholder="🔍 Buscar por nombre, referencia o mesada..." onkeyup="renderizarDirectorio()">
-                    <button class="btn-help" style="width: 28px; height: 28px; font-size: 1.1rem;" title="Ayuda del Buscador" onclick="mostrarAyuda('Buscador Global', 'La búsqueda permite filtrar los registros guardados analizando en tiempo real CUALQUIER campo (observaciones, nombre, radicado, montos). Escribe aquí tu criterio de búsqueda o borra el texto para cerrar el filtro y regresar a la vista de todos tus casos.')">?</button>
+                    <button class="btn-help" style="width: 28px; height: 28px; font-size: 1.1rem;" title="Ayuda del Buscador" onclick="mostrarAyuda('Buscador Global (Filtro)', 'Justificación: El sistema de búsqueda permite filtrar los registros guardados analizando en tiempo real CUALQUIER campo de la base de datos (observaciones, nombre, radicado, montos, etc.). Escribe aquí tu criterio de búsqueda para aislar un caso, o borra el texto para cerrar el filtro y regresar a la vista general de todos tus expedientes.')">?</button>
                     <button class="btn btn-secondary" onclick="cambiarVistaDashboard()" id="btnVista" style="margin-left:auto;">📄 Vista Lista</button>
                 </div>
 
@@ -381,7 +387,18 @@
             <button class="close-modal" title="Cerrar" onclick="document.getElementById('modalAyuda').style.display='none'">✖</button>
             <h3 style="color: var(--primary-color); margin-top:0;" id="modalAyudaTitulo">Ayuda</h3>
             <p id="modalAyudaTexto" style="line-height: 1.6; color: var(--text-main); font-size: 0.95rem;"></p>
-            <button class="btn btn-primary" onclick="document.getElementById('modalAyuda').style.display='none'">Entendido</button>
+            <button class="btn btn-primary" style="width: 100%;" onclick="document.getElementById('modalAyuda').style.display='none'">Entendido</button>
+        </div>
+    </div>
+
+    <!-- MODAL DE VALIDACIÓN JUDICIAL (NUEVO) -->
+    <div class="modal-overlay" id="modalValidacion">
+        <div class="modal-content" style="border-top: 5px solid var(--danger-color); max-width: 550px;">
+            <button class="close-modal" title="Cerrar" onclick="document.getElementById('modalValidacion').style.display='none'">✖</button>
+            <h3 style="color: var(--danger-color); margin-top:0;">⚠️ Faltan Datos Obligatorios</h3>
+            <p style="color: var(--text-main); font-size: 0.95rem;">El cálculo pericial no puede ejecutarse. Según los parámetros exigidos por la Corte Suprema de Justicia, debes completar los siguientes datos:</p>
+            <div id="listaValidacion" style="margin-top: 15px; margin-bottom: 25px;"></div>
+            <button class="btn btn-primary" style="background-color: var(--danger-color); width: 100%;" onclick="document.getElementById('modalValidacion').style.display='none'">Entendido, voy a completarlos</button>
         </div>
     </div>
 
@@ -431,7 +448,7 @@
                 document.getElementById("welcomePanel").style.display = "flex";
                 document.getElementById("sidebar").classList.remove("collapsed");
                 window.indemnizacionActual = null;
-                window.fechaCreacionOriginal = null; // Reiniciar fecha de creación
+                window.fechaCreacionOriginal = null; 
             }
         }
 
@@ -450,10 +467,10 @@
                 <div class="modal-grid">
                     <div><strong>👤 Nombre:</strong><br>${caso.nombre || 'Anónimo'}</div>
                     <div><strong>📌 Referencia:</strong><br>${caso.referencia || 'N/A'}</div>
-                    <div><strong>📅 Fecha de Guardado (Original):</strong><br>${fechaGuardadoFormat}</div>
+                    <div><strong>📅 Fecha de Guardado:</strong><br>${fechaGuardadoFormat}</div>
                     <div><strong>🚻 Sexo:</strong><br>${sexoStr}</div>
-                    <div><strong>🎂 Fecha y Edad Traslado:</strong><br>${caso.fechaTraslado || 'N/A'} (${caso.edadTraslado || 0} años)</div>
-                    <div><strong>📅 Fecha y Edad Nómina:</strong><br>${caso.fechaNomina || 'N/A'} (${caso.edadNomina || 0} años)</div>
+                    <div><strong>🎂 Traslado:</strong><br>${caso.fechaTraslado || 'N/A'} (${caso.edadTraslado || 0} años)</div>
+                    <div><strong>📅 Nómina (F.E.P):</strong><br>${caso.fechaNomina || 'N/A'} (${caso.edadNomina || 0} años)</div>
                     <div><strong>⏳ Semanas Traslado:</strong><br>${caso.semanasTraslado || 0} sem.</div>
                     <div><strong>🏦 Mesada RPM:</strong><br>${formatter.format(caso.mesadaRPM || 0)}</div>
                     <div><strong>📉 Mesada RAIS:</strong><br>${formatter.format(caso.mesadaRAIS || 0)}</div>
@@ -480,7 +497,6 @@
             const fe = new Date(fechaEv);
             let edad = fe.getFullYear() - fn.getFullYear();
             const m = fe.getMonth() - fn.getMonth();
-            // Resta un año si el mes del evento es menor, o si es el mismo mes pero el día es menor (NO redondea, trunca)
             if (m < 0 || (m === 0 && fe.getDate() < fn.getDate())) {
                 edad--;
             }
@@ -505,7 +521,7 @@
         let directorioHandle = null;
         let listaCasosGlobal = [];
         window.indemnizacionActual = null; 
-        window.fechaCreacionOriginal = null; // Variable para mantener la fecha original del JSON
+        window.fechaCreacionOriginal = null; 
 
         const idb = {
             db: null,
@@ -566,7 +582,7 @@
             return true;
         }
 
-        /* GUARDAR JSON (CONSERVA FECHAS, EDADES Y FECHA DE CREACIÓN ORIGINAL) */
+        /* GUARDAR JSON */
         async function guardarDictamen() {
             const nombre = document.getElementById("nombre").value.trim() || "SinNombre";
             if (!window.indemnizacionActual) {
@@ -590,7 +606,6 @@
                 const fileHandle = await window.showSaveFilePicker(options);
                 const writable = await fileHandle.createWritable();
 
-                // Si ya había una fecha original se mantiene, sino crea una nueva automática
                 const fechaGuardado = window.fechaCreacionOriginal ? window.fechaCreacionOriginal : new Date().toISOString();
 
                 const data = {
@@ -613,9 +628,7 @@
                 await writable.write(JSON.stringify(data, null, 2));
                 await writable.close();
                 
-                // Actualizar la memoria a la fecha recién guardada para no perderla si se sigue editando en caliente
                 window.fechaCreacionOriginal = fechaGuardado; 
-                
                 alert(`✅ Caso guardado exitosamente.`);
 
                 if(document.getElementById("dashboardPanel").style.display === "flex") {
@@ -678,7 +691,7 @@
         }
 
         /* ========================================================
-           LA NUEVA VISTA DIRECTORIO (BÚSQUEDA GLOBAL MULTICAMPO)
+           VISTA DIRECTORIO (BÚSQUEDA GLOBAL MULTICAMPO)
            ======================================================== */
         function renderizarDirectorio() {
             const contenedor = document.getElementById("contenedorCasos");
@@ -687,7 +700,6 @@
             const filtro = document.getElementById("buscadorCasos").value.toLowerCase();
             contenedor.innerHTML = "";
 
-            // Filtro Global en TODOS los campos como lo pediste
             const filtrados = listaCasosGlobal.filter(c => {
                 const cadenaStr = `${c.nombre} ${c.referencia} ${c.observaciones} ${c.indemnizacionTotal} ${c.fechaNacimiento} ${c.fechaTraslado} ${c.fechaNomina} ${c.mesadaRPM} ${c.mesadaRAIS}`.toLowerCase();
                 return cadenaStr.includes(filtro);
@@ -705,9 +717,9 @@
                         <tr>
                             <th>Nombre del Cliente</th>
                             <th>Referencia</th>
-                            <th>Guardado (Original)</th>
-                            <th>Edad Traslado</th>
-                            <th>Edad Nómina</th>
+                            <th>Guardado</th>
+                            <th>E. Traslado</th>
+                            <th>E. Nómina</th>
                             <th>Indemnización</th>
                             <th>Acciones</th>
                         </tr>
@@ -729,8 +741,8 @@
                             <td><span class="badge">${formatter.format(caso.indemnizacionTotal || 0)}</span></td>
                             <td>
                                 <div class="table-actions">
-                                    <button class="btn btn-primary btn-sm" onclick='cargarJSONalFormulario(${dataStr})' title="Cargar este caso">📂 Cargar</button>
-                                    <button class="btn btn-secondary btn-sm" onclick='abrirModalDetalle(${dataStr})' title="Ver detalles del caso">👁️ Ver</button>
+                                    <button class="btn btn-primary btn-sm" onclick='cargarJSONalFormulario(${dataStr})' title="Cargar este caso">📂</button>
+                                    <button class="btn btn-secondary btn-sm" onclick='abrirModalDetalle(${dataStr})' title="Ver detalles del caso">👁️</button>
                                 </div>
                             </td>
                         </tr>
@@ -741,7 +753,6 @@
                 contenedor.innerHTML = tableHTML;
 
             } else {
-                // VISTA CUADRÍCULA (Tarjetas)
                 filtrados.forEach((caso) => {
                     const fechaFormat = caso.fechaCreacion ? new Date(caso.fechaCreacion).toLocaleDateString() : "Sin fecha";
                     const dataStr = JSON.stringify(caso).replace(/'/g, "&apos;");
@@ -774,32 +785,35 @@
             document.getElementById("mesadaRAIS").value = data.mesadaRAIS || '';
             document.getElementById("observaciones").value = data.observaciones || '';
             
-            // Cargar SÓLO FECHAS y recalcular las edades (Compatibilidad)
             document.getElementById("fechaNacimiento").value = data.fechaNacimiento || '';
             document.getElementById("fechaTraslado").value = data.fechaTraslado || '';
             document.getElementById("fechaNomina").value = data.fechaNomina || '';
             actualizarEdades();
 
             window.indemnizacionActual = null; 
-            window.fechaCreacionOriginal = data.fechaCreacion || null; // Respetar la fecha de creación original del archivo
+            window.fechaCreacionOriginal = data.fechaCreacion || null; 
 
             document.getElementById("dashboardPanel").style.display = "none";
             document.getElementById("resultadoWrapper").style.display = "none";
             document.getElementById("welcomePanel").style.display = "flex";
             document.getElementById("sidebar").classList.remove("collapsed");
-            
             document.getElementById("modalDetalle").style.display = "none";
             
-            // Si el archivo JSON viejo no tenía las fechas, las edades quedarán en blanco, se fuerza a llenar y calcular de nuevo.
+            // LA VENTANA DE VALIDACIÓN AL CARGAR UN JSON VIEJO
             if(!data.fechaNacimiento || !data.fechaTraslado || !data.fechaNomina) {
-                alert(`⚠️ Atención: Este caso de ${data.nombre} es de una versión anterior y no tiene fechas. Por favor llene las fechas (nacimiento, traslado, nómina) para recalcular.`);
-            } else {
-                alert(`✅ Datos de ${data.nombre} cargados. Las edades se calcularon automáticamente desde las fechas.\nHaz clic en "Generar Dictamen" para recalcular la indemnización.`);
+                let htmlValidacion = `
+                    <div class="validacion-item">
+                        <strong>⚠️ Versión Anterior Detectada</strong>
+                        <span>Has cargado un caso antiguo que no contiene las fechas exactas obligatorias. La jurisprudencia actual de la Corte Suprema exige el uso de las fechas precisas (Nacimiento, Traslado e Inclusión en Nómina) para calcular sin margen de error la indemnización. Por favor, actualiza este caso ingresando las fechas requeridas en el formulario para poder recalcular la pérdida de oportunidad.</span>
+                    </div>
+                `;
+                document.getElementById("listaValidacion").innerHTML = htmlValidacion;
+                document.getElementById("modalValidacion").style.display = "flex";
             }
         }
 
         /* ========================================================
-           4. MOTOR MATEMÁTICO (LA FÓRMULA DE LA CORTE)
+           4. MOTOR MATEMÁTICO (LA FÓRMULA DE LA CORTE) Y VALIDACIÓN
            ======================================================== */
         const tablaEV = {
             57:{M:25.50,F:29.70}, 58:{M:24.60,F:28.80}, 59:{M:23.80,F:27.90}, 60:{M:23.00,F:27.00},
@@ -809,7 +823,6 @@
         const formatter = new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', minimumFractionDigits: 0, maximumFractionDigits: 2 });
 
         function liquidar() {
-            // Refrescar cálculo de fechas por si acaso
             actualizarEdades();
 
             const nombre = document.getElementById("nombre").value || "Cliente Anónimo";
@@ -826,15 +839,25 @@
             const mesadaRPM = parseFloat(document.getElementById("mesadaRPM").value);
             const mesadaRAIS = parseFloat(document.getElementById("mesadaRAIS").value);
 
-            if(!fechaNac || !fechaTraslado || !fechaNomina || isNaN(E) || isNaN(S) || isNaN(mesadaRPM) || isNaN(mesadaRAIS) || isNaN(edadNomina)) { 
-                alert("Complete las fechas y todos los campos numéricos."); return false; 
-            }
-            if(!tablaEV[edadNomina]) { 
-                alert(`La Edad en Nómina (${edadNomina}) está fuera del rango en la tabla simplificada de EV.`); return false; 
+            // 🛑 MOTOR DE VALIDACIÓN JUDICIAL 🛑
+            let erroresHTML = "";
+
+            if(!fechaNac) erroresHTML += `<div class="validacion-item"><strong>📅 Fecha de Nacimiento</strong><span><b>Justificación CSJ:</b> Es indispensable para determinar en números enteros exactos (sin redondear) la edad al momento del traslado y de nómina.</span></div>`;
+            if(!fechaTraslado) erroresHTML += `<div class="validacion-item"><strong>🗓️ Fecha Traslado al RAIS</strong><span><b>Justificación CSJ:</b> Marca el hito temporal originario donde se cercenó el derecho de información y se materializó el daño.</span></div>`;
+            if(isNaN(S) || S <= 0) erroresHTML += `<div class="validacion-item"><strong>⏳ Semanas al Traslado (S)</strong><span><b>Justificación CSJ:</b> Es el pilar del cálculo probabilístico. Define qué proporción del capital para pensionarse existía en el régimen público (frente a la meta de 1300 sem).</span></div>`;
+            if(isNaN(mesadaRPM) || mesadaRPM <= 0) erroresHTML += `<div class="validacion-item"><strong>🏦 Mesada Hipotética RPM</strong><span><b>Justificación CSJ:</b> Bajo el principio de compensación, marca el límite patrimonial máximo que se frustró para la víctima.</span></div>`;
+            if(isNaN(mesadaRAIS) || mesadaRAIS <= 0) erroresHTML += `<div class="validacion-item"><strong>📉 Mesada Real RAIS</strong><span><b>Justificación CSJ:</b> El disvalor o perjuicio a indemnizar solo puede determinarse comparando este monto real contra la expectativa hipotética.</span></div>`;
+            if(!fechaNomina) erroresHTML += `<div class="validacion-item"><strong>📅 Ingreso a Nómina (F.E.P.)</strong><span><b>Justificación CSJ:</b> Es el instante preciso en que el daño se vuelve irreversible y cuantificable en la vía judicial (impidiendo la declaratoria de ineficacia).</span></div>`;
+            if(!isNaN(edadNomina) && !tablaEV[edadNomina]) erroresHTML += `<div class="validacion-item"><strong>🎂 Edad en Nómina (${edadNomina})</strong><span><b>Justificación Técnica:</b> La edad obtenida tras el ingreso a nómina escapa de los límites de la tabla de Expectativa de Vida (Res 1555).</span></div>`;
+
+            if(erroresHTML !== "") {
+                document.getElementById("listaValidacion").innerHTML = erroresHTML;
+                document.getElementById("modalValidacion").style.display = "flex";
+                return false;
             }
 
+            // Súper fórmula de la CSJ
             const Er = (sexo === 'M') ? 62 : 57;
-            
             const factorSemanas = Math.pow(S / 1300, 0.5);
             const factorEdad = Math.pow(2, -Math.abs(E - Er) / 100);
             let PP_decimal = 0.5 * factorSemanas * factorEdad;
@@ -869,7 +892,7 @@
             document.getElementById("copyPasteText").innerText = 
 `REF: ${referencia}
 HECHO: Al momento de efectuarse el traslado desinformado el ${fechaTraslado}, mi poderdante se encontraba en una posición fáctica idónea con una edad calculada en números enteros de ${E} años, y un capital de ${S} semanas en el régimen público.
-HECHO: De no haber mediado el incumplimiento del deber de información de la AFP, mi poderdante habría conservado la probabilidad de pensionarse con una mesada aproximada de ${formatter.format(mesadaRPM)}. Al pensionarse en el RAIS y ser incluido en nómina el ${fechaNomina}, contando con ${edadNomina} años exactos, el daño se hizo irreversible y cuantificable en la vía judicial (SL169-2026), percibiendo una mesada inferior de ${formatter.format(mesadaRAIS)}.
+HECHO: De no haber mediado el incumplimiento del deber de información de la AFP, mi poderdante habría conservado la probabilidad de pensionarse con una mesada aproximada de ${formatter.format(mesadaRPM)}. Al pensionarse en el RAIS y ser incluido en nómina el ${fechaNomina}, contando con ${edadNomina} años exactos, el daño se hizo irreversible y cuantificable en la vía judicial, percibiendo una mesada inferior de ${formatter.format(mesadaRAIS)}.
 PRETENSIONES: Que se condene a la AFP a pagar un único desembolso global y definitivo por la suma de ${formatter.format(indemnizacionTotal)} a título de reparación por la Pérdida de Oportunidad, aplicando la probabilidad pensional truncada del ${PP_porcentaje}%.`;
 
             document.getElementById("welcomePanel").style.display = "none";
