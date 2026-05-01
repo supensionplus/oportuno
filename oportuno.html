@@ -1,3 +1,4 @@
+copiarlo y reemplazar el que tienes en tu servidor:
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -160,10 +161,15 @@
             padding: 50px 40px;
             text-align: center;
             border-radius: 12px;
-            height: 100%;
             box-shadow: inset 0 0 30px rgba(0,0,0,0.15);
             box-sizing: border-box;
+            
+            /* Ajuste para dejarla estática (fija) independientemente de la izquierda */
+            position: sticky;
+            top: 20px;
+            height: calc(100vh - 40px); /* Ocupa el alto de la pantalla menos el margen */
         }
+        
         .welcome-panel img {
             max-width: 280px;
             margin-bottom: 25px;
@@ -286,7 +292,7 @@
         </div>
     </div>
 
-    <!-- PANEL IZQUIERDO (INTACTO COMO LO SOLICITASTE) -->
+    <!-- PANEL IZQUIERDO -->
     <div class="panel">
         <div class="card sticky-header" style="padding-top: 15px;">
             <div class="brand-container">
@@ -344,10 +350,10 @@
         </div>
     </div>
 
-    <!-- PANEL DERECHO (MODIFICADO CON EL NUEVO DISEÑO) -->
+    <!-- PANEL DERECHO -->
     <div class="panel">
         
-        <!-- PANTALLA DE BIENVENIDA "REPROFESIONAL" (Se oculta al liquidar) -->
+        <!-- PANTALLA DE BIENVENIDA "REPROFESIONAL" (Estática/Fija) -->
         <div id="welcomePanel" class="welcome-panel">
             <img src="https://i.ibb.co/R49Ybz9S/Logo-Oportuno.webp" alt="Logo Oportuno">
             
@@ -381,7 +387,7 @@
             </div>
         </div>
 
-        <!-- RESULTADOS DEL DICTAMEN (Oculto inicialmente) -->
+        <!-- RESULTADOS DEL DICTAMEN (Oculto inicialmente, luego hace scroll normal) -->
         <div id="resultadoWrapper" style="display: none; flex-direction: column; gap: 20px;">
             <div class="export-bar" id="exportToolbar">
                 <button class="btn btn-pdf" onclick="exportarPDF()">📄 Exportar a PDF</button>
@@ -506,7 +512,7 @@
                 document.getElementById("semanasTraslado").value = ""; document.getElementById("mesadaRPM").value = "";
                 document.getElementById("mesadaRAIS").value = ""; document.getElementById("edadNomina").value = "";
                 
-                // OCULTAMOS EL DICTAMEN Y VOLVEMOS A MOSTRAR EL PANEL DE BIENVENIDA AZUL
+                // OCULTAMOS EL DICTAMEN Y VOLVEMOS A MOSTRAR EL PANEL DE BIENVENIDA AZUL FIJO
                 document.getElementById("resultadoWrapper").style.display = "none";
                 document.getElementById("welcomePanel").style.display = "flex";
             }
@@ -588,7 +594,7 @@
 HECHO: De no haber mediado el incumplimiento del deber de información de la AFP, mi poderdante habría conservado la probabilidad de pensionarse con una mesada aproximada de ${formatter.format(mesadaRPM)}. Al pensionarse en el RAIS a sus ${edadNomina} años y ser incluido en nómina, el daño se hizo irreversible, percibiendo una mesada inferior de ${formatter.format(mesadaRAIS)}.
 PRETENSIONES: Que se condene a la AFP a pagar un único desembolso global y definitivo por la suma de ${formatter.format(indemnizacionTotal)} a título de reparación por la Pérdida de Oportunidad, aplicando la probabilidad pensional truncada del ${PP_porcentaje}%.`;
 
-            // OCULTAMOS EL PANEL AZUL DE BIENVENIDA Y MOSTRAMOS EL DICTAMEN
+            // OCULTAMOS EL PANEL AZUL FIJO Y MOSTRAMOS EL DICTAMEN (QUE HARÁ SCROLL NORMAL)
             document.getElementById("welcomePanel").style.display = "none";
             document.getElementById("resultadoWrapper").style.display = "flex";
         }
