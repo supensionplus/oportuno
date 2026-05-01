@@ -1,19 +1,9 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Oportuno - Liquidador Previsional</title>
-
-    <!-- ==========================================
-         CANDADO DE SEGURIDAD VIP (ANTI-INTRUSOS)
-         ========================================== -->
-    <script>
-        if (sessionStorage.getItem("acceso_oportuno") !== "autorizado") {
-            window.location.replace("index.html");
-        }
-    </script>
-    <!-- ========================================== -->
 
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
@@ -106,7 +96,7 @@
         .btn-primary:hover { opacity: 0.9; }
         .btn-secondary { background-color: var(--surface-color); color: var(--text-main); border: 1px solid var(--border-color); }
         .btn-secondary:hover { border-color: var(--primary-color); background-color: var(--highlight-bg); }
-        .btn-danger { background-color: var(--danger-color); color: #FFF; }
+        .btn-danger { background-color: var(--danger-color); color: #FFF; border: none; border-radius: 6px;}
         .btn-danger:hover { opacity: 0.9; }
         
         .btn-help { background-color: var(--accent-color); color: white; border: none; border-radius: 50%; width: 18px; height: 18px; font-size: 0.7rem; font-weight: bold; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; margin-left: 8px; padding: 0; box-shadow: 0 2px 4px rgba(0,0,0,0.1); transition: transform 0.2s;}
@@ -195,7 +185,6 @@
             <button class="btn btn-secondary" onclick="guardarDictamen()">💾 Guardar</button>
             <button class="btn btn-primary" style="width: auto; padding: 8px 14px;" onclick="mostrarDashboard()">🗂️ Casos Guardados</button>
             <button class="btn btn-secondary" onclick="toggleTheme()">🌗 Tema</button>
-            <button class="btn btn-danger" onclick="cerrarSesion()">🚪 Salir</button>
         </div>
     </div>
 
@@ -206,6 +195,12 @@
         
         <!-- PANEL IZQUIERDO -->
         <div class="sidebar-panel" id="sidebar">
+
+            <!-- BOTÓN DE VALIDACIÓN MANUAL SIEMPRE VISIBLE AL INICIO -->
+            <button type="button" class="btn-danger" style="width: 100%; margin-top: 0; margin-bottom: 15px; padding: 10px;" onclick="mostrarValidacionInicio()">
+                ⚖️ Ver Reglas de Validación (CSJ 2026)
+            </button>
+
             <div class="card" style="margin-top: 0;">
                 <div class="card-header">1. Datos del Caso</div>
                 <div class="form-group">
@@ -271,7 +266,7 @@
                     <label>Observaciones del Caso <button type="button" class="btn-help" onclick="mostrarAyuda('Observaciones', 'Usa este espacio libre para anotar detalles estratégicos de tu equipo legal, justificaciones de valores ingresados o historial del litigio.')">?</button></label>
                     <textarea id="observaciones" class="form-control" rows="3" placeholder="Anotaciones, detalles de la demanda, etc..."></textarea>
                 </div>
-                <button class="btn btn-primary" onclick="liquidarYOcultarSidebar()">Generar Dictamen</button>
+                <button type="button" class="btn btn-primary" onclick="liquidarYOcultarSidebar()">Generar Dictamen</button>
             </div>
         </div>
 
@@ -390,12 +385,12 @@
         </div>
     </div>
 
-    <!-- MODAL DE VALIDACIÓN JUDICIAL (NUEVO / RECUPERADO) -->
+    <!-- MODAL DE VALIDACIÓN JUDICIAL (RECUPERADO Y AL INICIO) -->
     <div class="modal-overlay" id="modalValidacion">
         <div class="modal-content" style="border-top: 5px solid var(--danger-color); max-width: 550px;">
             <button class="close-modal" title="Cerrar" onclick="document.getElementById('modalValidacion').style.display='none'">✖</button>
-            <h3 style="color: var(--danger-color); margin-top:0;">⚠️ Faltan Datos Obligatorios</h3>
-            <p style="color: var(--text-main); font-size: 0.95rem;">El cálculo pericial no puede ejecutarse. Según los parámetros exigidos por la jurisprudencia reciente de la Corte Suprema de Justicia, debes completar obligatoriamente los siguientes datos:</p>
+            <h3 style="color: var(--danger-color); margin-top:0;" id="modalValidacionTitulo">⚠️ Faltan Datos Obligatorios</h3>
+            <p style="color: var(--text-main); font-size: 0.95rem;">El cálculo pericial requiere rigor. Según los parámetros exigidos por la jurisprudencia de la Corte Suprema de Justicia, debes completar los siguientes datos:</p>
             <div id="listaValidacion" style="margin-top: 15px; margin-bottom: 25px;"></div>
             <button class="btn btn-primary" style="background-color: var(--danger-color); width: 100%;" onclick="document.getElementById('modalValidacion').style.display='none'">Entendido, voy a completarlos</button>
         </div>
@@ -409,13 +404,25 @@
         let vistaActual = "grid";
 
         function toggleSidebar() { document.getElementById("sidebar").classList.toggle("collapsed"); }
-        function cerrarSesion() { sessionStorage.removeItem("acceso_oportuno"); window.location.replace("index.html"); }
         function toggleTheme() { document.body.setAttribute("data-theme", document.body.getAttribute("data-theme") === "dark" ? "light" : "dark"); }
 
         function mostrarAyuda(titulo, texto) {
             document.getElementById("modalAyudaTitulo").innerText = titulo;
             document.getElementById("modalAyudaTexto").innerText = texto;
             document.getElementById("modalAyuda").style.display = "flex";
+        }
+
+        /* 🟢 LA VENTANA DE VALIDACIÓN SOLICITADA AL INICIO 🟢 */
+        function mostrarValidacionInicio() {
+            let htmlValidacion = `
+                <div class="validacion-item">
+                    <strong>⚖️ Validaciones Exigidas (CSJ 2026)</strong>
+                    <span>Antes de iniciar, recuerda que el liquidador te exige las <b>fechas exactas (Nacimiento, Traslado, Inclusión en Nómina)</b> para calcular las edades en números enteros, tal como lo ordenan las sentencias recientes de la Corte Suprema. Si no las proporcionas, el sistema bloqueará el cálculo porque afectaría el porcentaje de la <i>Probabilidad Pensional Truncada</i>.</span>
+                </div>
+            `;
+            document.getElementById("listaValidacion").innerHTML = htmlValidacion;
+            document.getElementById("modalValidacionTitulo").innerText = "⚠️ Reglas de Validación (CSJ)";
+            document.getElementById("modalValidacion").style.display = "flex";
         }
 
         function cambiarVistaDashboard() {
@@ -550,8 +557,14 @@
         };
 
         window.onload = async () => {
-            await idb.init();
-            directorioHandle = await idb.get("carpetaTrabajo");
+            try {
+                await idb.init();
+                directorioHandle = await idb.get("carpetaTrabajo");
+            } catch(e) {
+                console.warn("IndexedDB sin acceso local, pero continuará.", e);
+            }
+            // 🟢 SE MUESTRA LA VENTANA DE VALIDACIÓN AL INICIO 🟢
+            mostrarValidacionInicio();
         };
 
         async function cambiarCarpetaTrabajo() {
@@ -691,7 +704,7 @@
         }
 
         /* ========================================================
-           VISTA DIRECTORIO (AHORA SÍ MUESTRA LAS FECHAS CLARAS)
+           VISTA DIRECTORIO
            ======================================================== */
         function renderizarDirectorio() {
             const contenedor = document.getElementById("contenedorCasos");
@@ -711,7 +724,6 @@
             }
 
             if (vistaActual === "list") {
-                // VISTA TABLA DIRECTORIO CON COLUMNAS DE FECHAS EXPRESAS
                 let tableHTML = `
                 <table class="directory-table">
                     <thead>
@@ -753,7 +765,6 @@
                 contenedor.innerHTML = tableHTML;
 
             } else {
-                // VISTA CUADRÍCULA (Tarjetas)
                 filtrados.forEach((caso) => {
                     const dataStr = JSON.stringify(caso).replace(/'/g, "&apos;");
                     
@@ -799,7 +810,7 @@
             document.getElementById("sidebar").classList.remove("collapsed");
             document.getElementById("modalDetalle").style.display = "none";
             
-            // LA VENTANA DE VALIDACIÓN AL CARGAR UN JSON VIEJO SIN FECHAS
+            // VALIDACIÓN AL CARGAR UN JSON VIEJO
             if(!data.fechaNacimiento || !data.fechaTraslado || !data.fechaNomina) {
                 let htmlValidacion = `
                     <div class="validacion-item">
@@ -808,6 +819,7 @@
                     </div>
                 `;
                 document.getElementById("listaValidacion").innerHTML = htmlValidacion;
+                document.getElementById("modalValidacionTitulo").innerText = "⚠️ Faltan Datos Obligatorios";
                 document.getElementById("modalValidacion").style.display = "flex";
             }
         }
@@ -839,19 +851,20 @@
             const mesadaRPM = parseFloat(document.getElementById("mesadaRPM").value);
             const mesadaRAIS = parseFloat(document.getElementById("mesadaRAIS").value);
 
-            // 🛑 MOTOR DE VALIDACIÓN JUDICIAL RECUPERADO 🛑
+            // 🛑 MOTOR DE VALIDACIÓN JUDICIAL RECUPERADO Y BLINDADO 🛑
             let erroresHTML = "";
 
-            if(!fechaNac) erroresHTML += `<div class="validacion-item"><strong>📅 Fecha de Nacimiento</strong><span><b>Justificación CSJ:</b> Es indispensable para determinar en números enteros exactos (sin redondear) la edad al momento del traslado y de nómina.</span></div>`;
-            if(!fechaTraslado) erroresHTML += `<div class="validacion-item"><strong>🗓️ Fecha Traslado al RAIS</strong><span><b>Justificación CSJ:</b> Marca el hito temporal originario donde se cercenó el derecho de información y se materializó el daño. (SL168-2026, SL169-2026).</span></div>`;
-            if(isNaN(S) || S <= 0) erroresHTML += `<div class="validacion-item"><strong>⏳ Semanas al Traslado (S)</strong><span><b>Justificación CSJ:</b> Es el pilar del cálculo probabilístico. Define qué proporción del capital para pensionarse existía en el régimen público frente a las 1300 sem requeridas. (SL175-2026).</span></div>`;
-            if(isNaN(mesadaRPM) || mesadaRPM <= 0) erroresHTML += `<div class="validacion-item"><strong>🏦 Mesada Hipotética RPM</strong><span><b>Justificación CSJ:</b> Bajo el principio de compensación, marca el límite patrimonial máximo que se frustró para la víctima.</span></div>`;
-            if(isNaN(mesadaRAIS) || mesadaRAIS <= 0) erroresHTML += `<div class="validacion-item"><strong>📉 Mesada Real RAIS</strong><span><b>Justificación CSJ:</b> El perjuicio se estima desde la brecha nominal de ambas pensiones, convirtiendo la diferencia económica en un valor esperado.</span></div>`;
-            if(!fechaNomina) erroresHTML += `<div class="validacion-item"><strong>📅 Ingreso a Nómina (F.E.P.)</strong><span><b>Justificación CSJ:</b> Es el instante preciso en que el daño se vuelve irreversible y cuantificable en la vía judicial (impidiendo la ineficacia). (SL169-2026, SL170-2026).</span></div>`;
+            if(!fechaNac) erroresHTML += `<div class="validacion-item"><strong>📅 Fecha de Nacimiento</strong><span><b>Justificación CSJ 2026:</b> Indispensable para determinar en números enteros exactos (sin redondear) la edad al momento del traslado y de nómina.</span></div>`;
+            if(!fechaTraslado) erroresHTML += `<div class="validacion-item"><strong>🗓️ Fecha Traslado al RAIS</strong><span><b>Justificación CSJ 2026:</b> Marca el hito temporal originario donde se cercenó el derecho de información y se materializó el daño. (SL168-2026).</span></div>`;
+            if(isNaN(S) || S <= 0) erroresHTML += `<div class="validacion-item"><strong>⏳ Semanas al Traslado (S)</strong><span><b>Justificación CSJ 2026:</b> Es el pilar del cálculo probabilístico. Define qué proporción del capital para pensionarse existía en el régimen público frente a las 1300 sem requeridas. (SL175-2026).</span></div>`;
+            if(isNaN(mesadaRPM) || mesadaRPM <= 0) erroresHTML += `<div class="validacion-item"><strong>🏦 Mesada Hipotética RPM</strong><span><b>Justificación CSJ 2026:</b> Bajo el principio de compensación, marca el límite patrimonial máximo que se frustró para la víctima (Pérdida de Oportunidad).</span></div>`;
+            if(isNaN(mesadaRAIS) || mesadaRAIS <= 0) erroresHTML += `<div class="validacion-item"><strong>📉 Mesada Real RAIS</strong><span><b>Justificación CSJ 2026:</b> El disvalor periódico se estima a partir de la brecha nominal de ambas pensiones.</span></div>`;
+            if(!fechaNomina) erroresHTML += `<div class="validacion-item"><strong>📅 Ingreso a Nómina (F.E.P.)</strong><span><b>Justificación CSJ 2026:</b> Es el instante preciso en que el daño se vuelve irreversible y cuantificable en la vía judicial (impidiendo la ineficacia). (SL169-2026, SL170-2026).</span></div>`;
             if(!isNaN(edadNomina) && !tablaEV[edadNomina]) erroresHTML += `<div class="validacion-item"><strong>🎂 Edad en Nómina (${edadNomina})</strong><span><b>Justificación Técnica:</b> La edad obtenida tras el ingreso a nómina escapa de los límites de la tabla de Expectativa de Vida (Res 1555).</span></div>`;
 
             if(erroresHTML !== "") {
                 document.getElementById("listaValidacion").innerHTML = erroresHTML;
+                document.getElementById("modalValidacionTitulo").innerText = "⚠️ Faltan Datos Obligatorios";
                 document.getElementById("modalValidacion").style.display = "flex";
                 return false;
             }
