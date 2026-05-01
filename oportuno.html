@@ -1,5 +1,4 @@
-reemplázalo:
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -95,11 +94,12 @@ reemplázalo:
         .card { background-color: var(--surface-color); border: 1px solid var(--border-color); border-radius: 12px; padding: 24px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); margin-bottom: 20px; transition: background-color 0.3s, border-color 0.3s; }
         .card-header { font-size: 1.1rem; font-weight: 600; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--border-color); color: var(--primary-color); }
         .form-group { margin-bottom: 16px; }
-        .form-group label { display: block; font-size: 0.85rem; font-weight: 600; color: var(--text-muted); margin-bottom: 6px; }
+        .form-group label { display: flex; align-items: center; font-size: 0.85rem; font-weight: 600; color: var(--text-muted); margin-bottom: 6px; }
         .form-control { width: 100%; padding: 10px 12px; font-family: 'Inter', sans-serif; font-size: 0.95rem; background-color: var(--surface-color); color: var(--text-main); border: 1px solid var(--border-color); border-radius: 8px; box-sizing: border-box; }
         .form-control:focus { outline: none; border-color: var(--primary-color); }
+        .form-control[readonly] { background-color: var(--highlight-bg); cursor: not-allowed; font-weight: bold;}
 
-        /* ====== BOTONES ====== */
+        /* ====== BOTONES Y AYUDAS ====== */
         .btn { padding: 8px 14px; font-size: 0.85rem; font-weight: 600; border: none; border-radius: 6px; cursor: pointer; transition: all 0.2s; display: inline-flex; align-items: center; justify-content: center; gap: 6px; }
         .btn-sm { padding: 6px 10px; font-size: 0.8rem; }
         .btn-primary { background-color: var(--primary-color); color: #FFF; width: 100%; padding: 14px; font-size: 1rem;}
@@ -109,6 +109,9 @@ reemplázalo:
         .btn-danger { background-color: var(--danger-color); color: #FFF; }
         .btn-danger:hover { opacity: 0.9; }
         
+        .btn-help { background-color: var(--accent-color); color: white; border: none; border-radius: 50%; width: 18px; height: 18px; font-size: 0.7rem; font-weight: bold; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; margin-left: 8px; padding: 0; box-shadow: 0 2px 4px rgba(0,0,0,0.1); transition: transform 0.2s;}
+        .btn-help:hover { transform: scale(1.1); background-color: var(--primary-color); }
+
         .export-bar { display: flex; gap: 10px; justify-content: flex-end; margin-bottom: 15px;}
         .btn-pdf { background-color: #EF4444; color: white; }
         .btn-doc { background-color: #3B82F6; color: white; }
@@ -124,10 +127,11 @@ reemplázalo:
         /* ====== MODALES ====== */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 9999; display: none; justify-content: center; align-items: center; backdrop-filter: blur(5px); }
         .modal-content { background: var(--surface-color); width: 90%; max-width: 650px; border-radius: 12px; padding: 30px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); max-height: 90vh; overflow-y: auto; position: relative;}
+        .modal-content.small-modal { max-width: 400px; padding: 25px; text-align: center;}
         .close-modal { position: absolute; top: 15px; right: 15px; background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--text-muted); transition: color 0.2s;}
         .close-modal:hover { color: var(--danger-color); }
 
-        /* ====== DISEÑO "REPROFESIONAL" PANEL BIENVENIDA ====== */
+        /* ====== DISEÑO PANEL BIENVENIDA ====== */
         .welcome-panel { background-color: var(--primary-color); color: #FFF; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 50px 40px; text-align: center; border-radius: 12px; box-shadow: inset 0 0 30px rgba(0,0,0,0.15); box-sizing: border-box; min-height: calc(100vh - var(--navbar-height) - 40px); }
         .welcome-panel img { max-width: 280px; margin-bottom: 25px; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3)); }
         .welcome-panel h2 { font-size: 1.7rem; color: var(--accent-color); margin-bottom: 15px; margin-top: 0; }
@@ -144,8 +148,6 @@ reemplázalo:
         .search-bar { flex: 1; padding: 12px 16px; font-size: 1rem; border: 1px solid var(--primary-color); border-radius: 8px; background: var(--surface-color); color: var(--text-main); min-width: 250px;}
         
         /* ESTILOS DE VISTAS (CUADRÍCULA Y TABLA DIRECTORIO) */
-        
-        /* 1. Vista Cuadrícula (Tarjetas) */
         .case-list.grid-view { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 15px; }
         .case-card { background: var(--surface-color); border: 1px solid var(--border-color); border-radius: 8px; padding: 16px; box-shadow: 0 2px 4px rgba(0,0,0,0.02); display: flex; flex-direction: column; justify-content: space-between; transition: all 0.2s;}
         .case-card h3 { margin: 0 0 5px 0; color: var(--primary-color); font-size: 1.1rem;}
@@ -153,7 +155,6 @@ reemplázalo:
         .badge { display: inline-block; background: var(--success-bg); color: var(--success-color); padding: 4px 8px; border-radius: 12px; font-size: 0.8rem; font-weight: 600; margin-top: 8px;}
         .case-actions { margin-top: 15px; display: flex; gap: 8px; }
 
-        /* 2. Vista Lista (Tabla Directorio) */
         .case-list.list-view { display: block; overflow-x: auto; }
         .directory-table { width: 100%; border-collapse: collapse; background: var(--surface-color); border-radius: 8px; overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.02); margin: 0; }
         .directory-table th, .directory-table td { padding: 12px 16px; text-align: left; border-bottom: 1px solid var(--border-color); font-size: 0.9rem; vertical-align: middle;}
@@ -163,7 +164,6 @@ reemplázalo:
         .directory-table .badge { margin-top: 0; }
         .table-actions { display: flex; gap: 8px; flex-wrap: nowrap;}
 
-        /* Detalles Modal Grid */
         .modal-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; font-size: 0.95rem; margin-top: 15px;}
         .modal-grid > div { background: var(--bg-color); padding: 12px; border-radius: 8px; border: 1px solid var(--border-color);}
         .modal-grid .full-width { grid-column: 1 / -1; }
@@ -204,30 +204,38 @@ reemplázalo:
             <div class="card" style="margin-top: 0;">
                 <div class="card-header">1. Datos del Caso</div>
                 <div class="form-group">
-                    <label>Nombre del Cliente</label>
+                    <label>Nombre del Cliente <button type="button" class="btn-help" onclick="mostrarAyuda('Nombre del Cliente', 'Nombre completo de tu cliente. Este nombre se usará también para sugerir el nombre del archivo al guardar.')">?</button></label>
                     <input type="text" id="nombre" class="form-control" placeholder="Ej: Martha Briceño">
                 </div>
                 <div class="form-group">
-                    <label>Referencia (Radicado/Proceso)</label>
+                    <label>Referencia (Radicado) <button type="button" class="btn-help" onclick="mostrarAyuda('Referencia', 'El número de radicado del proceso o expediente interno de tu oficina para vincular este cálculo a tu base de datos documental.')">?</button></label>
                     <input type="text" id="referencia" class="form-control" placeholder="Ej: Rad 2023-00404">
                 </div>
                 <div class="form-group">
-                    <label>Sexo</label>
+                    <label>Sexo <button type="button" class="btn-help" onclick="mostrarAyuda('Sexo (Edad Ley)', 'Define la Edad Ley requerida para pensionarse en el RSPMPD. Según la ley, 62 años para hombres y 57 para mujeres.')">?</button></label>
                     <select id="sexo" class="form-control">
                         <option value="M">Masculino (Edad Ley: 62)</option>
                         <option value="F">Femenino (Edad Ley: 57)</option>
                     </select>
+                </div>
+                <div class="form-group">
+                    <label>Fecha de Nacimiento <button type="button" class="btn-help" onclick="mostrarAyuda('Fecha de Nacimiento', 'La fecha exacta en la que nació tu cliente. El sistema utilizará esta fecha base para calcular de forma automática la edad exacta en años cumplidos para el momento del traslado y de la inclusión en nómina, tal como lo hace la Corte Suprema.')">?</button></label>
+                    <input type="date" id="fechaNacimiento" class="form-control" onchange="actualizarEdades()">
                 </div>
             </div>
 
             <div class="card">
                 <div class="card-header">2. Variables de Traslado (PP)</div>
                 <div class="form-group">
-                    <label>Edad al momento del traslado (E)</label>
-                    <input type="number" id="edadTraslado" class="form-control" placeholder="Ej: 35">
+                    <label>Fecha Traslado al RAIS <button type="button" class="btn-help" onclick="mostrarAyuda('Fecha Traslado al RAIS', 'El momento exacto en que se hizo efectivo el cambio de régimen al fondo privado.')">?</button></label>
+                    <input type="date" id="fechaTraslado" class="form-control" onchange="actualizarEdades()">
                 </div>
                 <div class="form-group">
-                    <label>Semanas cotizadas al traslado (S)</label>
+                    <label>Edad al Traslado (E) <button type="button" class="btn-help" onclick="mostrarAyuda('Edad al Traslado', 'Calculada automáticamente. Según la jurisprudencia, se usan números enteros exactos. Por ejemplo, si tenía 38 años y 11 meses, para la fórmula su edad es 38.')">?</button></label>
+                    <input type="number" id="edadTraslado" class="form-control" readonly placeholder="Calculado automáticamente">
+                </div>
+                <div class="form-group">
+                    <label>Semanas cotizadas al traslado (S) <button type="button" class="btn-help" onclick="mostrarAyuda('Semanas Cotizadas (Traslado)', 'El total de semanas que el cliente tenía cotizadas en Colpensiones/ISS justo antes de pasarse al RAIS.')">?</button></label>
                     <input type="number" step="0.01" id="semanasTraslado" class="form-control" placeholder="Ej: 766.71">
                 </div>
             </div>
@@ -235,23 +243,27 @@ reemplázalo:
             <div class="card">
                 <div class="card-header">3. Variables Financieras</div>
                 <div class="form-group">
-                    <label>Mesada Hipotética Colpensiones (RPM)</label>
+                    <label>Mesada Hipotética RPM <button type="button" class="btn-help" onclick="mostrarAyuda('Mesada Hipotética RPM', 'El valor de la mesada que Colpensiones (RSPMPD) le hubiese pagado al cliente. Debes haberla calculado previamente con tu equipo.')">?</button></label>
                     <input type="number" id="mesadaRPM" class="form-control" placeholder="Ej: 1409812">
                 </div>
                 <div class="form-group">
-                    <label>Mesada Real Fondo Privado (RAIS)</label>
+                    <label>Mesada Real RAIS <button type="button" class="btn-help" onclick="mostrarAyuda('Mesada Real RAIS', 'El valor real de la mesada pensional que el fondo privado (RAIS) le empezó a pagar al cliente en la fecha de inclusión en nómina.')">?</button></label>
                     <input type="number" id="mesadaRAIS" class="form-control" placeholder="Ej: 877803">
                 </div>
                 <div class="form-group">
-                    <label>Edad exacta de ingreso a nómina</label>
-                    <input type="number" id="edadNomina" class="form-control" placeholder="Ej: 57">
+                    <label>Fecha Ingreso a Nómina (F.E.P.) <button type="button" class="btn-help" onclick="mostrarAyuda('Fecha Ingreso Nómina (F.E.P.)', 'Fecha de Estatus de Pensionado (inclusión en nómina en el RAIS). Define el momento en que se concreta el daño y sirve para calcular la edad exacta para la expectativa de vida.')">?</button></label>
+                    <input type="date" id="fechaNomina" class="form-control" onchange="actualizarEdades()">
+                </div>
+                <div class="form-group">
+                    <label>Edad Ingreso Nómina <button type="button" class="btn-help" onclick="mostrarAyuda('Edad Ingreso Nómina', 'Calculada automáticamente. Es la edad entera que tenía el cliente en la fecha en que el fondo privado lo incluyó en la nómina de pensionados.')">?</button></label>
+                    <input type="number" id="edadNomina" class="form-control" readonly placeholder="Calculado automáticamente">
                 </div>
             </div>
 
             <div class="card">
                 <div class="card-header">4. Anotaciones</div>
                 <div class="form-group">
-                    <label>Observaciones del Caso</label>
+                    <label>Observaciones del Caso <button type="button" class="btn-help" onclick="mostrarAyuda('Observaciones', 'Usa este espacio libre para anotar detalles del expediente, justificaciones de los valores ingresados o cualquier comentario estratégico de tu equipo legal.')">?</button></label>
                     <textarea id="observaciones" class="form-control" rows="3" placeholder="Anotaciones, detalles de la demanda, etc..."></textarea>
                 </div>
                 <button class="btn btn-primary" onclick="liquidarYOcultarSidebar()">Generar Dictamen</button>
@@ -265,7 +277,7 @@ reemplázalo:
             <div id="welcomePanel" class="welcome-panel">
                 <img src="https://i.ibb.co/R49Ybz9S/Logo-Oportuno.webp" alt="Logo Oportuno">
                 <h2>Liquidador Pericial CSJ 2026</h2>
-                <p>Usa el menú lateral (☰) para ingresar los datos. Al calcular, la pantalla se expandirá automáticamente para brindarte la mejor lectura pericial.</p>
+                <p>Usa el menú lateral (☰) para ingresar las fechas y datos. El sistema calculará las edades automáticamente según la jurisprudencia. Al calcular, la pantalla se expandirá para brindarte la mejor lectura pericial.</p>
             </div>
 
             <!-- RESULTADOS DEL DICTAMEN -->
@@ -286,10 +298,14 @@ reemplázalo:
                             <th>Referencia</th><td id="resReferencia"></td>
                         </tr>
                         <tr>
+                            <th>Fecha Nacimiento</th><td id="resFechaNac"></td>
                             <th>Edad Ley (Er)</th><td id="resEr"></td>
-                            <th>Edad Traslado (E)</th><td id="resE"></td>
                         </tr>
                         <tr bgcolor="#f0f4f8">
+                            <th>Fecha Traslado RAIS</th><td id="resFechaTraslado"></td>
+                            <th>Edad al Traslado (E)</th><td id="resE"></td>
+                        </tr>
+                        <tr>
                             <th>Semanas Traslado (S)</th><td colspan="3" id="resS"></td>
                         </tr>
                     </table>
@@ -302,11 +318,15 @@ reemplázalo:
 
                     <h3>FASE 2 y 3: Diferencia y Expectativa de Vida</h3>
                     <table border="1" cellpadding="8" cellspacing="0" bordercolor="#dddddd">
-                        <tr><td>Mesada Hipotética RPM</td><td id="resRPM"></td></tr>
-                        <tr><td>Mesada Real RAIS</td><td id="resRAIS"></td></tr>
-                        <tr bgcolor="#f0f4f8"><td><strong>Diferencia Pensional Mensual</strong></td><td><strong style="color:#0F2B46" id="resDiferencia"></strong></td></tr>
-                        <tr><td>Expectativa de Vida (EV) - Res. 1555 de 2010</td><td id="resEV"></td></tr>
-                        <tr><td>Bolsa Consolidada Proyectada (Dif * EV * 13)</td><td id="resBolsa"></td></tr>
+                        <tr><td>Fecha Ingreso a Nómina (F.E.P.)</td><td colspan="3" id="resFechaNomina"></td></tr>
+                        <tr bgcolor="#f0f4f8">
+                            <th>Edad F.E.P.</th><td id="resEdadNomina"></td>
+                            <th>Expectativa de Vida (EV)</th><td id="resEV"></td>
+                        </tr>
+                        <tr><td>Mesada Hipotética RPM</td><td colspan="3" id="resRPM"></td></tr>
+                        <tr><td>Mesada Real RAIS</td><td colspan="3" id="resRAIS"></td></tr>
+                        <tr bgcolor="#f0f4f8"><td><strong>Diferencia Pensional Mensual</strong></td><td colspan="3"><strong style="color:#0F2B46" id="resDiferencia"></strong></td></tr>
+                        <tr><td>Bolsa Consolidada Proyectada (Dif * EV * 13)</td><td colspan="3" id="resBolsa"></td></tr>
                     </table>
 
                     <h3>FASE 4: Liquidación Final (Reparación por Equivalencia)</h3>
@@ -332,7 +352,8 @@ reemplázalo:
 
                 <div class="dashboard-controls">
                     <input type="text" id="buscadorCasos" class="search-bar" placeholder="🔍 Buscar por nombre, referencia o mesada..." onkeyup="renderizarDirectorio()">
-                    <button class="btn btn-secondary" onclick="cambiarVistaDashboard()" id="btnVista">📄 Vista Lista</button>
+                    <button class="btn-help" style="width: 28px; height: 28px; font-size: 1.1rem;" title="Ayuda del Buscador" onclick="mostrarAyuda('Buscador Global', 'La búsqueda permite filtrar los registros guardados analizando en tiempo real CUALQUIER campo (observaciones, nombre, radicado, montos). Escribe aquí tu criterio de búsqueda o borra el texto para cerrar el filtro y regresar a la vista de todos tus casos.')">?</button>
+                    <button class="btn btn-secondary" onclick="cambiarVistaDashboard()" id="btnVista" style="margin-left:auto;">📄 Vista Lista</button>
                 </div>
 
                 <div class="case-list grid-view" id="contenedorCasos">
@@ -354,16 +375,32 @@ reemplázalo:
         </div>
     </div>
 
+    <!-- MODAL DE AYUDA (SISTEMA DE ASISTENCIA) -->
+    <div class="modal-overlay" id="modalAyuda">
+        <div class="modal-content small-modal">
+            <button class="close-modal" title="Cerrar" onclick="document.getElementById('modalAyuda').style.display='none'">✖</button>
+            <h3 style="color: var(--primary-color); margin-top:0;" id="modalAyudaTitulo">Ayuda</h3>
+            <p id="modalAyudaTexto" style="line-height: 1.6; color: var(--text-main); font-size: 0.95rem;"></p>
+            <button class="btn btn-primary" onclick="document.getElementById('modalAyuda').style.display='none'">Entendido</button>
+        </div>
+    </div>
+
     <!-- SCRIPT DE BASE DE DATOS Y LOGICA -->
     <script>
         /* ========================================================
-           1. LOGICA DE NAVEGACION Y VISTAS
+           1. LOGICA DE NAVEGACION, VISTAS Y AYUDAS
            ======================================================== */
         let vistaActual = "grid";
 
         function toggleSidebar() { document.getElementById("sidebar").classList.toggle("collapsed"); }
         function cerrarSesion() { sessionStorage.removeItem("acceso_oportuno"); window.location.replace("index.html"); }
         function toggleTheme() { document.body.setAttribute("data-theme", document.body.getAttribute("data-theme") === "dark" ? "light" : "dark"); }
+
+        function mostrarAyuda(titulo, texto) {
+            document.getElementById("modalAyudaTitulo").innerText = titulo;
+            document.getElementById("modalAyudaTexto").innerText = texto;
+            document.getElementById("modalAyuda").style.display = "flex";
+        }
 
         function cambiarVistaDashboard() {
             vistaActual = vistaActual === "grid" ? "list" : "grid";
@@ -383,15 +420,18 @@ reemplázalo:
         function nuevoCaso() {
             if(confirm("⚠️ ¿Iniciar un nuevo cálculo y limpiar formulario?")) {
                 document.getElementById("nombre").value = ""; document.getElementById("referencia").value = "";
+                document.getElementById("fechaNacimiento").value = ""; document.getElementById("fechaTraslado").value = ""; 
                 document.getElementById("edadTraslado").value = ""; document.getElementById("semanasTraslado").value = ""; 
                 document.getElementById("mesadaRPM").value = ""; document.getElementById("mesadaRAIS").value = ""; 
-                document.getElementById("edadNomina").value = ""; document.getElementById("observaciones").value = "";
+                document.getElementById("fechaNomina").value = ""; document.getElementById("edadNomina").value = "";
+                document.getElementById("observaciones").value = "";
                 
                 document.getElementById("resultadoWrapper").style.display = "none";
                 document.getElementById("dashboardPanel").style.display = "none";
                 document.getElementById("welcomePanel").style.display = "flex";
                 document.getElementById("sidebar").classList.remove("collapsed");
                 window.indemnizacionActual = null;
+                window.fechaCreacionOriginal = null; // Reiniciar fecha de creación
             }
         }
 
@@ -402,18 +442,18 @@ reemplázalo:
             }
         }
 
-        // NUEVA FUNCIÓN: ABRIR MODAL CON TODOS LOS DETALLES
         function abrirModalDetalle(caso) {
-            const fechaFormat = caso.fechaCreacion ? new Date(caso.fechaCreacion).toLocaleDateString() : "Sin fecha";
+            const fechaGuardadoFormat = caso.fechaCreacion ? new Date(caso.fechaCreacion).toLocaleDateString() : "Sin fecha";
             const sexoStr = caso.sexo === 'M' ? 'Masculino' : (caso.sexo === 'F' ? 'Femenino' : 'N/A');
             
             const htmlDetalle = `
                 <div class="modal-grid">
                     <div><strong>👤 Nombre:</strong><br>${caso.nombre || 'Anónimo'}</div>
                     <div><strong>📌 Referencia:</strong><br>${caso.referencia || 'N/A'}</div>
-                    <div><strong>📅 Fecha de Guardado:</strong><br>${fechaFormat}</div>
+                    <div><strong>📅 Fecha de Guardado (Original):</strong><br>${fechaGuardadoFormat}</div>
                     <div><strong>🚻 Sexo:</strong><br>${sexoStr}</div>
-                    <div><strong>🎂 Edad Traslado:</strong><br>${caso.edadTraslado || 0} años</div>
+                    <div><strong>🎂 Fecha y Edad Traslado:</strong><br>${caso.fechaTraslado || 'N/A'} (${caso.edadTraslado || 0} años)</div>
+                    <div><strong>📅 Fecha y Edad Nómina:</strong><br>${caso.fechaNomina || 'N/A'} (${caso.edadNomina || 0} años)</div>
                     <div><strong>⏳ Semanas Traslado:</strong><br>${caso.semanasTraslado || 0} sem.</div>
                     <div><strong>🏦 Mesada RPM:</strong><br>${formatter.format(caso.mesadaRPM || 0)}</div>
                     <div><strong>📉 Mesada RAIS:</strong><br>${formatter.format(caso.mesadaRAIS || 0)}</div>
@@ -432,11 +472,40 @@ reemplázalo:
         }
 
         /* ========================================================
-           2. SISTEMA DE ARCHIVOS LOCAL (File System Access API)
+           2. CÁLCULO DE EDADES BASADO EN FECHAS
+           ======================================================== */
+        function calcularEdadEntera(fechaNac, fechaEv) {
+            if(!fechaNac || !fechaEv) return "";
+            const fn = new Date(fechaNac);
+            const fe = new Date(fechaEv);
+            let edad = fe.getFullYear() - fn.getFullYear();
+            const m = fe.getMonth() - fn.getMonth();
+            // Resta un año si el mes del evento es menor, o si es el mismo mes pero el día es menor (NO redondea, trunca)
+            if (m < 0 || (m === 0 && fe.getDate() < fn.getDate())) {
+                edad--;
+            }
+            return edad;
+        }
+
+        function actualizarEdades() {
+            const fn = document.getElementById("fechaNacimiento").value;
+            const ft = document.getElementById("fechaTraslado").value;
+            const fnm = document.getElementById("fechaNomina").value;
+            
+            if(fn && ft) document.getElementById("edadTraslado").value = calcularEdadEntera(fn, ft);
+            else document.getElementById("edadTraslado").value = "";
+
+            if(fn && fnm) document.getElementById("edadNomina").value = calcularEdadEntera(fn, fnm);
+            else document.getElementById("edadNomina").value = "";
+        }
+
+        /* ========================================================
+           3. SISTEMA DE ARCHIVOS LOCAL (File System Access API)
            ======================================================== */
         let directorioHandle = null;
         let listaCasosGlobal = [];
         window.indemnizacionActual = null; 
+        window.fechaCreacionOriginal = null; // Variable para mantener la fecha original del JSON
 
         const idb = {
             db: null,
@@ -497,7 +566,7 @@ reemplázalo:
             return true;
         }
 
-        /* GUARDAR JSON */
+        /* GUARDAR JSON (CONSERVA FECHAS, EDADES Y FECHA DE CREACIÓN ORIGINAL) */
         async function guardarDictamen() {
             const nombre = document.getElementById("nombre").value.trim() || "SinNombre";
             if (!window.indemnizacionActual) {
@@ -521,15 +590,21 @@ reemplázalo:
                 const fileHandle = await window.showSaveFilePicker(options);
                 const writable = await fileHandle.createWritable();
 
+                // Si ya había una fecha original se mantiene, sino crea una nueva automática
+                const fechaGuardado = window.fechaCreacionOriginal ? window.fechaCreacionOriginal : new Date().toISOString();
+
                 const data = {
-                    fechaCreacion: new Date().toISOString(),
+                    fechaCreacion: fechaGuardado,
                     nombre: document.getElementById("nombre").value,
                     referencia: document.getElementById("referencia").value,
                     sexo: document.getElementById("sexo").value,
+                    fechaNacimiento: document.getElementById("fechaNacimiento").value,
+                    fechaTraslado: document.getElementById("fechaTraslado").value,
                     edadTraslado: document.getElementById("edadTraslado").value,
                     semanasTraslado: document.getElementById("semanasTraslado").value,
                     mesadaRPM: document.getElementById("mesadaRPM").value,
                     mesadaRAIS: document.getElementById("mesadaRAIS").value,
+                    fechaNomina: document.getElementById("fechaNomina").value,
                     edadNomina: document.getElementById("edadNomina").value,
                     observaciones: document.getElementById("observaciones").value,
                     indemnizacionTotal: window.indemnizacionActual
@@ -537,6 +612,10 @@ reemplázalo:
 
                 await writable.write(JSON.stringify(data, null, 2));
                 await writable.close();
+                
+                // Actualizar la memoria a la fecha recién guardada para no perderla si se sigue editando en caliente
+                window.fechaCreacionOriginal = fechaGuardado; 
+                
                 alert(`✅ Caso guardado exitosamente.`);
 
                 if(document.getElementById("dashboardPanel").style.display === "flex") {
@@ -599,7 +678,7 @@ reemplázalo:
         }
 
         /* ========================================================
-           LA NUEVA VISTA DIRECTORIO (TABLA VS CUADRÍCULA)
+           LA NUEVA VISTA DIRECTORIO (BÚSQUEDA GLOBAL MULTICAMPO)
            ======================================================== */
         function renderizarDirectorio() {
             const contenedor = document.getElementById("contenedorCasos");
@@ -608,27 +687,27 @@ reemplázalo:
             const filtro = document.getElementById("buscadorCasos").value.toLowerCase();
             contenedor.innerHTML = "";
 
+            // Filtro Global en TODOS los campos como lo pediste
             const filtrados = listaCasosGlobal.filter(c => {
-                const cadenaStr = `${c.nombre} ${c.referencia} ${c.observaciones} ${c.indemnizacionTotal}`.toLowerCase();
+                const cadenaStr = `${c.nombre} ${c.referencia} ${c.observaciones} ${c.indemnizacionTotal} ${c.fechaNacimiento} ${c.fechaTraslado} ${c.fechaNomina} ${c.mesadaRPM} ${c.mesadaRAIS}`.toLowerCase();
                 return cadenaStr.includes(filtro);
             });
 
             if(filtrados.length === 0) {
-                contenedor.innerHTML = `<p style="grid-column: 1/-1; text-align:center; color: var(--text-muted);">No se encontraron casos guardados que coincidan con la búsqueda.</p>`;
+                contenedor.innerHTML = `<p style="grid-column: 1/-1; text-align:center; color: var(--text-muted);">No se encontraron registros que coincidan con la búsqueda.</p>`;
                 return;
             }
 
             if (vistaActual === "list") {
-                // VISTA TABLA DIRECTORIO
                 let tableHTML = `
                 <table class="directory-table">
                     <thead>
                         <tr>
                             <th>Nombre del Cliente</th>
                             <th>Referencia</th>
-                            <th>Fecha</th>
-                            <th>RPM (Hipotética)</th>
-                            <th>RAIS (Real)</th>
+                            <th>Guardado (Original)</th>
+                            <th>Edad Traslado</th>
+                            <th>Edad Nómina</th>
                             <th>Indemnización</th>
                             <th>Acciones</th>
                         </tr>
@@ -638,7 +717,6 @@ reemplázalo:
 
                 filtrados.forEach(caso => {
                     const fechaFormat = caso.fechaCreacion ? new Date(caso.fechaCreacion).toLocaleDateString() : "N/A";
-                    // Se pasa todo el objeto caso para la nueva ventana modal
                     const dataStr = JSON.stringify(caso).replace(/'/g, "&apos;");
 
                     tableHTML += `
@@ -646,8 +724,8 @@ reemplázalo:
                             <td><strong>${caso.nombre || 'Anónimo'}</strong></td>
                             <td>${caso.referencia || '-'}</td>
                             <td>${fechaFormat}</td>
-                            <td>${formatter.format(caso.mesadaRPM || 0)}</td>
-                            <td>${formatter.format(caso.mesadaRAIS || 0)}</td>
+                            <td>${caso.edadTraslado || '-'}</td>
+                            <td>${caso.edadNomina || '-'}</td>
                             <td><span class="badge">${formatter.format(caso.indemnizacionTotal || 0)}</span></td>
                             <td>
                                 <div class="table-actions">
@@ -673,8 +751,8 @@ reemplázalo:
                     card.innerHTML = `
                         <div>
                             <h3>${caso.nombre || 'Cliente Anónimo'}</h3>
-                            <p>${caso.referencia || 'Sin Ref.'} | ${fechaFormat}</p>
-                            <p>RPM: ${formatter.format(caso.mesadaRPM || 0)} | RAIS: ${formatter.format(caso.mesadaRAIS || 0)}</p>
+                            <p>${caso.referencia || 'Sin Ref.'} | Creación: ${fechaFormat}</p>
+                            <p>E. Traslado: ${caso.edadTraslado || '-'} | E. Nómina: ${caso.edadNomina || '-'}</p>
                             <div class="badge">${formatter.format(caso.indemnizacionTotal || 0)}</div>
                         </div>
                         <div class="case-actions">
@@ -691,28 +769,37 @@ reemplázalo:
             document.getElementById("nombre").value = data.nombre || ''; 
             document.getElementById("referencia").value = data.referencia || ''; 
             document.getElementById("sexo").value = data.sexo || 'M';
-            document.getElementById("edadTraslado").value = data.edadTraslado || ''; 
             document.getElementById("semanasTraslado").value = data.semanasTraslado || '';
             document.getElementById("mesadaRPM").value = data.mesadaRPM || ''; 
             document.getElementById("mesadaRAIS").value = data.mesadaRAIS || '';
-            document.getElementById("edadNomina").value = data.edadNomina || '';
             document.getElementById("observaciones").value = data.observaciones || '';
             
+            // Cargar SÓLO FECHAS y recalcular las edades (Compatibilidad)
+            document.getElementById("fechaNacimiento").value = data.fechaNacimiento || '';
+            document.getElementById("fechaTraslado").value = data.fechaTraslado || '';
+            document.getElementById("fechaNomina").value = data.fechaNomina || '';
+            actualizarEdades();
+
             window.indemnizacionActual = null; 
+            window.fechaCreacionOriginal = data.fechaCreacion || null; // Respetar la fecha de creación original del archivo
 
             document.getElementById("dashboardPanel").style.display = "none";
             document.getElementById("resultadoWrapper").style.display = "none";
             document.getElementById("welcomePanel").style.display = "flex";
             document.getElementById("sidebar").classList.remove("collapsed");
             
-            // Si el modal de detalle estaba abierto, lo cerramos
             document.getElementById("modalDetalle").style.display = "none";
             
-            alert(`✅ Datos de ${data.nombre} cargados en el formulario.\nHaz clic en "Generar Dictamen" para recalcular la indemnización.`);
+            // Si el archivo JSON viejo no tenía las fechas, las edades quedarán en blanco, se fuerza a llenar y calcular de nuevo.
+            if(!data.fechaNacimiento || !data.fechaTraslado || !data.fechaNomina) {
+                alert(`⚠️ Atención: Este caso de ${data.nombre} es de una versión anterior y no tiene fechas. Por favor llene las fechas (nacimiento, traslado, nómina) para recalcular.`);
+            } else {
+                alert(`✅ Datos de ${data.nombre} cargados. Las edades se calcularon automáticamente desde las fechas.\nHaz clic en "Generar Dictamen" para recalcular la indemnización.`);
+            }
         }
 
         /* ========================================================
-           3. MOTOR MATEMÁTICO (LA FÓRMULA DE LA CORTE)
+           4. MOTOR MATEMÁTICO (LA FÓRMULA DE LA CORTE)
            ======================================================== */
         const tablaEV = {
             57:{M:25.50,F:29.70}, 58:{M:24.60,F:28.80}, 59:{M:23.80,F:27.90}, 60:{M:23.00,F:27.00},
@@ -722,17 +809,29 @@ reemplázalo:
         const formatter = new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', minimumFractionDigits: 0, maximumFractionDigits: 2 });
 
         function liquidar() {
+            // Refrescar cálculo de fechas por si acaso
+            actualizarEdades();
+
             const nombre = document.getElementById("nombre").value || "Cliente Anónimo";
             const referencia = document.getElementById("referencia").value || "Sin Referencia";
             const sexo = document.getElementById("sexo").value;
-            const E = parseFloat(document.getElementById("edadTraslado").value);
+            
+            const fechaNac = document.getElementById("fechaNacimiento").value;
+            const fechaTraslado = document.getElementById("fechaTraslado").value;
+            const fechaNomina = document.getElementById("fechaNomina").value;
+
+            const E = parseInt(document.getElementById("edadTraslado").value);
+            const edadNomina = parseInt(document.getElementById("edadNomina").value);
             const S = parseFloat(document.getElementById("semanasTraslado").value);
             const mesadaRPM = parseFloat(document.getElementById("mesadaRPM").value);
             const mesadaRAIS = parseFloat(document.getElementById("mesadaRAIS").value);
-            const edadNomina = parseInt(document.getElementById("edadNomina").value);
 
-            if(!E || !S || !mesadaRPM || !mesadaRAIS || !edadNomina) { alert("Llene todos los campos numéricos."); return false; }
-            if(!tablaEV[edadNomina]) { alert("Edad de nómina fuera de rango en la tabla simplificada."); return false; }
+            if(!fechaNac || !fechaTraslado || !fechaNomina || isNaN(E) || isNaN(S) || isNaN(mesadaRPM) || isNaN(mesadaRAIS) || isNaN(edadNomina)) { 
+                alert("Complete las fechas y todos los campos numéricos."); return false; 
+            }
+            if(!tablaEV[edadNomina]) { 
+                alert(`La Edad en Nómina (${edadNomina}) está fuera del rango en la tabla simplificada de EV.`); return false; 
+            }
 
             const Er = (sexo === 'M') ? 62 : 57;
             
@@ -749,12 +848,17 @@ reemplázalo:
 
             window.indemnizacionActual = indemnizacionTotal;
 
+            // Inyectar en reporte
             document.getElementById("resNombre").innerText = nombre;
             document.getElementById("resReferencia").innerText = referencia;
+            document.getElementById("resFechaNac").innerText = fechaNac;
+            document.getElementById("resFechaTraslado").innerText = fechaTraslado;
             document.getElementById("resEr").innerText = Er + " años";
             document.getElementById("resE").innerText = E + " años";
             document.getElementById("resS").innerText = S + " sem.";
             document.getElementById("resPP").innerText = PP_porcentaje + "%";
+            document.getElementById("resFechaNomina").innerText = fechaNomina;
+            document.getElementById("resEdadNomina").innerText = edadNomina + " años";
             document.getElementById("resRPM").innerText = formatter.format(mesadaRPM);
             document.getElementById("resRAIS").innerText = formatter.format(mesadaRAIS);
             document.getElementById("resDiferencia").innerText = formatter.format(diferenciaMensual);
@@ -764,8 +868,8 @@ reemplázalo:
 
             document.getElementById("copyPasteText").innerText = 
 `REF: ${referencia}
-HECHO: Al momento de efectuarse el traslado desinformado, mi poderdante se encontraba en una posición fáctica idónea con ${E} años de edad y un capital de ${S} semanas en el régimen público.
-HECHO: De no haber mediado el incumplimiento del deber de información de la AFP, mi poderdante habría conservado la probabilidad de pensionarse con una mesada aproximada de ${formatter.format(mesadaRPM)}. Al pensionarse en el RAIS a sus ${edadNomina} años y ser incluido en nómina, el daño se hizo irreversible, percibiendo una mesada inferior de ${formatter.format(mesadaRAIS)}.
+HECHO: Al momento de efectuarse el traslado desinformado el ${fechaTraslado}, mi poderdante se encontraba en una posición fáctica idónea con una edad calculada en números enteros de ${E} años, y un capital de ${S} semanas en el régimen público.
+HECHO: De no haber mediado el incumplimiento del deber de información de la AFP, mi poderdante habría conservado la probabilidad de pensionarse con una mesada aproximada de ${formatter.format(mesadaRPM)}. Al pensionarse en el RAIS y ser incluido en nómina el ${fechaNomina}, contando con ${edadNomina} años exactos, el daño se hizo irreversible y cuantificable en la vía judicial (SL169-2026), percibiendo una mesada inferior de ${formatter.format(mesadaRAIS)}.
 PRETENSIONES: Que se condene a la AFP a pagar un único desembolso global y definitivo por la suma de ${formatter.format(indemnizacionTotal)} a título de reparación por la Pérdida de Oportunidad, aplicando la probabilidad pensional truncada del ${PP_porcentaje}%.`;
 
             document.getElementById("welcomePanel").style.display = "none";
@@ -774,7 +878,7 @@ PRETENSIONES: Que se condene a la AFP a pagar un único desembolso global y defi
         }
 
         /* ========================================================
-           4. FUNCIONES DE EXPORTACIÓN
+           5. FUNCIONES DE EXPORTACIÓN
            ======================================================== */
         function obtenerNombreArchivo() {
             let nom = document.getElementById("nombre").value.trim().replace(/[^a-z0-9]/gi, '_');
