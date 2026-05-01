@@ -131,6 +131,11 @@
         .close-modal { position: absolute; top: 15px; right: 15px; background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--text-muted); transition: color 0.2s;}
         .close-modal:hover { color: var(--danger-color); }
 
+        /* Lista Validaciones */
+        .validacion-item { margin-bottom: 12px; padding: 12px; background: var(--bg-color); border-left: 4px solid var(--danger-color); border-radius: 4px;}
+        .validacion-item strong { color: var(--danger-color); display: block; margin-bottom: 5px; font-size: 1rem;}
+        .validacion-item span { display: block; font-size: 0.85rem; color: var(--text-muted); line-height: 1.4; }
+
         /* ====== DISEÑO PANEL BIENVENIDA ====== */
         .welcome-panel { background-color: var(--primary-color); color: #FFF; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 50px 40px; text-align: center; border-radius: 12px; box-shadow: inset 0 0 30px rgba(0,0,0,0.15); box-sizing: border-box; min-height: calc(100vh - var(--navbar-height) - 40px); }
         .welcome-panel img { max-width: 280px; margin-bottom: 25px; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3)); }
@@ -157,22 +162,17 @@
 
         .case-list.list-view { display: block; overflow-x: auto; }
         .directory-table { width: 100%; border-collapse: collapse; background: var(--surface-color); border-radius: 8px; overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.02); margin: 0; }
-        .directory-table th, .directory-table td { padding: 12px 16px; text-align: left; border-bottom: 1px solid var(--border-color); font-size: 0.9rem; vertical-align: middle;}
+        .directory-table th, .directory-table td { padding: 12px 10px; text-align: left; border-bottom: 1px solid var(--border-color); font-size: 0.85rem; vertical-align: middle;}
         .directory-table th { background-color: var(--primary-color); color: white; font-weight: 600; white-space: nowrap; border-bottom: none;}
         .directory-table tr:last-child td { border-bottom: none; }
         .directory-table tr:hover { background-color: var(--highlight-bg); }
         .directory-table .badge { margin-top: 0; }
-        .table-actions { display: flex; gap: 8px; flex-wrap: nowrap;}
+        .table-actions { display: flex; gap: 5px; flex-wrap: nowrap;}
 
         .modal-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; font-size: 0.95rem; margin-top: 15px;}
         .modal-grid > div { background: var(--bg-color); padding: 12px; border-radius: 8px; border: 1px solid var(--border-color);}
         .modal-grid .full-width { grid-column: 1 / -1; }
         .modal-grid .highlight { background: var(--success-bg); color: var(--success-color); border-color: var(--success-color); font-weight: bold; text-align: center; font-size: 1.1rem;}
-
-        /* Lista Validaciones */
-        .validacion-item { margin-bottom: 12px; padding: 10px; background: var(--bg-color); border-left: 4px solid var(--danger-color); border-radius: 4px;}
-        .validacion-item strong { color: var(--danger-color); }
-        .validacion-item span { display: block; margin-top: 4px; font-size: 0.85rem; color: var(--text-muted); }
 
     </style>
 </head>
@@ -252,11 +252,11 @@
                     <input type="number" id="mesadaRPM" class="form-control" placeholder="Ej: 1409812">
                 </div>
                 <div class="form-group">
-                    <label>Mesada Real RAIS <button type="button" class="btn-help" onclick="mostrarAyuda('Mesada Real RAIS', 'Justificación Jurídica: El perjuicio patrimonial (lucro cesante o disvalor periódico) surge de la diferencia pura entre lo concedido en el RAIS y la hipotética del RPM.')">?</button></label>
+                    <label>Mesada Real RAIS <button type="button" class="btn-help" onclick="mostrarAyuda('Mesada Real RAIS', 'Justificación Jurídica: El perjuicio patrimonial surge de la diferencia pura entre lo concedido en el RAIS y la hipotética del RPM.')">?</button></label>
                     <input type="number" id="mesadaRAIS" class="form-control" placeholder="Ej: 877803">
                 </div>
                 <div class="form-group">
-                    <label>Ingreso a Nómina (F.E.P.) <button type="button" class="btn-help" onclick="mostrarAyuda('Fecha Ingreso Nómina (F.E.P.)', 'Justificación Jurídica: Fecha de Estatus de Pensionado. Es el momento crítico donde el daño se hace irreversible, se materializa la pérdida y, además, sirve para cruzar la edad con las tablas de expectativa de vida de la SuperFinanciera.')">?</button></label>
+                    <label>Ingreso a Nómina (F.E.P.) <button type="button" class="btn-help" onclick="mostrarAyuda('Fecha Ingreso Nómina (F.E.P.)', 'Justificación Jurídica: Fecha de Estatus de Pensionado. Es el momento crítico donde el daño se hace irreversible, se materializa la pérdida y sirve para cruzar la edad con las tablas de expectativa de vida de la SuperFinanciera.')">?</button></label>
                     <input type="date" id="fechaNomina" class="form-control" onchange="actualizarEdades()">
                 </div>
                 <div class="form-group">
@@ -357,7 +357,7 @@
 
                 <div class="dashboard-controls">
                     <input type="text" id="buscadorCasos" class="search-bar" placeholder="🔍 Buscar por nombre, referencia o mesada..." onkeyup="renderizarDirectorio()">
-                    <button class="btn-help" style="width: 28px; height: 28px; font-size: 1.1rem;" title="Ayuda del Buscador" onclick="mostrarAyuda('Buscador Global (Filtro)', 'Justificación: El sistema de búsqueda permite filtrar los registros guardados analizando en tiempo real CUALQUIER campo de la base de datos (observaciones, nombre, radicado, montos, etc.). Escribe aquí tu criterio de búsqueda para aislar un caso, o borra el texto para cerrar el filtro y regresar a la vista general de todos tus expedientes.')">?</button>
+                    <button class="btn-help" style="width: 28px; height: 28px; font-size: 1.1rem;" title="Ayuda del Buscador" onclick="mostrarAyuda('Buscador Global (Filtro)', 'El sistema de búsqueda permite filtrar los registros guardados analizando en tiempo real CUALQUIER campo de la base de datos (observaciones, nombre, radicado, montos, fechas, etc.). Escribe aquí tu criterio de búsqueda para aislar un caso, o borra el texto para cerrar el filtro.')">?</button>
                     <button class="btn btn-secondary" onclick="cambiarVistaDashboard()" id="btnVista" style="margin-left:auto;">📄 Vista Lista</button>
                 </div>
 
@@ -390,12 +390,12 @@
         </div>
     </div>
 
-    <!-- MODAL DE VALIDACIÓN JUDICIAL (NUEVO) -->
+    <!-- MODAL DE VALIDACIÓN JUDICIAL (NUEVO / RECUPERADO) -->
     <div class="modal-overlay" id="modalValidacion">
         <div class="modal-content" style="border-top: 5px solid var(--danger-color); max-width: 550px;">
             <button class="close-modal" title="Cerrar" onclick="document.getElementById('modalValidacion').style.display='none'">✖</button>
             <h3 style="color: var(--danger-color); margin-top:0;">⚠️ Faltan Datos Obligatorios</h3>
-            <p style="color: var(--text-main); font-size: 0.95rem;">El cálculo pericial no puede ejecutarse. Según los parámetros exigidos por la Corte Suprema de Justicia, debes completar los siguientes datos:</p>
+            <p style="color: var(--text-main); font-size: 0.95rem;">El cálculo pericial no puede ejecutarse. Según los parámetros exigidos por la jurisprudencia reciente de la Corte Suprema de Justicia, debes completar obligatoriamente los siguientes datos:</p>
             <div id="listaValidacion" style="margin-top: 15px; margin-bottom: 25px;"></div>
             <button class="btn btn-primary" style="background-color: var(--danger-color); width: 100%;" onclick="document.getElementById('modalValidacion').style.display='none'">Entendido, voy a completarlos</button>
         </div>
@@ -468,9 +468,10 @@
                     <div><strong>📌 Referencia:</strong><br>${caso.referencia || 'N/A'}</div>
                     <div><strong>📅 Fecha de Guardado:</strong><br>${fechaGuardadoFormat}</div>
                     <div><strong>🚻 Sexo:</strong><br>${sexoStr}</div>
-                    <div><strong>🎂 Traslado:</strong><br>${caso.fechaTraslado || 'N/A'} (${caso.edadTraslado || 0} años)</div>
-                    <div><strong>📅 Nómina (F.E.P):</strong><br>${caso.fechaNomina || 'N/A'} (${caso.edadNomina || 0} años)</div>
+                    <div><strong>🎂 Nacimiento:</strong><br>${caso.fechaNacimiento || 'N/A'}</div>
                     <div><strong>⏳ Semanas Traslado:</strong><br>${caso.semanasTraslado || 0} sem.</div>
+                    <div><strong>🗓️ F. Traslado (E):</strong><br>${caso.fechaTraslado || 'N/A'} (${caso.edadTraslado || 0} años)</div>
+                    <div><strong>📅 F. Nómina (F.E.P):</strong><br>${caso.fechaNomina || 'N/A'} (${caso.edadNomina || 0} años)</div>
                     <div><strong>🏦 Mesada RPM:</strong><br>${formatter.format(caso.mesadaRPM || 0)}</div>
                     <div><strong>📉 Mesada RAIS:</strong><br>${formatter.format(caso.mesadaRAIS || 0)}</div>
                     <div class="full-width highlight">
@@ -690,7 +691,7 @@
         }
 
         /* ========================================================
-           VISTA DIRECTORIO (BÚSQUEDA GLOBAL MULTICAMPO)
+           VISTA DIRECTORIO (AHORA SÍ MUESTRA LAS FECHAS CLARAS)
            ======================================================== */
         function renderizarDirectorio() {
             const contenedor = document.getElementById("contenedorCasos");
@@ -710,15 +711,16 @@
             }
 
             if (vistaActual === "list") {
+                // VISTA TABLA DIRECTORIO CON COLUMNAS DE FECHAS EXPRESAS
                 let tableHTML = `
                 <table class="directory-table">
                     <thead>
                         <tr>
                             <th>Nombre del Cliente</th>
                             <th>Referencia</th>
-                            <th>Guardado</th>
-                            <th>E. Traslado</th>
-                            <th>E. Nómina</th>
+                            <th>F. Nacimiento</th>
+                            <th>F. Traslado</th>
+                            <th>F. Nómina</th>
                             <th>Indemnización</th>
                             <th>Acciones</th>
                         </tr>
@@ -727,16 +729,15 @@
                 `;
 
                 filtrados.forEach(caso => {
-                    const fechaFormat = caso.fechaCreacion ? new Date(caso.fechaCreacion).toLocaleDateString() : "N/A";
                     const dataStr = JSON.stringify(caso).replace(/'/g, "&apos;");
 
                     tableHTML += `
                         <tr>
                             <td><strong>${caso.nombre || 'Anónimo'}</strong></td>
                             <td>${caso.referencia || '-'}</td>
-                            <td>${fechaFormat}</td>
-                            <td>${caso.edadTraslado || '-'}</td>
-                            <td>${caso.edadNomina || '-'}</td>
+                            <td>${caso.fechaNacimiento || '-'}</td>
+                            <td>${caso.fechaTraslado || '-'} <br><small style="color:var(--text-muted)">(${caso.edadTraslado || 0} años)</small></td>
+                            <td>${caso.fechaNomina || '-'} <br><small style="color:var(--text-muted)">(${caso.edadNomina || 0} años)</small></td>
                             <td><span class="badge">${formatter.format(caso.indemnizacionTotal || 0)}</span></td>
                             <td>
                                 <div class="table-actions">
@@ -752,8 +753,8 @@
                 contenedor.innerHTML = tableHTML;
 
             } else {
+                // VISTA CUADRÍCULA (Tarjetas)
                 filtrados.forEach((caso) => {
-                    const fechaFormat = caso.fechaCreacion ? new Date(caso.fechaCreacion).toLocaleDateString() : "Sin fecha";
                     const dataStr = JSON.stringify(caso).replace(/'/g, "&apos;");
                     
                     const card = document.createElement("div");
@@ -761,8 +762,8 @@
                     card.innerHTML = `
                         <div>
                             <h3>${caso.nombre || 'Cliente Anónimo'}</h3>
-                            <p>${caso.referencia || 'Sin Ref.'} | Creación: ${fechaFormat}</p>
-                            <p>E. Traslado: ${caso.edadTraslado || '-'} | E. Nómina: ${caso.edadNomina || '-'}</p>
+                            <p>${caso.referencia || 'Sin Ref.'}</p>
+                            <p><strong>Nac:</strong> ${caso.fechaNacimiento || '-'} | <strong>Tras:</strong> ${caso.fechaTraslado || '-'} | <strong>Nóm:</strong> ${caso.fechaNomina || '-'}</p>
                             <div class="badge">${formatter.format(caso.indemnizacionTotal || 0)}</div>
                         </div>
                         <div class="case-actions">
@@ -798,7 +799,7 @@
             document.getElementById("sidebar").classList.remove("collapsed");
             document.getElementById("modalDetalle").style.display = "none";
             
-            // LA VENTANA DE VALIDACIÓN AL CARGAR UN JSON VIEJO
+            // LA VENTANA DE VALIDACIÓN AL CARGAR UN JSON VIEJO SIN FECHAS
             if(!data.fechaNacimiento || !data.fechaTraslado || !data.fechaNomina) {
                 let htmlValidacion = `
                     <div class="validacion-item">
@@ -812,7 +813,7 @@
         }
 
         /* ========================================================
-           4. MOTOR MATEMÁTICO (LA FÓRMULA DE LA CORTE) Y VALIDACIÓN
+           4. MOTOR MATEMÁTICO (FÓRMULA CSJ) Y VALIDACIÓN JUDICIAL
            ======================================================== */
         const tablaEV = {
             57:{M:25.50,F:29.70}, 58:{M:24.60,F:28.80}, 59:{M:23.80,F:27.90}, 60:{M:23.00,F:27.00},
@@ -838,15 +839,15 @@
             const mesadaRPM = parseFloat(document.getElementById("mesadaRPM").value);
             const mesadaRAIS = parseFloat(document.getElementById("mesadaRAIS").value);
 
-            // 🛑 MOTOR DE VALIDACIÓN JUDICIAL 🛑
+            // 🛑 MOTOR DE VALIDACIÓN JUDICIAL RECUPERADO 🛑
             let erroresHTML = "";
 
             if(!fechaNac) erroresHTML += `<div class="validacion-item"><strong>📅 Fecha de Nacimiento</strong><span><b>Justificación CSJ:</b> Es indispensable para determinar en números enteros exactos (sin redondear) la edad al momento del traslado y de nómina.</span></div>`;
-            if(!fechaTraslado) erroresHTML += `<div class="validacion-item"><strong>🗓️ Fecha Traslado al RAIS</strong><span><b>Justificación CSJ:</b> Marca el hito temporal originario donde se cercenó el derecho de información y se materializó el daño.</span></div>`;
-            if(isNaN(S) || S <= 0) erroresHTML += `<div class="validacion-item"><strong>⏳ Semanas al Traslado (S)</strong><span><b>Justificación CSJ:</b> Es el pilar del cálculo probabilístico. Define qué proporción del capital para pensionarse existía en el régimen público (frente a la meta de 1300 sem).</span></div>`;
+            if(!fechaTraslado) erroresHTML += `<div class="validacion-item"><strong>🗓️ Fecha Traslado al RAIS</strong><span><b>Justificación CSJ:</b> Marca el hito temporal originario donde se cercenó el derecho de información y se materializó el daño. (SL168-2026, SL169-2026).</span></div>`;
+            if(isNaN(S) || S <= 0) erroresHTML += `<div class="validacion-item"><strong>⏳ Semanas al Traslado (S)</strong><span><b>Justificación CSJ:</b> Es el pilar del cálculo probabilístico. Define qué proporción del capital para pensionarse existía en el régimen público frente a las 1300 sem requeridas. (SL175-2026).</span></div>`;
             if(isNaN(mesadaRPM) || mesadaRPM <= 0) erroresHTML += `<div class="validacion-item"><strong>🏦 Mesada Hipotética RPM</strong><span><b>Justificación CSJ:</b> Bajo el principio de compensación, marca el límite patrimonial máximo que se frustró para la víctima.</span></div>`;
-            if(isNaN(mesadaRAIS) || mesadaRAIS <= 0) erroresHTML += `<div class="validacion-item"><strong>📉 Mesada Real RAIS</strong><span><b>Justificación CSJ:</b> El disvalor o perjuicio a indemnizar solo puede determinarse comparando este monto real contra la expectativa hipotética.</span></div>`;
-            if(!fechaNomina) erroresHTML += `<div class="validacion-item"><strong>📅 Ingreso a Nómina (F.E.P.)</strong><span><b>Justificación CSJ:</b> Es el instante preciso en que el daño se vuelve irreversible y cuantificable en la vía judicial (impidiendo la declaratoria de ineficacia).</span></div>`;
+            if(isNaN(mesadaRAIS) || mesadaRAIS <= 0) erroresHTML += `<div class="validacion-item"><strong>📉 Mesada Real RAIS</strong><span><b>Justificación CSJ:</b> El perjuicio se estima desde la brecha nominal de ambas pensiones, convirtiendo la diferencia económica en un valor esperado.</span></div>`;
+            if(!fechaNomina) erroresHTML += `<div class="validacion-item"><strong>📅 Ingreso a Nómina (F.E.P.)</strong><span><b>Justificación CSJ:</b> Es el instante preciso en que el daño se vuelve irreversible y cuantificable en la vía judicial (impidiendo la ineficacia). (SL169-2026, SL170-2026).</span></div>`;
             if(!isNaN(edadNomina) && !tablaEV[edadNomina]) erroresHTML += `<div class="validacion-item"><strong>🎂 Edad en Nómina (${edadNomina})</strong><span><b>Justificación Técnica:</b> La edad obtenida tras el ingreso a nómina escapa de los límites de la tabla de Expectativa de Vida (Res 1555).</span></div>`;
 
             if(erroresHTML !== "") {
@@ -855,7 +856,7 @@
                 return false;
             }
 
-            // Súper fórmula de la CSJ
+            // Fórmula CSJ 2026 (Pérdida de Oportunidad)
             const Er = (sexo === 'M') ? 62 : 57;
             const factorSemanas = Math.pow(S / 1300, 0.5);
             const factorEdad = Math.pow(2, -Math.abs(E - Er) / 100);
@@ -891,7 +892,7 @@
             document.getElementById("copyPasteText").innerText = 
 `REF: ${referencia}
 HECHO: Al momento de efectuarse el traslado desinformado el ${fechaTraslado}, mi poderdante se encontraba en una posición fáctica idónea con una edad calculada en números enteros de ${E} años, y un capital de ${S} semanas en el régimen público.
-HECHO: De no haber mediado el incumplimiento del deber de información de la AFP, mi poderdante habría conservado la probabilidad de pensionarse con una mesada aproximada de ${formatter.format(mesadaRPM)}. Al pensionarse en el RAIS y ser incluido en nómina el ${fechaNomina}, contando con ${edadNomina} años exactos, el daño se hizo irreversible y cuantificable en la vía judicial, percibiendo una mesada inferior de ${formatter.format(mesadaRAIS)}.
+HECHO: De no haber mediado el incumplimiento del deber de información de la AFP, mi poderdante habría conservado la probabilidad de pensionarse con una mesada aproximada de ${formatter.format(mesadaRPM)}. Al pensionarse en el RAIS y ser incluido en nómina el ${fechaNomina}, contando con ${edadNomina} años exactos, el daño se hizo irreversible y cuantificable en la vía judicial (SL169-2026), percibiendo una mesada inferior de ${formatter.format(mesadaRAIS)}.
 PRETENSIONES: Que se condene a la AFP a pagar un único desembolso global y definitivo por la suma de ${formatter.format(indemnizacionTotal)} a título de reparación por la Pérdida de Oportunidad, aplicando la probabilidad pensional truncada del ${PP_porcentaje}%.`;
 
             document.getElementById("welcomePanel").style.display = "none";
