@@ -1,3 +1,4 @@
+tu archivo oportuno.html:
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -223,8 +224,8 @@
                 <button class="btn btn-secondary" onclick="guardarDictamen()">💾 Guardar</button>
                 <button class="btn btn-primary" style="width: auto; padding: 8px 14px;" onclick="mostrarDashboard()">🗂️ Casos Guardados</button>
                 
-                <!-- BOTÓN USUARIOS DINÁMICO OCULTO POR DEFECTO -->
-                <button class="btn btn-success" id="btnUsuarios" style="display: none;" onclick="abrirUsuarios()">👥 Usuarios</button>
+                <!-- BOTÓN USUARIOS CORREGIDO CON CLASE BASE Y COLOR INTEGRADO -->
+                <button class="btn" id="btnUsuarios" style="display: none; background-color: var(--success-color); color: white;" onclick="abrirUsuarios()">👥 Usuarios</button>
                 
                 <button class="btn btn-secondary" onclick="toggleTheme()">🌗 Tema</button>
             </div>
@@ -740,7 +741,7 @@
                     await idb.set("Tipo", tipoUsuarioDB);
                 }
 
-                // Mostrar botón solo a usuarios Tipo A
+                // Mostrar botón solo a usuarios Tipo A, restaurando el display flex nativo de '.btn'
                 if (tipoUsuarioDB === 'A') {
                     document.getElementById('btnUsuarios').style.display = 'inline-flex';
                 }
