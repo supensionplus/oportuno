@@ -1,4 +1,3 @@
-completo y reemplaza tu archivo oportuno.html:
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -101,6 +100,7 @@ completo y reemplaza tu archivo oportuno.html:
 
         /* ====== BOTONES ====== */
         .btn { padding: 8px 14px; font-size: 0.85rem; font-weight: 600; border: none; border-radius: 6px; cursor: pointer; transition: all 0.2s; display: inline-flex; align-items: center; justify-content: center; gap: 6px; }
+        .btn-sm { padding: 6px 10px; font-size: 0.75rem; }
         .btn-primary { background-color: var(--primary-color); color: #FFF; width: 100%; padding: 14px; font-size: 1rem;}
         .btn-primary:hover { opacity: 0.9; }
         .btn-secondary { background-color: var(--surface-color); color: var(--text-main); border: 1px solid var(--border-color); }
@@ -141,29 +141,26 @@ completo y reemplaza tu archivo oportuno.html:
         .dashboard-controls { display: flex; gap: 10px; align-items: center; margin-bottom: 10px; flex-wrap: wrap;}
         .search-bar { flex: 1; padding: 12px 16px; font-size: 1rem; border: 1px solid var(--primary-color); border-radius: 8px; background: var(--surface-color); color: var(--text-main); min-width: 250px;}
         
-        /* ESTILOS DE VISTAS (CUADRÍCULA Y LISTA) */
+        /* ESTILOS DE VISTAS (CUADRÍCULA Y TABLA DIRECTORIO) */
+        
+        /* 1. Vista Cuadrícula (Tarjetas) */
+        .case-list.grid-view { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 15px; }
         .case-card { background: var(--surface-color); border: 1px solid var(--border-color); border-radius: 8px; padding: 16px; box-shadow: 0 2px 4px rgba(0,0,0,0.02); display: flex; flex-direction: column; justify-content: space-between; transition: all 0.2s;}
         .case-card h3 { margin: 0 0 5px 0; color: var(--primary-color); font-size: 1.1rem;}
         .case-card p { margin: 3px 0; font-size: 0.85rem; color: var(--text-muted); }
-        .case-card .badge { display: inline-block; background: var(--success-bg); color: var(--success-color); padding: 3px 8px; border-radius: 12px; font-size: 0.75rem; font-weight: 600; margin-top: 8px;}
+        .badge { display: inline-block; background: var(--success-bg); color: var(--success-color); padding: 4px 8px; border-radius: 12px; font-size: 0.8rem; font-weight: 600; margin-top: 8px;}
         .case-actions { margin-top: 15px; display: flex; gap: 8px; }
 
-        /* VISTA CUADRÍCULA (GRID) */
-        .case-list.grid-view { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 15px; }
+        /* 2. Vista Lista (Tabla Directorio) */
+        .case-list.list-view { display: block; overflow-x: auto; }
+        .directory-table { width: 100%; border-collapse: collapse; background: var(--surface-color); border-radius: 8px; overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.02); margin: 0; }
+        .directory-table th, .directory-table td { padding: 12px 16px; text-align: left; border-bottom: 1px solid var(--border-color); font-size: 0.9rem; vertical-align: middle;}
+        .directory-table th { background-color: var(--primary-color); color: white; font-weight: 600; white-space: nowrap; border-bottom: none;}
+        .directory-table tr:last-child td { border-bottom: none; }
+        .directory-table tr:hover { background-color: var(--highlight-bg); }
+        .directory-table .badge { margin-top: 0; }
+        .table-actions { display: flex; gap: 5px; }
 
-        /* VISTA LISTA (LIST) */
-        .case-list.list-view { display: flex; flex-direction: column; gap: 10px; }
-        .case-list.list-view .case-card { flex-direction: row; align-items: center; justify-content: space-between; padding: 12px 20px;}
-        .case-list.list-view .case-card > div:first-child { display: flex; flex: 1; align-items: center; gap: 20px; flex-wrap: wrap;}
-        .case-list.list-view .case-card h3 { min-width: 200px; margin: 0;}
-        .case-list.list-view .case-card p { margin: 0; }
-        .case-list.list-view .case-card .badge { margin-top: 0; }
-        .case-list.list-view .case-actions { margin-top: 0; margin-left: 15px;}
-
-        @media (max-width: 900px) {
-            .case-list.list-view .case-card { flex-direction: column; align-items: flex-start; }
-            .case-list.list-view .case-actions { margin-top: 15px; margin-left: 0; width: 100%; justify-content: flex-start;}
-        }
     </style>
 </head>
 <body>
@@ -326,12 +323,12 @@ completo y reemplaza tu archivo oportuno.html:
                 </div>
 
                 <div class="dashboard-controls">
-                    <input type="text" id="buscadorCasos" class="search-bar" placeholder="🔍 Buscar por nombre, referencia, observaciones, mesada..." onkeyup="renderizarDirectorio()">
+                    <input type="text" id="buscadorCasos" class="search-bar" placeholder="🔍 Buscar por nombre, referencia o mesada..." onkeyup="renderizarDirectorio()">
                     <button class="btn btn-secondary" onclick="cambiarVistaDashboard()" id="btnVista">📄 Vista Lista</button>
                 </div>
 
                 <div class="case-list grid-view" id="contenedorCasos">
-                    <!-- Tarjetas inyectadas por JS -->
+                    <!-- Tarjetas / Tablas inyectadas por JS -->
                 </div>
             </div>
 
@@ -466,9 +463,7 @@ completo y reemplaza tu archivo oportuno.html:
             return true;
         }
 
-        /* ========================================================
-           GUARDAR JSON (VENTANA NATIVA DEL SISTEMA OPERATIVO)
-           ======================================================== */
+        /* GUARDAR JSON */
         async function guardarDictamen() {
             const nombre = document.getElementById("nombre").value.trim() || "SinNombre";
             if (!window.indemnizacionActual) {
@@ -482,21 +477,13 @@ completo y reemplaza tu archivo oportuno.html:
             let nombreSugerido = `Oportuno_${safeName}.json`;
 
             try {
-                // Configura las opciones para abrir la ventana nativa "Guardar como"
                 const options = {
                     suggestedName: nombreSugerido,
-                    types: [{
-                        description: 'Archivo de Oportuno (JSON)',
-                        accept: {'application/json': ['.json']},
-                    }],
+                    types: [{ description: 'Archivo de Oportuno (JSON)', accept: {'application/json': ['.json']} }],
                 };
 
-                // Si ya vinculaste una carpeta, sugiere abrir allí directamente
-                if (directorioHandle) {
-                    options.startIn = directorioHandle;
-                }
+                if (directorioHandle) options.startIn = directorioHandle;
 
-                // Abre la ventana de diálogo del sistema operativo (maneja los reemplazos nativamente)
                 const fileHandle = await window.showSaveFilePicker(options);
                 const writable = await fileHandle.createWritable();
 
@@ -523,15 +510,14 @@ completo y reemplaza tu archivo oportuno.html:
                 }
 
             } catch (err) {
-                // El error 'AbortError' ocurre simplemente si el usuario le da en "Cancelar" en la ventana de guardar
                 if (err.name !== 'AbortError') {
                     console.error(err);
-                    alert("❌ Error al guardar el archivo en la carpeta seleccionada.");
+                    alert("❌ Error al guardar el archivo.");
                 }
             }
         }
 
-        /* LEER JSONS Y DIBUJAR DASHBOARD */
+        /* LEER JSONS Y RENDERIZAR */
         async function cargarCasosDesdeDirectorio() {
             if (!(await verificarPermisoDirectorio())) return;
             
@@ -578,6 +564,9 @@ completo y reemplaza tu archivo oportuno.html:
             `;
         }
 
+        /* ========================================================
+           LA NUEVA VISTA DIRECTORIO (TABLA VS CUADRÍCULA)
+           ======================================================== */
         function renderizarDirectorio() {
             const contenedor = document.getElementById("contenedorCasos");
             contenedor.className = "case-list " + vistaActual + "-view"; 
@@ -595,24 +584,73 @@ completo y reemplaza tu archivo oportuno.html:
                 return;
             }
 
-            filtrados.forEach((caso, index) => {
-                const fechaFormat = caso.fechaCreacion ? new Date(caso.fechaCreacion).toLocaleDateString() : "Sin fecha";
-                const card = document.createElement("div");
-                card.className = "case-card";
-                card.innerHTML = `
-                    <div>
-                        <h3>${caso.nombre || 'Cliente Anónimo'}</h3>
-                        <p><strong>Ref:</strong> ${caso.referencia || 'N/A'} | <strong>Fecha:</strong> ${fechaFormat}</p>
-                        <p><strong>RPM:</strong> ${formatter.format(caso.mesadaRPM || 0)} | <strong>RAIS:</strong> ${formatter.format(caso.mesadaRAIS || 0)}</p>
-                        <div class="badge">Indemnización: ${formatter.format(caso.indemnizacionTotal || 0)}</div>
-                    </div>
-                    <div class="case-actions">
-                        <button class="btn btn-primary" style="padding: 6px 10px; font-size: 0.8rem;" onclick='cargarJSONalFormulario(${JSON.stringify(caso).replace(/'/g, "&apos;")})'>📥 Cargar al Liquidador</button>
-                        <button class="btn btn-secondary" style="padding: 6px 10px; font-size: 0.8rem;" onclick='abrirModalObs(${JSON.stringify(caso.observaciones || "").replace(/'/g, "&apos;")})'>👁️ Ver Notas</button>
-                    </div>
+            if (vistaActual === "list") {
+                // VISTA TABLA DIRECTORIO (Sin repetir campos a los lados)
+                let tableHTML = `
+                <table class="directory-table">
+                    <thead>
+                        <tr>
+                            <th>Nombre del Cliente</th>
+                            <th>Referencia</th>
+                            <th>Fecha</th>
+                            <th>RPM (Hipotética)</th>
+                            <th>RAIS (Real)</th>
+                            <th>Indemnización</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
                 `;
-                contenedor.appendChild(card);
-            });
+
+                filtrados.forEach(caso => {
+                    const fechaFormat = caso.fechaCreacion ? new Date(caso.fechaCreacion).toLocaleDateString() : "N/A";
+                    const dataStr = JSON.stringify(caso).replace(/'/g, "&apos;");
+                    const obsStr = JSON.stringify(caso.observaciones || "").replace(/'/g, "&apos;");
+
+                    tableHTML += `
+                        <tr>
+                            <td><strong>${caso.nombre || 'Anónimo'}</strong></td>
+                            <td>${caso.referencia || '-'}</td>
+                            <td>${fechaFormat}</td>
+                            <td>${formatter.format(caso.mesadaRPM || 0)}</td>
+                            <td>${formatter.format(caso.mesadaRAIS || 0)}</td>
+                            <td><span class="badge">${formatter.format(caso.indemnizacionTotal || 0)}</span></td>
+                            <td>
+                                <div class="table-actions">
+                                    <button class="btn btn-primary btn-sm" onclick='cargarJSONalFormulario(${dataStr})' title="Cargar">📥</button>
+                                    <button class="btn btn-secondary btn-sm" onclick='abrirModalObs(${obsStr})' title="Ver Notas">👁️</button>
+                                </div>
+                            </td>
+                        </tr>
+                    `;
+                });
+
+                tableHTML += `</tbody></table>`;
+                contenedor.innerHTML = tableHTML;
+
+            } else {
+                // VISTA CUADRÍCULA (Tarjetas normales)
+                filtrados.forEach((caso) => {
+                    const fechaFormat = caso.fechaCreacion ? new Date(caso.fechaCreacion).toLocaleDateString() : "Sin fecha";
+                    const dataStr = JSON.stringify(caso).replace(/'/g, "&apos;");
+                    const obsStr = JSON.stringify(caso.observaciones || "").replace(/'/g, "&apos;");
+                    const card = document.createElement("div");
+                    card.className = "case-card";
+                    card.innerHTML = `
+                        <div>
+                            <h3>${caso.nombre || 'Cliente Anónimo'}</h3>
+                            <p>${caso.referencia || 'Sin Ref.'} | ${fechaFormat}</p>
+                            <p>RPM: ${formatter.format(caso.mesadaRPM || 0)} | RAIS: ${formatter.format(caso.mesadaRAIS || 0)}</p>
+                            <div class="badge">${formatter.format(caso.indemnizacionTotal || 0)}</div>
+                        </div>
+                        <div class="case-actions">
+                            <button class="btn btn-primary btn-sm" style="flex:1;" onclick='cargarJSONalFormulario(${dataStr})'>📥 Cargar</button>
+                            <button class="btn btn-secondary btn-sm" style="flex:1;" onclick='abrirModalObs(${obsStr})'>👁️ Notas</button>
+                        </div>
+                    `;
+                    contenedor.appendChild(card);
+                });
+            }
         }
 
         function cargarJSONalFormulario(data) {
