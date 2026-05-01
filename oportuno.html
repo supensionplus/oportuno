@@ -223,10 +223,12 @@
                 <button class="btn btn-secondary" onclick="guardarDictamen()">💾 Guardar</button>
                 <button class="btn btn-primary" style="width: auto; padding: 8px 14px;" onclick="mostrarDashboard()">🗂️ Casos Guardados</button>
                 
-                <!-- BOTÓN USUARIOS CORREGIDO CON CLASE BASE Y COLOR INTEGRADO -->
                 <button class="btn" id="btnUsuarios" style="display: none; background-color: var(--success-color); color: white;" onclick="abrirUsuarios()">👥 Usuarios</button>
                 
                 <button class="btn btn-secondary" onclick="toggleTheme()">🌗 Tema</button>
+                
+                <!-- NUEVO BOTÓN: CERRAR SESIÓN -->
+                <button class="btn btn-danger" onclick="cerrarSesion()">🚪 Cerrar Sesión</button>
             </div>
         </div>
     </div>
@@ -545,6 +547,15 @@
     <!-- SCRIPT DE BASE DE DATOS Y LOGICA -->
     <script>
         
+        // FUNCIÓN PARA CERRAR SESIÓN
+        function cerrarSesion() {
+            if(confirm("¿Estás seguro de que deseas cerrar la sesión?")) {
+                // Aquí podrías agregar limpieza de variables o localStorage si se requiere
+                alert("Sesión cerrada correctamente.");
+                window.location.reload(); // Recarga la página
+            }
+        }
+
         function abrirUsuarios() {
             window.open('https://docs.google.com/spreadsheets/d/1cekjJpR6grakSUisA86oG8Ioob-l-SgOEn694oqq7dI/edit?gid=0#gid=0', '_blank');
         }
@@ -729,9 +740,7 @@
                 await idb.init();
                 directorioHandle = await idb.get("carpetaTrabajo");
 
-                // ====================================================
-                // NUEVO: Validación del campo "Tipo" desde la Base de Datos
-                // ====================================================
+                // Validación del campo "Tipo" desde la Base de Datos
                 let tipoUsuarioDB = await idb.get("Tipo");
                 
                 // Si la BD está vacía (primer ingreso), forzamos 'U' (usuario) o 'A' por defecto para las pruebas
