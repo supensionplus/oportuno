@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oportuno - Inicio de Sesión</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-color: #F4F6F9;
+            --surface-color: #FFFFFF;
+            --text-main: #1F2937;
+            --text-muted: #6B7280;
+            --primary-color: #0F2B46; 
+            --accent-color: #D4AF37; 
+            --border-color: #E5E7EB;
+            --error-color: #EF4444;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .login-container {
+            background-color: var(--surface-color);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 40px;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            text-align: center;
+        }
+
+        .brand-logo {
+            max-width: 220px;
+            margin-bottom: 10px;
+        }
+
+        .login-container h2 {
+            margin-top: 0;
+            font-size: 1.2rem;
+            color: var(--primary-color);
+            margin-bottom: 5px;
+        }
+
+        .login-container p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            text-align: left;
+            margin-bottom: 20px;
+            position: relative; 
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 16px;
+            padding-right: 40px; 
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            box-sizing: border-box;
+            transition: border-color 0.3s;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            background-color: #FFF;
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 12px;
+            top: 35px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            user-select: none;
+            opacity: 0.7;
+        }
+
+        .toggle-password:hover {
+            opacity: 1;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: #FFF;
+            width: 100%;
+            padding: 14px;
+            font-size: 1rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-top: 10px;
+        }
+
+        .btn-primary:hover {
+            background-color: #1a3e61;
+        }
+
+        .error-message {
+            color: var(--error-color);
+            font-size: 0.85rem;
+            margin-top: 15px;
+            display: none;
+            font-weight: 600;
+        }
+        
+        .loader {
+            display: none;
+            font-size: 0.85rem;
+            color: var(--primary-color);
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="login-container">
+        <!-- Logo de la marca -->
+        <img src="https://i.ibb.co/R49Ybz9S/Logo-Oportuno.webp" alt="Logo Oportuno" class="brand-logo">
+        
+        <h2>Acceso Plataforma Pericial</h2>
+        <p>Ingresa tus credenciales para continuar</p>
+
+        <div class="form-group">
+            <label for="usuario">Usuario</label>
+            <input type="text" id="usuario" class="form-control" placeholder="Ej: canoasesor">
+        </div>
+
+        <div class="form-group">
+            <label for="password">Contraseña</label>
+            <input type="password" id="password" class="form-control" placeholder="••••••••">
+            <span class="toggle-password" id="toggleIcon" onclick="mostrarOcultarClave()">👁️</span>
+        </div>
+
+        <button class="btn-primary" onclick="iniciarSesion()">Ingresar al Liquidador</button>
+        
+        <div id="loader" class="loader">⏳ Conectando con la base de datos...</div>
+        <div id="errorMessage" class="error-message">❌ Usuario o contraseña incorrectos.</div>
+    </div>
+
+    <script>
+        function mostrarOcultarClave() {
+            const inputClave = document.getElementById("password");
+            const icono = document.getElementById("toggleIcon");
+            
+            if (inputClave.type === "password") {
+                inputClave.type = "text";
+                icono.innerText = "🙈"; 
+            } else {
+                inputClave.type = "password";
+                icono.innerText = "👁️"; 
+            }
+        }
+
+        // =========================================================================
+        // NUEVO PUENTE DE SEGURIDAD (CORSPROXY):
+        // Más estable y no es bloqueado por los antivirus locales.
+        // =========================================================================
+        const urlOriginal = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTG1WZVvi7km7oI8s8dM9qjFl3o2oTMIej1fw7H_3gE8ifXmYJsI8yUDeLZif_7vWC0rAR1GMGIynMh/pub?output=csv";
+        const dbUrl = "https://corsproxy.io/?" + encodeURIComponent(urlOriginal);
+
+        async function iniciarSesion() {
+            const userIngresado = document.getElementById("usuario").value.trim();
+            const passIngresado = document.getElementById("password").value.trim();
+            const errorDiv = document.getElementById("errorMessage");
+            const loaderDiv = document.getElementById("loader");
+
+            errorDiv.style.display = "none";
+
+            if (!userIngresado || !passIngresado) {
+                errorDiv.innerText = "⚠️ Por favor, llena ambos campos.";
+                errorDiv.style.display = "block";
+                return;
+            }
+
+            loaderDiv.style.display = "block";
+
+            try {
+                // Descargamos tu base de datos pasando por el nuevo puente
+                const response = await fetch(dbUrl);
+                
+                if (!response.ok) {
+                    throw new Error("El servidor bloqueó la conexión.");
+                }
+
+                const data = await response.text();
+                const filas = data.split('\n');
+                let accesoConcedido = false;
+                let mensajeExito = "";
+
+                const hoy = new Date();
+                hoy.setHours(0,0,0,0);
+
+                let numeroFila = 0;
+                for (const fila of filas) {
+                    // Saltamos la fila 0 porque tiene los títulos
+                    if (numeroFila === 0) { 
+                        numeroFila++; 
+                        continue; 
+                    }
+
+                    const columnas = fila.split(',');
+                    
+                    if (columnas.length >= 5) {
+                        // Usamos .at() para extraer los datos de forma segura
+                        const dbCliente = columnas.at(0).trim();       
+                        const dbUser = columnas.at(1).trim();          
+                        const dbPass = columnas.at(2).trim();          
+                        const dbTipo = columnas.at(3).trim();          
+                        const dbVencimiento = columnas.at(4).trim();   
+
+                        if (userIngresado === dbUser && passIngresado === dbPass) {
+                            
+                            const partesFecha = dbVencimiento.split('/');
+                            if(partesFecha.length === 3) {
+                                // Evaluamos la columna 'Vence'
+                                const fechaVencimiento = new Date(partesFecha.at(2), partesFecha.at(1) - 1, partesFecha.at(0));
+                                
+                                if (hoy > fechaVencimiento) {
+                                    errorDiv.innerText = `❌ Tu suscripción venció el ${dbVencimiento}. Por favor, renueva tu acceso.`;
+                                    errorDiv.style.display = "block";
+                                    loaderDiv.style.display = "none";
+                                    return; 
+                                }
+                            }
+
+                            accesoConcedido = true;
+                            mensajeExito = `✅ ¡Bienvenido(a), ${dbCliente}!\nRedirigiendo a Oportuno...`;
+                            break;
+                        }
+                    }
+                    numeroFila++;
+                }
+
+                loaderDiv.style.display = "none";
+
+                if (accesoConcedido) {
+                    // SE OTORGA EL PASE VIP DE SEGURIDAD
+                    sessionStorage.setItem("acceso_oportuno", "autorizado");
+                    
+                    alert(mensajeExito);
+                    // TELETRANSPORTA EXACTAMENTE AL ARCHIVO OPORT04.HTML
+                    window.location.href = "Oport05.html"; 
+                } else {
+                    errorDiv.innerText = "❌ Usuario o contraseña incorrectos.";
+                    errorDiv.style.display = "block";
+                }
+
+            } catch (error) {
+                loaderDiv.style.display = "none";
+                errorDiv.innerText = "❌ Error de conexión con el servidor. Revisa tu internet e intenta de nuevo.";
+                errorDiv.style.display = "block";
+                console.error(error);
+            }
+        }
+    </script>
+</body>
+</html>
