@@ -1,4 +1,3 @@
-nuevo código:
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -71,7 +70,7 @@ nuevo código:
 
         .nav-right { display: flex; align-items: center; gap: 20px; }
         .user-profile { text-align: right; line-height: 1.3; border-right: 1px solid var(--border-color); padding-right: 15px;}
-        .user-profile .user-name { font-size: 0.85rem; font-weight: 700; color: var(--primary-color); display: block;}
+        .user-profile .user-name { font-size: 0.9rem; font-weight: 700; color: var(--primary-color); display: block;}
         .user-profile .user-license { font-size: 0.75rem; font-weight: 600; color: var(--success-color); display: block;}
 
         .nav-actions { display: flex; gap: 8px; flex-wrap: wrap; }
@@ -131,6 +130,9 @@ nuevo código:
         .modal-content.large-modal { max-width: 800px; padding: 35px;}
         .close-modal { position: absolute; top: 15px; right: 15px; background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--text-muted); transition: color 0.2s;}
         .close-modal:hover { color: var(--danger-color); }
+
+        /* NUEVA REGLA PARA ASEGURAR QUE LA AYUDA FLOTE POR ENCIMA DEL KIT DE LITIGIO */
+        #modalAyuda { z-index: 10005 !important; }
 
         /* Lista Validaciones */
         .validacion-item { margin-bottom: 12px; padding: 12px; background: var(--bg-color); border-left: 4px solid var(--danger-color); border-radius: 4px;}
@@ -210,9 +212,9 @@ nuevo código:
         </div>
         
         <div class="nav-right">
-            <!-- BLOQUE DE USUARIO Y VENCIMIENTO -->
+            <!-- BLOQUE DE USUARIO Y VENCIMIENTO ACTUALIZADO -->
             <div class="user-profile">
-                <span class="user-name">👤 Usuario Activo</span>
+                <span class="user-name">👤 César Cano</span>
                 <span class="user-license">⏳ Vence: 31/12/2026</span>
             </div>
 
@@ -234,7 +236,7 @@ nuevo código:
         <!-- PANEL IZQUIERDO -->
         <div class="sidebar-panel" id="sidebar">
 
-            <!-- NUEVO BOTÓN: KIT DE LITIGIO / DIAGNÓSTICO -->
+            <!-- BOTÓN: KIT DE LITIGIO / DIAGNÓSTICO -->
             <button type="button" class="btn-success" onclick="abrirKitLitigio()">
                 🩺 Kit de Litigio (Diagnóstico CSJ)
             </button>
@@ -415,13 +417,13 @@ nuevo código:
         </div>
     </div>
 
-    <!-- MODAL DE AYUDA (SISTEMA DE ASISTENCIA) -->
+    <!-- MODAL DE AYUDA (SISTEMA DE ASISTENCIA). Z-INDEX AJUSTADO A 10005 PARA EVITAR QUE QUEDE DETRÁS -->
     <div class="modal-overlay" id="modalAyuda">
         <div class="modal-content small-modal">
             <button class="close-modal" title="Cerrar" onclick="document.getElementById('modalAyuda').style.display='none'">✖</button>
             <h3 style="color: var(--primary-color); margin-top:0;" id="modalAyudaTitulo">Ayuda</h3>
-            <p id="modalAyudaTexto" style="line-height: 1.6; color: var(--text-main); font-size: 0.95rem;"></p>
-            <button class="btn btn-primary" style="width: 100%;" onclick="document.getElementById('modalAyuda').style.display='none'">Entendido</button>
+            <p id="modalAyudaTexto" style="line-height: 1.6; color: var(--text-main); font-size: 0.95rem; white-space: pre-line;"></p>
+            <button class="btn btn-primary" style="width: 100%; margin-top: 15px;" onclick="document.getElementById('modalAyuda').style.display='none'">Entendido</button>
         </div>
     </div>
 
@@ -436,7 +438,7 @@ nuevo código:
         </div>
     </div>
 
-    <!-- MODAL: KIT DE LITIGIO 2.0 (CHECKLIST CON AYUDAS Y JUSTIFICACIÓN) -->
+    <!-- MODAL: KIT DE LITIGIO 2.0 (RESTAURADA CON LOS BOTONES '?' COMO PEDISTE) -->
     <div class="modal-overlay" id="modalKitLitigio">
         <div class="modal-content large-modal" style="border-top: 5px solid var(--success-color);">
             <button class="close-modal" title="Cerrar" onclick="document.getElementById('modalKitLitigio').style.display='none'">✖</button>
@@ -445,7 +447,7 @@ nuevo código:
                 🩺 Kit de Litigio Previsional 2.0
             </h2>
             
-            <button class="btn btn-secondary" style="width: 100%; text-align: left; margin-bottom: 20px; font-weight: normal;" onclick="mostrarAyuda('¿Por qué usar este Kit?', 'Justificación Estratégica: Este filtro inicial es indispensable para el litigante porque previene el desgaste judicial al iniciar demandas irremediablemente perdidas. La Corte Suprema (2026) unificó el criterio diferenciando tajantemente la Ineficacia (para no pensionados) de la Indemnización (para pensionados), definió estrictamente desde cuándo corre la prescripción, y demarcó las Líneas Rojas que liberan totalmente a la AFP de indemnizar, al considerarlas un aprovechamiento exclusivo de la víctima. Responder este test asegura la viabilidad técnica del cálculo posterior.')">
+            <button class="btn btn-secondary" type="button" style="width: 100%; text-align: left; margin-bottom: 20px; font-weight: normal;" onclick="mostrarAyuda('¿Por qué usar este Kit?', 'Justificación Estratégica: Este filtro inicial es indispensable para el litigante porque previene el desgaste judicial al iniciar demandas irremediablemente perdidas. La Corte Suprema (2026) unificó el criterio diferenciando tajantemente la Ineficacia (para no pensionados) de la Indemnización (para pensionados), definió estrictamente desde cuándo corre la prescripción, y demarcó las Líneas Rojas que liberan totalmente a la AFP de indemnizar, al considerarlas un aprovechamiento exclusivo de la víctima. Responder este test asegura la viabilidad técnica del cálculo posterior.')">
                 💡 <strong>¿Por qué usar este diagnóstico antes de calcular?</strong> (Ver justificación)
             </button>
 
