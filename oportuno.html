@@ -3,8 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Oportuno - Inicio de Sesión</title>
+    <title>Oportuno - Liquidador Previsional</title>
+
+    <!-- ==========================================
+         CANDADO DE SEGURIDAD VIP (ANTI-INTRUSOS)
+         ========================================== -->
+    <script>
+        if (sessionStorage.getItem("acceso_oportuno") !== "autorizado") {
+            window.location.replace("index.html");
+        }
+    </script>
+    <!-- ========================================== -->
+
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     
     <style>
         :root {
@@ -15,362 +27,576 @@
             --primary-color: #0F2B46; 
             --accent-color: #D4AF37; 
             --border-color: #E5E7EB;
-            --error-color: #EF4444;
+            --highlight-bg: #F0F4F8;
+            --success-color: #059669;
+            --success-bg: #D1FAE5;
+            --danger-color: #EF4444;
+        }
+
+        [data-theme="dark"] {
+            --bg-color: #111827;
+            --surface-color: #1F2937;
+            --text-main: #F9FAFB;
+            --text-muted: #9CA3AF;
+            --primary-color: #1a3e61; 
+            --accent-color: #FBBF24;
+            --border-color: #374151;
+            --highlight-bg: #374151;
+            --success-color: #34D399;
+            --success-bg: #064E3B;
+            --danger-color: #F87171;
         }
 
         body {
             font-family: 'Inter', sans-serif;
-            margin: 0;
-            display: flex;
-            height: 100vh;
-            background-color: var(--surface-color);
-        }
-
-        /* ===== MITAD IZQUIERDA: LOGIN ===== */
-        .login-section {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: 40px;
-        }
-
-        .login-box {
-            width: 100%;
-            max-width: 380px;
-        }
-
-        .login-box h2 {
-            margin-top: 0;
-            font-size: 1.5rem;
-            color: var(--text-main);
-            margin-bottom: 5px;
-        }
-
-        .login-box p {
-            font-size: 0.9rem;
-            color: var(--text-muted);
-            margin-bottom: 30px;
-        }
-
-        .form-group {
-            text-align: left;
-            margin-bottom: 20px;
-            position: relative; 
-        }
-
-        .form-group label {
-            display: block;
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: var(--text-muted);
-            margin-bottom: 8px;
-        }
-
-        .form-control {
-            width: 100%;
-            padding: 12px 16px;
-            padding-right: 40px; 
-            font-family: 'Inter', sans-serif;
-            font-size: 1rem;
             background-color: var(--bg-color);
             color: var(--text-main);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            box-sizing: border-box;
-            transition: border-color 0.3s;
+            margin: 0;
+            padding: 20px;
+            display: grid;
+            grid-template-columns: 350px 1fr;
+            gap: 24px;
+            min-height: 100vh;
+            transition: background-color 0.3s, color 0.3s;
         }
 
-        .form-control:focus {
-            outline: none;
-            border-color: var(--primary-color);
-            background-color: #FFF;
-        }
-
-        .toggle-password {
-            position: absolute;
-            right: 12px;
-            top: 35px;
-            cursor: pointer;
-            font-size: 1.2rem;
-            user-select: none;
-            opacity: 0.7;
-        }
-
-        .toggle-password:hover {
-            opacity: 1;
-        }
-
-        .btn-primary {
-            background-color: var(--primary-color);
-            color: #FFF;
-            width: 100%;
-            padding: 14px;
-            font-size: 1rem;
-            font-weight: 600;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-            margin-top: 10px;
-        }
-
-        .btn-primary:hover {
-            background-color: #1a3e61;
-        }
-
-        .error-message {
-            color: var(--error-color);
-            font-size: 0.85rem;
-            margin-top: 15px;
-            display: none;
-            font-weight: 600;
-            text-align: center;
-        }
+        h1, h2, h3, h4 { margin-top: 0; color: var(--text-main); }
         
-        .loader {
-            display: none;
-            font-size: 0.85rem;
-            color: var(--primary-color);
-            margin-top: 15px;
-            text-align: center;
+        .panel { display: flex; flex-direction: column; gap: 20px; }
+
+        .card {
+            background-color: var(--surface-color);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            transition: background-color 0.3s, border-color 0.3s;
         }
 
-        /* ===== MITAD DERECHA: INFORMACIÓN CORPORATIVA ===== */
-        .info-section {
-            flex: 1.2;
+        .sticky-header {
+            position: sticky;
+            top: 20px;
+            z-index: 100;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-header {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--primary-color);
+        }
+
+        .brand-container { text-align: center; margin-bottom: 10px; }
+        .brand-container img { max-width: 180px; height: auto; }
+        .brand-subtitle { font-size: 0.8rem; font-weight: 600; color: var(--text-muted); margin-top: 8px; text-transform: uppercase;}
+        
+        .toolbar { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 15px; justify-content: center; }
+        
+        .form-group { margin-bottom: 16px; }
+        .form-group label { display: block; font-size: 0.85rem; font-weight: 600; color: var(--text-muted); margin-bottom: 6px; }
+        .form-control {
+            width: 100%; padding: 10px 12px; font-family: 'Inter', sans-serif;
+            font-size: 0.95rem; background-color: var(--surface-color); color: var(--text-main);
+            border: 1px solid var(--border-color); border-radius: 8px; box-sizing: border-box;
+        }
+        .form-control:focus { outline: none; border-color: var(--primary-color); }
+
+        .btn {
+            padding: 8px 12px; font-size: 0.85rem; font-weight: 600;
+            border: none; border-radius: 6px; cursor: pointer; transition: all 0.2s;
+            display: inline-flex; align-items: center; justify-content: center; gap: 4px;
+        }
+        .btn-primary { background-color: var(--primary-color); color: #FFF; width: 100%; padding: 14px; font-size: 1rem;}
+        .btn-primary:hover { opacity: 0.9; }
+        .btn-secondary { background-color: var(--highlight-bg); color: var(--text-main); border: 1px solid var(--border-color); flex: 1 1 45%;}
+        .btn-secondary:hover { border-color: var(--primary-color); }
+        .btn-danger { background-color: var(--danger-color); color: #FFF; width: 100%; padding: 14px; font-size: 1rem;}
+        
+        .export-bar { display: flex; gap: 10px; justify-content: flex-end; margin-bottom: 15px;}
+        .btn-pdf { background-color: #EF4444; color: white; }
+        .btn-doc { background-color: #3B82F6; color: white; }
+        .btn-xls { background-color: #10B981; color: white; }
+
+        .report-container { font-family: 'Inter', sans-serif; color: var(--text-main); background: var(--surface-color); padding: 20px;}
+        table { width: 100%; border-collapse: collapse; margin-bottom: 20px; font-size: 0.9rem; }
+        th, td { padding: 12px; text-align: left; border-bottom: 1px solid var(--border-color); }
+        th { background-color: var(--highlight-bg); font-weight: 600; color: var(--text-muted); }
+        .copy-paste-box { background-color: var(--bg-color); border: 1px dashed var(--border-color); padding: 16px; border-radius: 8px; font-family: Georgia, serif; font-size: 0.9rem; line-height: 1.6; white-space: pre-wrap; color: var(--text-main); }
+        
+        input[type="file"] { display: none; }
+
+        /* ====== MODAL CHECKLIST ANTI-RIESGOS ====== */
+        #checklistModal {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8); z-index: 9999; display: flex;
+            justify-content: center; align-items: center; backdrop-filter: blur(5px);
+        }
+        .modal-content {
+            background: var(--surface-color); width: 90%; max-width: 600px;
+            border-radius: 12px; padding: 30px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);
+            max-height: 90vh; overflow-y: auto;
+        }
+        .question-box {
+            padding: 15px; border: 1px solid var(--border-color);
+            border-radius: 8px; margin-bottom: 15px; background: var(--bg-color);
+        }
+        .question-box p { margin: 0 0 10px 0; font-weight: 600; font-size: 0.95rem;}
+        .question-box .note { font-size: 0.8rem; color: var(--text-muted); font-style: italic; margin-bottom: 10px; display: block;}
+        .radio-group { display: flex; gap: 15px; }
+        .radio-group label { font-weight: 400; cursor: pointer; }
+        #modalWarning { display: none; background: #FEF2F2; color: #991B1B; padding: 15px; border-radius: 8px; border-left: 4px solid #EF4444; margin-top: 20px; font-size: 0.9rem; font-weight: 600;}
+
+        /* ====== NUEVO DISEÑO "REPROFESIONAL" PANEL DERECHO ====== */
+        .welcome-panel {
             background-color: var(--primary-color);
             color: #FFF;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            padding: 50px;
+            padding: 50px 40px;
             text-align: center;
-            border-top-left-radius: 30px;
-            border-bottom-left-radius: 30px;
-            box-shadow: -10px 0 30px rgba(0,0,0,0.1);
+            border-radius: 12px;
+            height: 100%;
+            box-shadow: inset 0 0 30px rgba(0,0,0,0.15);
+            box-sizing: border-box;
         }
-
-        .info-section img {
-            max-width: 320px;
-            margin-bottom: 30px;
+        .welcome-panel img {
+            max-width: 280px;
+            margin-bottom: 25px;
             filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3));
         }
-
-        .info-section h3 {
-            font-size: 1.6rem;
-            margin-bottom: 15px;
+        .welcome-panel h2 {
+            font-size: 1.7rem;
             color: var(--accent-color);
+            margin-bottom: 15px;
+            margin-top: 0;
         }
-
+        .welcome-panel > p {
+            font-size: 0.95rem;
+            color: #CBD5E1;
+            max-width: 80%;
+            line-height: 1.6;
+            margin-bottom: 35px;
+        }
         .feature-list {
             text-align: left;
-            max-width: 450px;
-            margin-top: 20px;
+            max-width: 500px;
+            width: 100%;
         }
-
         .feature-item {
             display: flex;
             align-items: flex-start;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
         }
-
         .feature-icon {
-            font-size: 1.5rem;
+            font-size: 1.8rem;
             margin-right: 15px;
             background: rgba(255,255,255,0.1);
-            padding: 10px;
+            padding: 12px;
             border-radius: 12px;
         }
-
         .feature-text h4 {
-            margin: 0 0 5px 0;
-            font-size: 1.05rem;
+            margin: 0 0 6px 0;
+            font-size: 1.1rem;
             color: #FFF;
         }
-
         .feature-text p {
             margin: 0;
             font-size: 0.85rem;
-            color: #CBD5E1;
+            color: #94A3B8;
             line-height: 1.5;
-        }
-
-        /* Hacerlo responsivo para celulares */
-        @media (max-width: 768px) {
-            body { flex-direction: column; }
-            .info-section { border-radius: 0; padding: 40px 20px; }
         }
     </style>
 </head>
 <body>
 
-    <!-- LADO IZQUIERDO: FORMULARIO -->
-    <div class="login-section">
-        <div class="login-box">
-            <h2>Bienvenido a Oportuno</h2>
-            <p>Ingresa tus credenciales periciales para continuar</p>
-
-            <div class="form-group">
-                <label for="usuario">Usuario</label>
-                <input type="text" id="usuario" class="form-control" placeholder="Ej: canoasesor">
-            </div>
-
-            <div class="form-group">
-                <label for="password">Contraseña</label>
-                <input type="password" id="password" class="form-control" placeholder="••••••••">
-                <span class="toggle-password" id="toggleIcon" onclick="mostrarOcultarClave()">👁️</span>
-            </div>
-
-            <button class="btn-primary" onclick="iniciarSesion()">Acceder al Liquidador</button>
+    <!-- ==========================================
+         MODAL: FILTRO JURISPRUDENCIAL ANTI-RIESGOS
+         ========================================== -->
+    <div id="checklistModal">
+        <div class="modal-content">
+            <h2 style="color: var(--primary-color); text-align: center;">🚦 KIT DE LITIGIO PREVISIONAL 2.0</h2>
+            <p style="text-align: center; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 25px;">Filtro de Viabilidad CSJ 2026. Responda para desbloquear el liquidador.</p>
             
-            <div id="loader" class="loader">⏳ Validando credenciales...</div>
-            <div id="errorMessage" class="error-message">❌ Usuario o contraseña incorrectos.</div>
+            <form id="checklistForm">
+                <div class="question-box">
+                    <p>1. Estatus Pensional</p>
+                    <span class="note">¿Tu cliente ya adquirió el estatus de pensionado en el fondo privado y ya fue incluido en nómina? (Si es NO, la vía es ineficacia, no indemnización).</span>
+                    <div class="radio-group">
+                        <label><input type="radio" name="q1" value="si" required> SÍ</label>
+                        <label><input type="radio" name="q1" value="no"> NO</label>
+                    </div>
+                </div>
+
+                <div class="question-box">
+                    <p>2. Prescripción</p>
+                    <span class="note">¿Han pasado menos de 3 años desde el momento exacto en que tu cliente empezó a percibir su primera mesada pensional?</span>
+                    <div class="radio-group">
+                        <label><input type="radio" name="q2" value="si" required> SÍ</label>
+                        <label><input type="radio" name="q2" value="no"> NO</label>
+                    </div>
+                </div>
+
+                <div class="question-box">
+                    <p>3. Deber de Información</p>
+                    <span class="note">Al trasladarse, ¿tu cliente firmó sin recibir una proyección clara y comparativa de su futura pensión en ambos regímenes?</span>
+                    <div class="radio-group">
+                        <label><input type="radio" name="q3" value="si" required> SÍ</label>
+                        <label><input type="radio" name="q3" value="no"> NO</label>
+                    </div>
+                </div>
+
+                <h4 style="color: var(--danger-color); margin-top: 25px;">LÍNEAS ROJAS (Trampas de la AFP)</h4>
+                
+                <div class="question-box" style="border-left: 4px solid var(--danger-color);">
+                    <p>4. Pensión Mínima Maliciosa</p>
+                    <span class="note">¿Aceptó la garantía de pensión mínima sabiendo que NO le alcanzaban las 1300 semanas en Colpensiones? (Si sí tenía 1300 sem, marque NO).</span>
+                    <div class="radio-group">
+                        <label><input type="radio" name="q4" value="si" required> SÍ (Rojo)</label>
+                        <label><input type="radio" name="q4" value="no"> NO (Verde)</label>
+                    </div>
+                </div>
+
+                <div class="question-box" style="border-left: 4px solid var(--danger-color);">
+                    <p>5. Retiro de Excedentes</p>
+                    <span class="note">¿Tu cliente solicitó y se gastó los excedentes de libre disponibilidad de su cuenta de ahorro individual?</span>
+                    <div class="radio-group">
+                        <label><input type="radio" name="q5" value="si" required> SÍ (Rojo)</label>
+                        <label><input type="radio" name="q5" value="no"> NO (Verde)</label>
+                    </div>
+                </div>
+
+                <div class="question-box" style="border-left: 4px solid var(--danger-color);">
+                    <p>6. Pensión Anticipada</p>
+                    <span class="note">¿Tu cliente se pensionó antes de la edad de ley (57/62) negociando anticipadamente su bono pensional?</span>
+                    <div class="radio-group">
+                        <label><input type="radio" name="q6" value="si" required> SÍ (Rojo)</label>
+                        <label><input type="radio" name="q6" value="no"> NO (Verde)</label>
+                    </div>
+                </div>
+
+                <button type="button" class="btn btn-primary" onclick="validarChecklist()">Validar y Acceder</button>
+                <div id="modalWarning"></div>
+                <button type="button" class="btn btn-secondary" style="margin-top: 10px; width: 100%; display: none;" id="btnCerrarSesion" onclick="cerrarSesion()">Salir de la plataforma</button>
+            </form>
         </div>
     </div>
 
-    <!-- LADO DERECHO: INFORMACIÓN Y LOGO -->
-    <div class="info-section">
-        <img src="https://i.ibb.co/R49Ybz9S/Logo-Oportuno.webp" alt="Logo Oportuno">
+    <!-- PANEL IZQUIERDO (INTACTO COMO LO SOLICITASTE) -->
+    <div class="panel">
+        <div class="card sticky-header" style="padding-top: 15px;">
+            <div class="brand-container">
+                <img src="https://i.ibb.co/R49Ybz9S/Logo-Oportuno.webp" alt="Logo Oportuno">
+                <div class="brand-subtitle">Liquidador Pericial de Pérdida de Oportunidad<br><span style="font-weight:400; font-size:0.7rem; color: #3B82F6;">Desarrollado por Supension Plus</span></div>
+            </div>
+            <div class="toolbar">
+                <button class="btn btn-secondary" onclick="nuevoCaso()">📄 Nuevo</button>
+                <button class="btn btn-secondary" onclick="document.getElementById('fileInput').click()">📂 Cargar</button>
+                <button class="btn btn-secondary" onclick="guardarJSON()">💾 Guardar</button>
+                <button class="btn btn-secondary" onclick="toggleTheme()">🌗 Tema</button>
+                <button class="btn btn-danger" onclick="cerrarSesion()" style="flex: 1 1 100%; margin-top: 5px;">🚪 Cerrar Sesión</button>
+                <input type="file" id="fileInput" accept=".json" onchange="cargarJSON(event)">
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">1. Variables de Traslado (PP)</div>
+            <div class="form-group">
+                <label>Nombre del Cliente</label>
+                <input type="text" id="nombre" class="form-control" placeholder="Ej: Martha Briceño">
+            </div>
+            <div class="form-group">
+                <label>Sexo</label>
+                <select id="sexo" class="form-control">
+                    <option value="M">Masculino (Edad Ley: 62)</option>
+                    <option value="F">Femenino (Edad Ley: 57)</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Edad al momento del traslado (E)</label>
+                <input type="number" id="edadTraslado" class="form-control" placeholder="Ej: 35">
+            </div>
+            <div class="form-group">
+                <label>Semanas cotizadas al traslado (S)</label>
+                <input type="number" step="0.01" id="semanasTraslado" class="form-control" placeholder="Ej: 766.71">
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">2. Variables Financieras</div>
+            <div class="form-group">
+                <label>Mesada Hipotética Colpensiones (RPM)</label>
+                <input type="number" id="mesadaRPM" class="form-control" placeholder="Ej: 1409812">
+            </div>
+            <div class="form-group">
+                <label>Mesada Real Fondo Privado (RAIS)</label>
+                <input type="number" id="mesadaRAIS" class="form-control" placeholder="Ej: 877803">
+            </div>
+            <div class="form-group">
+                <label>Edad exacta de ingreso a nómina</label>
+                <input type="number" id="edadNomina" class="form-control" placeholder="Ej: 57">
+            </div>
+            <button class="btn btn-primary" onclick="liquidar()">Generar Dictamen Pericial</button>
+        </div>
+    </div>
+
+    <!-- PANEL DERECHO (MODIFICADO CON EL NUEVO DISEÑO) -->
+    <div class="panel">
         
-        <h3>Liquidador Pericial CSJ 2026</h3>
-        
-        <div class="feature-list">
-            <div class="feature-item">
-                <div class="feature-icon">⚖️</div>
-                <div class="feature-text">
-                    <h4>Pérdida de Oportunidad</h4>
-                    <p>Reemplaza la ineficacia del traslado y liquida indemnizaciones por la frustración definitiva de acceder al Régimen de Prima Media.</p>
+        <!-- PANTALLA DE BIENVENIDA "REPROFESIONAL" (Se oculta al liquidar) -->
+        <div id="welcomePanel" class="welcome-panel">
+            <img src="https://i.ibb.co/R49Ybz9S/Logo-Oportuno.webp" alt="Logo Oportuno">
+            
+            <h2>Liquidador Pericial CSJ 2026</h2>
+            <p>Ingresa los datos en el panel izquierdo y haz clic en "Generar Dictamen" para calcular el perjuicio con total rigor jurisprudencial.</p>
+            
+            <div class="feature-list">
+                <div class="feature-item">
+                    <div class="feature-icon">⚖️</div>
+                    <div class="feature-text">
+                        <h4>Pérdida de Oportunidad</h4>
+                        <p>Liquida la indemnización por la frustración definitiva de acceder al RPM, superando el obsoleto concepto de lucro cesante puro.</p>
+                    </div>
+                </div>
+                
+                <div class="feature-item">
+                    <div class="feature-icon">🧮</div>
+                    <div class="feature-text">
+                        <h4>Fórmula Actuarial Exacta</h4>
+                        <p>Aplica estrictamente el algoritmo de Probabilidad Pensional Truncada (PP) validado por la Corte Suprema de Justicia.</p>
+                    </div>
+                </div>
+
+                <div class="feature-item">
+                    <div class="feature-icon">🛡️</div>
+                    <div class="feature-text">
+                        <h4>Filtro Anti-Riesgos</h4>
+                        <p>Plataforma blindada para auditar eximentes de responsabilidad AFP y asegurar la viabilidad técnica de la demanda.</p>
+                    </div>
                 </div>
             </div>
-            
-            <div class="feature-item">
-                <div class="feature-icon">🧮</div>
-                <div class="feature-text">
-                    <h4>Fórmula Actuarial Exacta</h4>
-                    <p>Aplica estrictamente el algoritmo de Probabilidad Pensional Truncada (PP) validado por la Corte, integrando semanas, edad y expectativa de vida.</p>
-                </div>
+        </div>
+
+        <!-- RESULTADOS DEL DICTAMEN (Oculto inicialmente) -->
+        <div id="resultadoWrapper" style="display: none; flex-direction: column; gap: 20px;">
+            <div class="export-bar" id="exportToolbar">
+                <button class="btn btn-pdf" onclick="exportarPDF()">📄 Exportar a PDF</button>
+                <button class="btn btn-doc" onclick="exportarDocs()">📝 a Google Docs</button>
+                <button class="btn btn-xls" onclick="exportarSheets()">📊 a Excel</button>
             </div>
 
-            <div class="feature-item">
-                <div class="feature-icon">🛡️</div>
-                <div class="feature-text">
-                    <h4>Filtro Anti-Riesgos</h4>
-                    <p>Diagnóstico previo que audita eximentes de responsabilidad (causa extraña o culpa exclusiva) para blindar el éxito de tu demanda.</p>
-                </div>
+            <div class="card report-container" id="reporteContenido">
+                <h2 style="color: var(--primary-color); text-align: center; margin-bottom: 5px;">DICTAMEN PERICIAL ACTUARIAL</h2>
+                <p style="text-align: center; font-size: 0.85rem; margin-top: 0; margin-bottom: 30px;">Liquidación de Perjuicios por Pérdida de Oportunidad (Sentencias CSJ 2026)</p>
+                
+                <table border="1" cellpadding="8" cellspacing="0" bordercolor="#dddddd">
+                    <tr bgcolor="#f0f4f8">
+                        <th>Afiliado(a)</th><td id="resNombre"></td>
+                        <th>Edad Ley (Er)</th><td id="resEr"></td>
+                    </tr>
+                    <tr>
+                        <th>Edad Traslado (E)</th><td id="resE"></td>
+                        <th>Semanas Traslado (S)</th><td id="resS"></td>
+                    </tr>
+                </table>
+
+                <h3>FASE 1: Probabilidad Pensional Truncada (PP)</h3>
+                <table border="1" cellpadding="8" cellspacing="0" bordercolor="#dddddd">
+                    <tr><td>Fórmula Aplicada CSJ</td><td>PP = (0,5 * (S/1300)^0,5) * 2^(-|E-Er|/100)</td></tr>
+                    <tr bgcolor="#f0f4f8"><td><strong>Probabilidad Pensional Truncada (PP)</strong></td><td><strong style="color:#0F2B46" id="resPP"></strong></td></tr>
+                </table>
+
+                <h3>FASE 2 y 3: Diferencia y Expectativa de Vida</h3>
+                <table border="1" cellpadding="8" cellspacing="0" bordercolor="#dddddd">
+                    <tr><td>Mesada Hipotética RPM</td><td id="resRPM"></td></tr>
+                    <tr><td>Mesada Real RAIS</td><td id="resRAIS"></td></tr>
+                    <tr bgcolor="#f0f4f8"><td><strong>Diferencia Pensional Mensual</strong></td><td><strong style="color:#0F2B46" id="resDiferencia"></strong></td></tr>
+                    <tr><td>Expectativa de Vida (EV) - Res. 1555 de 2010</td><td id="resEV"></td></tr>
+                    <tr><td>Bolsa Consolidada Proyectada (Dif * EV * 13)</td><td id="resBolsa"></td></tr>
+                </table>
+
+                <h3>FASE 4: Liquidación Final (Reparación por Equivalencia)</h3>
+                <table border="1" cellpadding="10" cellspacing="0" bordercolor="#059669">
+                    <tr bgcolor="#D1FAE5">
+                        <td style="color:#059669; font-size:1.1rem;"><strong>INDEMNIZACIÓN TOTAL A DEMANDAR</strong></td>
+                        <td style="color:#059669; font-size:1.1rem;"><strong id="resTotal"></strong></td>
+                    </tr>
+                </table>
+
+                <h3 style="margin-top: 30px; color: var(--primary-color);">📝 Anexo: Hechos y Pretensiones</h3>
+                <div class="copy-paste-box" id="copyPasteText"></div>
             </div>
         </div>
     </div>
 
     <script>
-        function mostrarOcultarClave() {
-            const inputClave = document.getElementById("password");
-            const icono = document.getElementById("toggleIcon");
+        /* ========================================================
+           1. LOGICA DEL FILTRO ANTI-RIESGOS (CHECKLIST)
+           ======================================================== */
+        function validarChecklist() {
+            const form = document.getElementById("checklistForm");
+            const warning = document.getElementById("modalWarning");
+            const btnSalir = document.getElementById("btnCerrarSesion");
             
-            if (inputClave.type === "password") {
-                inputClave.type = "text";
-                icono.innerText = "🙈"; 
-            } else {
-                inputClave.type = "password";
-                icono.innerText = "👁️"; 
-            }
-        }
+            const q1 = form.q1.value; const q2 = form.q2.value; const q3 = form.q3.value;
+            const q4 = form.q4.value; const q5 = form.q5.value; const q6 = form.q6.value;
 
-        // Como ya estás en la nube, el enlace CSV directo funciona perfecto.
-        const dbUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTG1WZVvi7km7oI8s8dM9qjFl3o2oTMIej1fw7H_3gE8ifXmYJsI8yUDeLZif_7vWC0rAR1GMGIynMh/pub?output=csv";
-
-        async function iniciarSesion() {
-            const userIngresado = document.getElementById("usuario").value.trim();
-            const passIngresado = document.getElementById("password").value.trim();
-            const errorDiv = document.getElementById("errorMessage");
-            const loaderDiv = document.getElementById("loader");
-
-            errorDiv.style.display = "none";
-
-            if (!userIngresado || !passIngresado) {
-                errorDiv.innerText = "⚠️ Por favor, llena ambos campos.";
-                errorDiv.style.display = "block";
+            if(!q1 || !q2 || !q3 || !q4 || !q5 || !q6) {
+                warning.style.display = "block";
+                warning.innerText = "⚠️ Por favor, responde todas las preguntas del diagnóstico.";
                 return;
             }
 
-            loaderDiv.style.display = "block";
+            if(q1 === "no") {
+                warning.style.display = "block"; btnSalir.style.display = "block";
+                warning.innerHTML = "❌ <strong>Vía Incorrecta:</strong> Como el cliente no está pensionado aún, el proceso adecuado es la INEFICACIA de traslado para retornar a Colpensiones, no la indemnización por pérdida de oportunidad.";
+                return;
+            }
+            if(q2 === "no") {
+                warning.style.display = "block"; btnSalir.style.display = "block";
+                warning.innerHTML = "🚨 <strong>CASO PRESCRITO:</strong> Han transcurrido más de 3 años desde la inclusión en nómina. La CSJ estableció que la acción indemnizatoria prescribe trienalmente desde ese hito exacto.";
+                return;
+            }
+            if(q4 === "si" || q5 === "si" || q6 === "si") {
+                warning.style.display = "block"; btnSalir.style.display = "block";
+                warning.innerHTML = "⚠️ <strong>CASO INVIABLE (Eximente de AFP):</strong> El cliente configuró una Causa Extraña / Hecho de la víctima. Reclamar excedentes, aceptar GPM sin tener 1300 semanas, o pensionarse anticipadamente exonera a la AFP de pagar la indemnización según la jurisprudencia.";
+                return;
+            }
 
-            try {
-                const response = await fetch(dbUrl);
+            document.getElementById("checklistModal").style.display = "none";
+        }
+
+        function cerrarSesion() {
+            sessionStorage.removeItem("acceso_oportuno");
+            window.location.replace("index.html");
+        }
+
+        /* ========================================================
+           2. VARIABLES Y TABLAS DEL LIQUIDADOR
+           ======================================================== */
+        const tablaEV = {
+            15:{M:64.80,F:70.00}, 16:{M:63.90,F:69.10}, 17:{M:62.90,F:68.10}, 18:{M:61.90,F:67.10}, 19:{M:60.90,F:66.10},
+            20:{M:60.00,F:65.10}, 21:{M:59.00,F:64.20}, 22:{M:58.00,F:63.20}, 23:{M:57.10,F:62.20}, 24:{M:56.10,F:61.20},
+            25:{M:55.10,F:60.20}, 26:{M:54.20,F:59.30}, 27:{M:53.20,F:58.30}, 28:{M:52.30,F:57.30}, 29:{M:51.30,F:56.30},
+            30:{M:50.30,F:55.40}, 31:{M:49.40,F:54.40}, 32:{M:48.40,F:53.40}, 33:{M:47.50,F:52.40}, 34:{M:46.50,F:51.50},
+            35:{M:45.60,F:50.50}, 36:{M:44.60,F:49.50}, 37:{M:43.70,F:48.60}, 38:{M:42.70,F:47.60}, 39:{M:41.80,F:46.60},
+            40:{M:40.80,F:45.70}, 41:{M:39.90,F:44.70}, 42:{M:39.00,F:43.70}, 43:{M:38.00,F:42.80}, 44:{M:37.10,F:41.80},
+            45:{M:36.20,F:40.90}, 46:{M:35.30,F:39.90}, 47:{M:34.40,F:39.00}, 48:{M:33.40,F:38.00}, 49:{M:32.50,F:37.10},
+            50:{M:31.60,F:36.20}, 51:{M:30.70,F:35.20}, 52:{M:29.90,F:34.30}, 53:{M:29.00,F:33.40}, 54:{M:28.10,F:32.50},
+            55:{M:27.20,F:31.60}, 56:{M:26.40,F:30.60}, 57:{M:25.50,F:29.70}, 58:{M:24.60,F:28.80}, 59:{M:23.80,F:27.90},
+            60:{M:23.00,F:27.00}, 61:{M:22.10,F:26.20}, 62:{M:21.30,F:25.30}, 63:{M:20.50,F:24.40}, 64:{M:19.70,F:23.50},
+            65:{M:19.00,F:22.70}, 66:{M:18.20,F:21.80}, 67:{M:17.40,F:21.00}, 68:{M:16.70,F:20.20}, 69:{M:16.00,F:19.40},
+            70:{M:15.30,F:18.60}, 71:{M:14.60,F:17.80}, 72:{M:14.00,F:17.00}, 73:{M:13.30,F:16.20}, 74:{M:12.70,F:15.50},
+            75:{M:12.10,F:14.70}, 76:{M:11.50,F:14.00}, 77:{M:10.90,F:13.30}, 78:{M:10.40,F:12.60}, 79:{M:9.80,F:11.90},
+            80:{M:9.30,F:11.30}, 81:{M:8.80,F:10.60}, 82:{M:8.30,F:10.00}, 83:{M:7.80,F:9.40},  84:{M:7.40,F:8.90},
+            85:{M:7.00,F:8.30},  86:{M:6.60,F:7.80},  87:{M:6.20,F:7.30},  88:{M:5.80,F:6.80},  89:{M:5.40,F:6.30},
+            90:{M:5.10,F:5.80},  91:{M:4.80,F:5.40},  92:{M:4.50,F:5.00},  93:{M:4.20,F:4.60},  94:{M:3.90,F:4.20}
+        };
+        const formatter = new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', minimumFractionDigits: 0, maximumFractionDigits: 2 });
+
+        function toggleTheme() { document.body.setAttribute("data-theme", document.body.getAttribute("data-theme") === "dark" ? "light" : "dark"); }
+
+        function nuevoCaso() {
+            if(confirm("⚠️ ¿Iniciar un nuevo cálculo y borrar datos actuales?")) {
+                document.getElementById("nombre").value = ""; document.getElementById("edadTraslado").value = "";
+                document.getElementById("semanasTraslado").value = ""; document.getElementById("mesadaRPM").value = "";
+                document.getElementById("mesadaRAIS").value = ""; document.getElementById("edadNomina").value = "";
                 
-                if (!response.ok) {
-                    throw new Error("El servidor bloqueó la conexión.");
-                }
-
-                const data = await response.text();
-                const filas = data.split('\n');
-                let accesoConcedido = false;
-                let mensajeExito = "";
-
-                const hoy = new Date();
-                hoy.setHours(0,0,0,0);
-
-                let numeroFila = 0;
-                for (const fila of filas) {
-                    if (numeroFila === 0) { 
-                        numeroFila++; 
-                        continue; 
-                    }
-
-                    const columnas = fila.split(',');
-                    
-                    if (columnas.length >= 5) {
-                        const dbCliente = columnas.at(0).trim();       
-                        const dbUser = columnas.at(1).trim();          
-                        const dbPass = columnas.at(2).trim();          
-                        const dbTipo = columnas.at(3).trim();          
-                        const dbVencimiento = columnas.at(4).trim();   
-
-                        if (userIngresado === dbUser && passIngresado === dbPass) {
-                            
-                            const partesFecha = dbVencimiento.split('/');
-                            if(partesFecha.length === 3) {
-                                const fechaVencimiento = new Date(partesFecha.at(2), partesFecha.at(1) - 1, partesFecha.at(0));
-                                
-                                if (hoy > fechaVencimiento) {
-                                    errorDiv.innerText = `❌ Tu suscripción venció el ${dbVencimiento}. Por favor, renueva tu acceso.`;
-                                    errorDiv.style.display = "block";
-                                    loaderDiv.style.display = "none";
-                                    return; 
-                                }
-                            }
-
-                            accesoConcedido = true;
-                            mensajeExito = `✅ ¡Bienvenido(a), ${dbCliente}!\nRedirigiendo a Oportuno...`;
-                            break;
-                        }
-                    }
-                    numeroFila++;
-                }
-
-                loaderDiv.style.display = "none";
-
-                if (accesoConcedido) {
-                    // SE OTORGA EL PASE VIP
-                    sessionStorage.setItem("acceso_oportuno", "autorizado");
-                    
-                    alert(mensajeExito);
-                    // TELETRANSPORTA AL ARCHIVO DE LA CALCULADORA
-                    window.location.href = "Oport04.html"; 
-                } else {
-                    errorDiv.innerText = "❌ Usuario o contraseña incorrectos.";
-                    errorDiv.style.display = "block";
-                }
-
-            } catch (error) {
-                loaderDiv.style.display = "none";
-                errorDiv.innerText = "❌ Error de conexión con la base de datos.";
-                errorDiv.style.display = "block";
-                console.error(error);
+                // OCULTAMOS EL DICTAMEN Y VOLVEMOS A MOSTRAR EL PANEL DE BIENVENIDA AZUL
+                document.getElementById("resultadoWrapper").style.display = "none";
+                document.getElementById("welcomePanel").style.display = "flex";
             }
         }
+
+        function guardarJSON() {
+            const data = {
+                nombre: document.getElementById("nombre").value, sexo: document.getElementById("sexo").value,
+                edadTraslado: document.getElementById("edadTraslado").value, semanasTraslado: document.getElementById("semanasTraslado").value,
+                mesadaRPM: document.getElementById("mesadaRPM").value, mesadaRAIS: document.getElementById("mesadaRAIS").value,
+                edadNomina: document.getElementById("edadNomina").value
+            };
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' }));
+            a.download = `Oportuno_${data.nombre ? data.nombre.replace(/\s+/g, '_') : 'Cliente'}.json`;
+            a.click();
+        }
+
+        function cargarJSON(event) {
+            const file = event.target.files.item(0); 
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    document.getElementById("nombre").value = data.nombre || ''; document.getElementById("sexo").value = data.sexo || 'M';
+                    document.getElementById("edadTraslado").value = data.edadTraslado || ''; document.getElementById("semanasTraslado").value = data.semanasTraslado || '';
+                    document.getElementById("mesadaRPM").value = data.mesadaRPM || ''; document.getElementById("mesadaRAIS").value = data.mesadaRAIS || '';
+                    document.getElementById("edadNomina").value = data.edadNomina || '';
+                    alert("✅ Datos cargados exitosamente.");
+                } catch(err) { alert("❌ Error al leer el archivo."); }
+                event.target.value = ''; 
+            };
+            reader.readAsText(file);
+        }
+
+        /* ========================================================
+           3. MOTOR MATEMÁTICO (LA FÓRMULA EXACTA DE LA CORTE)
+           ======================================================== */
+        function liquidar() {
+            const nombre = document.getElementById("nombre").value || "Cliente";
+            const sexo = document.getElementById("sexo").value;
+            const E = parseFloat(document.getElementById("edadTraslado").value);
+            const S = parseFloat(document.getElementById("semanasTraslado").value);
+            const mesadaRPM = parseFloat(document.getElementById("mesadaRPM").value);
+            const mesadaRAIS = parseFloat(document.getElementById("mesadaRAIS").value);
+            const edadNomina = parseInt(document.getElementById("edadNomina").value);
+
+            if(!E || !S || !mesadaRPM || !mesadaRAIS || !edadNomina) { alert("Llene todos los campos numéricos."); return; }
+            if(!tablaEV[edadNomina]) { alert("Edad de nómina fuera de rango."); return; }
+
+            const Er = (sexo === 'M') ? 62 : 57;
+            
+            const factorSemanas = Math.pow(S / 1300, 0.5);
+            const factorEdad = Math.pow(2, -Math.abs(E - Er) / 100);
+            let PP_decimal = 0.5 * factorSemanas * factorEdad;
+            let PP_porcentaje = (Math.trunc(PP_decimal * 10000) / 100).toFixed(2);
+
+            const diferenciaMensual = mesadaRPM - mesadaRAIS;
+            const EV = tablaEV[edadNomina][sexo];
+            const pagosFuturos = EV * 13;
+            const bolsaTotal = diferenciaMensual * pagosFuturos;
+            const indemnizacionTotal = bolsaTotal * (PP_porcentaje / 100);
+
+            document.getElementById("resNombre").innerText = nombre;
+            document.getElementById("resEr").innerText = Er + " años";
+            document.getElementById("resE").innerText = E + " años";
+            document.getElementById("resS").innerText = S + " sem.";
+            document.getElementById("resPP").innerText = PP_porcentaje + "%";
+            document.getElementById("resRPM").innerText = formatter.format(mesadaRPM);
+            document.getElementById("resRAIS").innerText = formatter.format(mesadaRAIS);
+            document.getElementById("resDiferencia").innerText = formatter.format(diferenciaMensual);
+            document.getElementById("resEV").innerText = EV + " años (" + pagosFuturos.toFixed(1) + " pagos)";
+            document.getElementById("resBolsa").innerText = formatter.format(bolsaTotal);
+            document.getElementById("resTotal").innerText = formatter.format(indemnizacionTotal);
+
+            document.getElementById("copyPasteText").innerText = 
+`HECHO: Al momento de efectuarse el traslado desinformado, mi poderdante se encontraba en una posición fáctica idónea con ${E} años de edad y un capital de ${S} semanas en el régimen público.
+HECHO: De no haber mediado el incumplimiento del deber de información de la AFP, mi poderdante habría conservado la probabilidad de pensionarse con una mesada aproximada de ${formatter.format(mesadaRPM)}. Al pensionarse en el RAIS a sus ${edadNomina} años y ser incluido en nómina, el daño se hizo irreversible, percibiendo una mesada inferior de ${formatter.format(mesadaRAIS)}.
+PRETENSIONES: Que se condene a la AFP a pagar un único desembolso global y definitivo por la suma de ${formatter.format(indemnizacionTotal)} a título de reparación por la Pérdida de Oportunidad, aplicando la probabilidad pensional truncada del ${PP_porcentaje}%.`;
+
+            // OCULTAMOS EL PANEL AZUL DE BIENVENIDA Y MOSTRAMOS EL DICTAMEN
+            document.getElementById("welcomePanel").style.display = "none";
+            document.getElementById("resultadoWrapper").style.display = "flex";
+        }
+
+        /* Funciones de Exportación */
+        function exportarPDF() { html2pdf().set({margin: 10, filename: `Dictamen_${document.getElementById("nombre").value}.pdf`, image: {type: 'jpeg', quality: 0.98}, html2canvas: {scale: 2}, jsPDF: {unit: 'mm', format: 'letter', orientation: 'portrait'}}).from(document.getElementById('reporteContenido')).save(); }
+        function exportarDocs() { const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob(['\ufeff', `<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'><head><meta charset='utf-8'><title>Dictamen</title></head><body>${document.getElementById('reporteContenido').innerHTML}</body></html>`], { type: 'application/msword' })); a.download = `Dictamen.doc`; a.click(); }
+        function exportarSheets() { let html = `<meta charset='utf-8'><h3>Dictamen Pericial</h3>`; document.querySelectorAll('#reporteContenido table').forEach(t => html += t.outerHTML + "<br><br>"); const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob(['\ufeff', html], { type: 'application/vnd.ms-excel' })); a.download = `Dictamen.xls`; a.click(); }
     </script>
 </body>
 </html>
