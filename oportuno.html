@@ -131,7 +131,6 @@
         .close-modal { position: absolute; top: 15px; right: 15px; background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--text-muted); transition: color 0.2s;}
         .close-modal:hover { color: var(--danger-color); }
 
-        /* NUEVA REGLA PARA ASEGURAR QUE LA AYUDA FLOTE POR ENCIMA DEL KIT DE LITIGIO */
         #modalAyuda { z-index: 10005 !important; }
 
         /* Lista Validaciones */
@@ -177,7 +176,7 @@
         .case-list.grid-view { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 15px; }
         .case-card { background: var(--surface-color); border: 1px solid var(--border-color); border-radius: 8px; padding: 16px; box-shadow: 0 2px 4px rgba(0,0,0,0.02); display: flex; flex-direction: column; justify-content: space-between; transition: all 0.2s;}
         .case-card h3 { margin: 0 0 5px 0; color: var(--primary-color); font-size: 1.1rem;}
-        .case-card p { margin: 3px 0; font-size: 0.85rem; color: var(--text-muted); }
+        .case-card p { margin: 3px 0; font-size: 0.85rem; color: var(--text-muted); line-height: 1.4; }
         .badge { display: inline-block; background: var(--success-bg); color: var(--success-color); padding: 4px 8px; border-radius: 12px; font-size: 0.8rem; font-weight: 600; margin-top: 8px;}
         .case-actions { margin-top: 15px; display: flex; gap: 8px; }
 
@@ -212,7 +211,7 @@
         </div>
         
         <div class="nav-right">
-            <!-- BLOQUE DE USUARIO Y VENCIMIENTO ACTUALIZADO -->
+            <!-- BLOQUE DE USUARIO Y VENCIMIENTO -->
             <div class="user-profile">
                 <span class="user-name">👤 César Cano</span>
                 <span class="user-license">⏳ Vence: 31/12/2026</span>
@@ -223,6 +222,10 @@
                 <button class="btn btn-secondary" onclick="cambiarCarpetaTrabajo()">📁 Carpeta Trabajo</button>
                 <button class="btn btn-secondary" onclick="guardarDictamen()">💾 Guardar</button>
                 <button class="btn btn-primary" style="width: auto; padding: 8px 14px;" onclick="mostrarDashboard()">🗂️ Casos Guardados</button>
+                
+                <!-- BOTÓN USUARIOS DINÁMICO OCULTO POR DEFECTO -->
+                <button class="btn btn-success" id="btnUsuarios" style="display: none;" onclick="abrirUsuarios()">👥 Usuarios</button>
+                
                 <button class="btn btn-secondary" onclick="toggleTheme()">🌗 Tema</button>
             </div>
         </div>
@@ -438,7 +441,7 @@
         </div>
     </div>
 
-    <!-- MODAL: KIT DE LITIGIO 2.0 (RESTAURADA CON LOS BOTONES '?' COMO PEDISTE) -->
+    <!-- MODAL: KIT DE LITIGIO 2.0 -->
     <div class="modal-overlay" id="modalKitLitigio">
         <div class="modal-content large-modal" style="border-top: 5px solid var(--success-color);">
             <button class="close-modal" title="Cerrar" onclick="document.getElementById('modalKitLitigio').style.display='none'">✖</button>
@@ -541,6 +544,11 @@
 
     <!-- SCRIPT DE BASE DE DATOS Y LOGICA -->
     <script>
+        
+        function abrirUsuarios() {
+            window.open('https://docs.google.com/spreadsheets/d/1cekjJpR6grakSUisA86oG8Ioob-l-SgOEn694oqq7dI/edit?gid=0#gid=0', '_blank');
+        }
+
         /* ========================================================
            1. LOGICA DE NAVEGACION Y AYUDAS
            ======================================================== */
@@ -683,7 +691,7 @@
         }
 
         /* ========================================================
-           3. SISTEMA DE ARCHIVOS LOCAL (File System Access API)
+           3. SISTEMA DE ARCHIVOS LOCAL E IndexedDB
            ======================================================== */
         let directorioHandle = null;
         let listaCasosGlobal = [];
@@ -720,8 +728,25 @@
             try {
                 await idb.init();
                 directorioHandle = await idb.get("carpetaTrabajo");
+
+                // ====================================================
+                // NUEVO: Validación del campo "Tipo" desde la Base de Datos
+                // ====================================================
+                let tipoUsuarioDB = await idb.get("Tipo");
+                
+                // Si la BD está vacía (primer ingreso), forzamos 'U' (usuario) o 'A' por defecto para las pruebas
+                if (!tipoUsuarioDB) {
+                    tipoUsuarioDB = 'A'; // Puedes cambiarlo a 'U' si deseas restringir por defecto
+                    await idb.set("Tipo", tipoUsuarioDB);
+                }
+
+                // Mostrar botón solo a usuarios Tipo A
+                if (tipoUsuarioDB === 'A') {
+                    document.getElementById('btnUsuarios').style.display = 'inline-flex';
+                }
+
             } catch(e) {
-                console.warn("IndexedDB sin acceso local.", e);
+                console.warn("IndexedDB sin acceso local o inicialización fallida.", e);
             }
         };
 
@@ -917,7 +942,11 @@
                         <div>
                             <h3>${caso.nombre || 'Cliente Anónimo'}</h3>
                             <p>${caso.referencia || 'Sin Ref.'}</p>
-                            <p><strong>Nac:</strong> ${caso.fechaNacimiento || '-'} | <strong>Tras:</strong> ${caso.fechaTraslado || '-'} | <strong>Nóm:</strong> ${caso.fechaNomina || '-'}</p>
+                            <p>
+                                <strong>Nac:</strong> ${caso.fechaNacimiento || '-'} <br>
+                                <strong>Tras:</strong> ${caso.fechaTraslado || '-'} (${caso.edadTraslado || 0} años) <br>
+                                <strong>Nóm:</strong> ${caso.fechaNomina || '-'} (${caso.edadNomina || 0} años)
+                            </p>
                             <div class="badge">${formatter.format(caso.indemnizacionTotal || 0)}</div>
                         </div>
                         <div class="case-actions">
