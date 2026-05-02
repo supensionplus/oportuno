@@ -1305,9 +1305,8 @@ PRETENSIONES: Que se condene a la AFP a pagar un único desembolso global y defi
                 return;
             }
 
-            // SOLUCIÓN DEFINITIVA: Usamos .item(0) para evitar que el chat borre los corchetes 
-            // y garantizar que extraemos un archivo válido (Blob) de la lista.
-            const file = event.target.files.item(0); 
+            // CORRECCIÓN APLICADA AQUÍ: Se añade  para extraer el archivo individual (Blob) del FileList
+            const file = event.target.files; 
             if (!file) return;
 
             const reader = new FileReader();
@@ -1368,7 +1367,7 @@ PRETENSIONES: Que se condene a la AFP a pagar un único desembolso global y defi
                 };
 
                 try {
-                    // Orden de reemplazo de llaves
+                    // Orden de reemplazo de llaves {{...}}
                     doc.render(data);
                 } catch (error) {
                     alert("❌ Hubo un error procesando las etiquetas en tu documento Word. Revisa que las llaves estén escritas exactamente como en la lista oficial.");
@@ -1392,8 +1391,8 @@ PRETENSIONES: Que se condene a la AFP a pagar un único desembolso global y defi
                 alert("✅ ¡Magia completada! Tu archivo de Word ha sido diligenciado y se está descargando.");
             };
 
-            // Ejecutar la lectura del documento
-            reader.readAsArrayBuffer(file);
+// Ejecutar la lectura del documento como cadena binaria
+reader.readAsBinaryString(file);
         }
     </script>
 </body>
