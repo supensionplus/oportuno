@@ -225,7 +225,7 @@
                 <button type="button" class="btn btn-secondary" onclick="nuevoCaso()">📄 Nuevo</button>
                 <button type="button" class="btn btn-secondary" onclick="cambiarCarpetaTrabajo()">📁 Carpeta Trabajo</button>
                 <button type="button" class="btn btn-secondary" onclick="guardarDictamen(event)">💾 Guardar</button>
-                <button type="button" class="btn btn-primary" style="width: auto; padding: 8px 14px;" onclick="mostrarDashboard()">🗂️ Casos Guardados</button>
+                <button type="button" class="btn btn-primary" style="width: auto; padding: 8px 14px;" onclick="mostrarDashboard()">🗂️ Lista de Casos</button>
                 <button type="button" class="btn" id="btnUsuarios" style="display: none; background-color: var(--success-color); color: white;" onclick="abrirUsuarios()">👥 Usuarios</button>
                 <button type="button" class="btn btn-secondary" onclick="toggleTheme()">🌗 Tema</button>
                 <button type="button" class="btn btn-danger" onclick="cerrarSesion()">🚪 Cerrar Sesión</button>
@@ -310,7 +310,7 @@
                     <label>Observaciones del Caso <button type="button" class="btn-help" onclick="mostrarAyuda('Observaciones', 'Usa este espacio libre para anotar detalles estratégicos de tu equipo legal, justificaciones de valores ingresados o historial del litigio.')">?</button></label>
                     <textarea id="observaciones" class="form-control" rows="3" placeholder="Anotaciones, detalles de la demanda, etc..."></textarea>
                 </div>
-                <button type="button" class="btn btn-primary" onclick="liquidarYOcultarSidebar()">Generar Dictamen</button>
+                <button type="button" class="btn btn-primary" onclick="liquidarYOcultarSidebar()">Generar Liquidación</button>
             </div>
         </div>
 
@@ -1305,7 +1305,7 @@ PRETENSIONES: Que se condene a la AFP a pagar un único desembolso global y defi
                 return;
             }
 
-            // CORRECCIÓN APLICADA AQUÍ: Se añade  para leer el archivo seleccionado
+            // CORRECCIÓN APLICADA AQUÍ: Se añade  para leer el archivo seleccionado correctamente
             const file = event.target.files; 
             if (!file) return;
 
@@ -1391,7 +1391,7 @@ PRETENSIONES: Que se condene a la AFP a pagar un único desembolso global y defi
                 alert("✅ ¡Magia completada! Tu archivo de Word ha sido diligenciado y se está descargando.");
             };
 
-            // Ejecutar la lectura del documento (Ahora sí lee el blob correcto)
+            // Ejecutar la lectura del documento (Ahora sí lee el blob correcto al estar posicionado en la posición  de la lista)
             reader.readAsArrayBuffer(file);
         }
     </script>
