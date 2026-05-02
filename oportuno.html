@@ -327,7 +327,7 @@
             <!-- RESULTADOS DEL DICTAMEN -->
             <div id="resultadoWrapper" style="display: none; flex-direction: column;">
                 
-                <!-- BARRA DE BOTONES DE EXPORTACIÓN (CON AMBOS BOTONES RESTAURADOS Y CORREGIDOS) -->
+                <!-- BARRA DE BOTONES DE EXPORTACIÓN -->
                 <div class="export-bar" id="exportToolbar">
                     <button type="button" class="btn btn-pdf" onclick="exportarPDF()">📄 a PDF</button>
                     <button type="button" class="btn btn-doc" onclick="exportarDocs()">📝 a Docs</button>
@@ -1305,8 +1305,11 @@ PRETENSIONES: Que se condene a la AFP a pagar un único desembolso global y defi
                 return;
             }
 
-            // CORRECCIÓN APLICADA AQUÍ: Se añade  para extraer el archivo individual (Blob) del FileList
-            const file = event.target.files; 
+            // 🔥 LA TRAMPA (Desestructuración): 
+            // Poner "file" entre corchetes extrae mágicamente el primer archivo de la lista
+            // sin usar números, métodos ni índices que el chat o el navegador puedan bloquear.
+            const [file] = event.target.files; 
+            
             if (!file) return;
 
             const reader = new FileReader();
@@ -1367,7 +1370,7 @@ PRETENSIONES: Que se condene a la AFP a pagar un único desembolso global y defi
                 };
 
                 try {
-                    // Orden de reemplazo de llaves {{...}}
+                    // Orden de reemplazo de llaves
                     doc.render(data);
                 } catch (error) {
                     alert("❌ Hubo un error procesando las etiquetas en tu documento Word. Revisa que las llaves estén escritas exactamente como en la lista oficial.");
@@ -1391,8 +1394,8 @@ PRETENSIONES: Que se condene a la AFP a pagar un único desembolso global y defi
                 alert("✅ ¡Magia completada! Tu archivo de Word ha sido diligenciado y se está descargando.");
             };
 
-// Ejecutar la lectura del documento como cadena binaria
-reader.readAsBinaryString(file);
+            // Volvemos a ejecutar la lectura como ArrayBuffer (PizZip lo requiere así)
+            reader.readAsArrayBuffer(file);
         }
     </script>
 </body>
