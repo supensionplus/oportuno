@@ -8,6 +8,11 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     
+    <!-- NUEVAS LIBRERÍAS PARA EL MÓDULO PRO (Word) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/docxtemplater/3.37.11/docxtemplater.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pizzip/3.1.4/pizzip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+    
     <style>
         :root {
             --bg-color: #F4F6F9;
@@ -325,7 +330,10 @@
                     <button type="button" class="btn btn-pdf" onclick="exportarPDF()">📄 Exportar a PDF</button>
                     <button type="button" class="btn btn-doc" onclick="exportarDocs()">📝 a Google Docs</button>
                     <button type="button" class="btn btn-xls" onclick="exportarSheets()">📊 a Excel</button>
-                    <button type="button" class="btn btn-doc" style="background-color: #4F46E5; font-weight: bold;" onclick="exportarMetodologiaDocs()">📘 Metodología a Word</button>
+                    
+                    <!-- NUEVO MÓDULO PRO: CARGAR MODELO PROPIO EN WORD -->
+                    <input type="file" id="inputPlantillaWord" accept=".docx" style="display: none;" onchange="procesarPlantillaWord(event)">
+                    <button type="button" class="btn btn-success" style="background-color: #8B5CF6; width:auto; padding: 8px 14px; margin:0;" onclick="document.getElementById('inputPlantillaWord').click()">📂 Subir mi Modelo (.docx)</button>
                 </div>
 
                 <div class="card report-container" id="reporteContenido">
@@ -1122,164 +1130,103 @@ PRETENSIONES: Que se condene a la AFP a pagar un único desembolso global y defi
         function exportarSheets() { let html = `<meta charset='utf-8'><h3>Dictamen Pericial</h3>`; document.querySelectorAll('#reporteContenido table').forEach(t => html += t.outerHTML + "<br><br>"); const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob(['\ufeff', html], { type: 'application/vnd.ms-excel' })); a.download = `${obtenerNombreArchivo()}.xls`; a.click(); }
 
         /* ========================================================
-           5. NUEVA EXPORTACIÓN DE METODOLOGÍA CALCADA SL168-2026
+           6. MÓDULO PRO: LECTURA E INYECCIÓN EN PLANTILLAS WORD (.docx)
            ======================================================== */
-        function exportarMetodologiaDocs() {
+        function procesarPlantillaWord(event) {
             if (!window.indemnizacionActual) {
-                alert("⚠️ Primero debes generar el dictamen para exportar la metodología.");
+                alert("⚠️ Primero debes generar el dictamen para poder inyectar los datos en tu modelo.");
+                document.getElementById('inputPlantillaWord').value = ""; // Limpiar el input si hay error temprano
                 return;
             }
 
-            // Recopilación de variables calculadas de la interfaz
-            const nombre = document.getElementById("nombre").value || "Cliente";
-            const referencia = document.getElementById("referencia").value || "Sin Ref";
-            const S = parseFloat(document.getElementById("semanasTraslado").value) || 0;
-            const E = parseInt(document.getElementById("edadTraslado").value) || 0;
-            const sexo = document.getElementById("sexo").value;
-            const Er = (sexo === 'M') ? 62 : 57;
-            const PP_porcentaje = document.getElementById("resPP").innerText;
+            const file = event.target.files;
+            if (!file) return;
+
+            const reader = new FileReader();
             
-            const mesadaRPM = parseFloat(document.getElementById("mesadaRPM").value) || 0;
-            const mesadaRAIS = parseFloat(document.getElementById("mesadaRAIS").value) || 0;
-            const diferenciaMensual = mesadaRPM - mesadaRAIS;
-            
-            const fechaNac = document.getElementById("fechaNacimiento").value;
-            const fechaNomina = document.getElementById("fechaNomina").value;
-            const edadNomina = parseInt(document.getElementById("edadNomina").value) || 0;
-            const EV = tablaEV[edadNomina][sexo] || 0;
-            const pagosFuturos = EV * 13;
-            const bolsaTotal = diferenciaMensual * pagosFuturos;
-            const indemnizacionTotal = window.indemnizacionActual;
+            reader.onload = function(e) {
+                const content = e.target.result;
+                let zip;
+                try {
+                    zip = new PizZip(content);
+                } catch(err) {
+                    alert("❌ Error al leer el archivo. Asegúrate de subir un documento válido de Word en formato .docx");
+                    return;
+                }
 
-            // Formato de moneda
-            const formatoMoneda = new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', minimumFractionDigits: 0, maximumFractionDigits: 2 });
+                // Inicializar el procesador de plantillas Word
+                const doc = new window.docxtemplater(zip, { paragraphLoop: true, linebreaks: true });
 
-            // Construcción del documento HTML calcado de la Sentencia SL168-2026 (Págs 66 a 71)
-            const htmlWord = `
-            <html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
-            <head>
-                <meta charset='utf-8'>
-                <title>Anexo Metodológico SL168-2026</title>
-                <style>
-                    body { font-family: 'Arial', sans-serif; font-size: 11pt; line-height: 1.5; color: #000; text-align: justify; }
-                    h2 { text-align: center; font-size: 12pt; font-weight: bold; margin-bottom: 20px;}
-                    p { margin-bottom: 10px; }
-                    table { width: 100%; border-collapse: collapse; margin: 15px 0; font-size: 10pt; }
-                    th, td { border: 1px solid #000; padding: 6px 10px; text-align: left; vertical-align: top; }
-                    .center { text-align: center; }
-                    .bold { font-weight: bold; }
-                </style>
-            </head>
-            <body>
-                <h2>ANEXO METODOLÓGICO: CÁLCULO ACTUARIAL POR PÉRDIDA DE OPORTUNIDAD<br>
-                (Aplicación Sentencia CSJ SL168-2026)</h2>
+                // Configurar formato para números con separadores de miles (sin símbolo de $, ya que la plantilla incluye el $ por fuera de la llave)
+                const formatoMonedaSinSimbolo = new Intl.NumberFormat('es-CO', { style: 'decimal', minimumFractionDigits: 0, maximumFractionDigits: 2 });
                 
-                <p><strong>Ref:</strong> ${referencia}<br>
-                <strong>Afiliado(a):</strong> ${nombre}</p>
-
-                <p>En atención a los criterios de equidad y los lineamientos jurisprudenciales establecidos por la Sala de Casación Laboral de la Corte Suprema de Justicia (Sentencia SL168-2026), se adopta la fórmula que permite establecer un parámetro objetivo para tasar la compensación económica derivada de la pérdida de oportunidad. Para tal propósito, se emplea la siguiente fórmula, que fija el porcentaje de la «probabilidad pensional» que le asistía a la parte demandante en el momento del traslado de régimen.</p>
+                // Recolectar variables base
+                const sexo = document.getElementById("sexo").value;
+                const edadNomina = parseInt(document.getElementById("edadNomina").value) || 0;
+                const EV = tablaEV[edadNomina] ? tablaEV[edadNomina][sexo] : 0;
+                const mesadaRPM = parseFloat(document.getElementById("mesadaRPM").value) || 0;
+                const mesadaRAIS = parseFloat(document.getElementById("mesadaRAIS").value) || 0;
+                const dif = mesadaRPM - mesadaRAIS;
+                const pagos = EV * 13;
+                const bolsa = dif * pagos;
                 
-                <p>Se plantea un paralelo entre lo ocurrido y aquello que podría haber sucedido si no se hubiese frustrado la oportunidad. Para tal propósito, se utiliza la siguiente fórmula, donde la indemnización esperada se calcula multiplicando tres componentes, así:</p>
+                // Se retira el % del campo resPP en caso de que lo tenga, porque en el modelo enviado la llave ya va seguida del signo %
+                let ppPorcentaje = document.getElementById("resPP").innerText || "0";
+                ppPorcentaje = ppPorcentaje.replace('%', '').trim();
+
+                // Construcción exacta del diccionario de etiquetas cortas para inyectar al Word
+                const data = {
+                    nom: document.getElementById("nombre").value || "Sin Nombre",
+                    ref: document.getElementById("referencia").value || "Sin Ref",
+                    fnac: document.getElementById("fechaNacimiento").value || "N/A",
+                    sex: sexo,
+                    er: (sexo === 'M') ? 62 : 57,
+                    
+                    ftra: document.getElementById("fechaTraslado").value || "N/A",
+                    e: document.getElementById("edadTraslado").value || "0",
+                    s: document.getElementById("semanasTraslado").value || "0",
+                    
+                    mrpm: formatoMonedaSinSimbolo.format(mesadaRPM),
+                    mrais: formatoMonedaSinSimbolo.format(mesadaRAIS),
+                    dif: formatoMonedaSinSimbolo.format(dif),
+                    
+                    fep: document.getElementById("fechaNomina").value || "N/A",
+                    efep: edadNomina,
+                    ev: EV,
+                    pagos: pagos.toFixed(1),
+                    
+                    pp: ppPorcentaje,
+                    bolsa: formatoMonedaSinSimbolo.format(bolsa),
+                    total: formatoMonedaSinSimbolo.format(window.indemnizacionActual || 0)
+                };
+
+                try {
+                    // Orden de reemplazo de llaves {{...}}
+                    doc.render(data);
+                } catch (error) {
+                    alert("❌ Hubo un error procesando las etiquetas en tu documento Word. Revisa que las llaves estén escritas exactamente como en la lista oficial.");
+                    console.log(error);
+                    return;
+                }
+
+                // Generar y empaquetar el archivo resultante
+                const out = doc.getZip().generate({
+                    type: "blob",
+                    mimeType: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+                });
+
+                // Iniciar la descarga del memorial personalizado
+                const nombreSeguro = data.nom.replace(/[^a-z0-9]/gi, '_');
+                saveAs(out, `Liquidacion_Word_${nombreSeguro}.docx`);
+
+                // Reiniciar el input para futuras cargas
+                document.getElementById('inputPlantillaWord').value = "";
                 
-                <p class="center bold">Indemnización = PP * (MesadaRPM − MesadaRAIS) * (EVaños*13)</p>
+                alert("✅ ¡Magia completada! Tu archivo de Word ha sido diligenciado y se está descargando.");
+            };
 
-                <p><strong>Primer componente:</strong> Se inicia por la probabilidad pensional (PP). Este porcentaje resume, en un solo número, la cercanía de la persona de cumplir las condiciones para pensionarse. La fórmula es:</p>
-                
-                <p class="center bold">PP = (0,5*(S/1300)^0.5)*2^(-|E-Er|/100)</p>
-
-                <table>
-                    <tr><th colspan="2" class="center">TABLA DE CONVENCIONES</th></tr>
-                    <tr>
-                        <td width="20%" class="bold center">S</td>
-                        <td>Número de semanas del afiliado al momento del traslado.</td>
-                    </tr>
-                    <tr>
-                        <td class="bold center">1300</td>
-                        <td>Número de semanas mínimas requeridas para pensionarse.</td>
-                    </tr>
-                    <tr>
-                        <td class="bold center">E</td>
-                        <td>Edad de la persona al momento del traslado.</td>
-                    </tr>
-                    <tr>
-                        <td class="bold center">Er</td>
-                        <td>Edad mínima requerida para pensionarse (57 o 62).</td>
-                    </tr>
-                    <tr>
-                        <td class="bold center">0,5</td>
-                        <td>La constante 0,5 dentro de la fórmula equivale al 50% de la probabilidad, por cuanto en el sistema de pensiones se contempla la coexistencia de dos regímenes (RSPMPD y RAIS); en términos simples, la posibilidad de estar en cualquiera de los dos implica que la equiprobabilidad inicial está reflejada en el factor 0,5 que es el punto de partida común.</td>
-                    </tr>
-                    <tr>
-                        <td class="bold center">(S/1300)^0.5</td>
-                        <td>Conjunto que mide el efecto de las semanas cotizadas. Al dividir entre 1.300 ubica las semanas en una escala de oportunidad de cara a la posibilidad real de pensionarse en el RSPMPD. El exponente 0,5 hace que la densidad de semanas equilibre la PP respecto de la edad.</td>
-                    </tr>
-                    <tr>
-                        <td class="bold center">2^(-|E-ER|/100)</td>
-                        <td>Conjunto que incorpora la distancia a la edad requerida en una magnitud inversamente proporcional. De esa suerte, si la persona está muy lejos de llegar a la edad de 57 o 62 años, el factor baja; y si está cerca, el factor sube; y si está exactamente en la edad requerida, vale 1. La integración de los conjuntos arroja que la PP crezca cuando hay más semanas y mayor cercanía a la edad exigida.</td>
-                    </tr>
-                </table>
-
-                <p><strong>Segundo componente:</strong> Este componente dentro de la fórmula resarcitoria es (MesadaRPM – MesadaRAIS) y se entiende como la diferencia mensual entre la mesada que resultaría en el RSPMPD respecto de la que se recibe en el RAIS, que estima el disvalor periódico.</p>
-
-                <p><strong>Tercer componente:</strong> Este factor convierte el tiempo en número real de pagos: se toma la expectativa de vida (Resolución n.° 1555 de 2010), expresada en años y se multiplica por 13, que corresponde a las mesadas que el sistema reconoce al año.</p>
-
-                <p>Esta fórmula ofrece: (i) transparencia, porque cada elemento es visible y comprobable: la brecha nominal, el número de mesadas que realmente se pagan por año y el porcentaje -PP- que nace de la situación de la persona frente a los dos regímenes; y, (ii) proporcionalidad, porque el resultado no asume certezas en la cuantificación del daño, pues convierte la diferencia económica en un valor esperado, donde la mitad inicial (0,5) refleja la coexistencia de dos regímenes, y los otros factores se ajustan aritméticamente según la trayectoria de cotización y la cercanía a la edad.</p>
-
-                <p>Para aplicarla en la práctica, el orden será: (i) obtener la PP con las semanas y las edades; (ii) calcular la diferencia mensual entre mesadas; (iii) convertir la expectativa de vida en número de mesadas multiplicando por trece; y, (iv) factorizar los tres resultados. El número final es la indemnización, expresada en la misma moneda de las mesadas.</p>
-
-                <p>Al trasladar la información requerida a la fórmula, se obtiene una probabilidad pensional del ${PP_porcentaje} que viene a ser el daño previsional por pérdida de oportunidad, siendo este porcentaje de la probabilidad perdida, lo que servirá como medida para la reparación de los perjuicios que se hayan causado, conforme a la siguiente tabla:</p>
-
-                <table>
-                    <tr><th colspan="2" class="center">FÓRMULA PROBABILIDAD PENSIONAL (PP)<br>PP = (0,5*(S/1300)^0.5)*2^(-|E-Er|/100)</th></tr>
-                    <tr><td><strong>S</strong> = # de semanas del afiliado(a) al momento del traslado</td><td class="center">${S}</td></tr>
-                    <tr><td><strong>1300</strong> = # de semanas mínimas requeridas para pensionarse</td><td class="center">1.300</td></tr>
-                    <tr><td><strong>E</strong> = Edad del afiliado(a) al momento del traslado</td><td class="center">${E}</td></tr>
-                    <tr><td><strong>Er</strong> = Edad mínima requerida por la ley para pensionarse</td><td class="center">${Er}</td></tr>
-                    <tr><td class="bold">PROBABILIDAD PENSIONAL (PP)</td><td class="center bold">${PP_porcentaje}</td></tr>
-                </table>
-
-                <p>El porcentaje de probabilidad pensional encontrado deberá ser aplicado a la diferencia pensional surgida con ocasión del contraste del valor de la pensión reconocida en el RAIS y el valor de la mesada que le pudo haber correspondido en el RSPMPD.</p>
-
-                <table>
-                    <tr><td class="bold">Valor mesada probable en el RSPMPD</td><td class="center">${formatoMoneda.format(mesadaRPM)}</td></tr>
-                    <tr><td class="bold">Valor mesada reconocida en el RAIS</td><td class="center">${formatoMoneda.format(mesadaRAIS)}</td></tr>
-                    <tr><td class="bold">Valor diferencia</td><td class="center bold">${formatoMoneda.format(diferenciaMensual)}</td></tr>
-                </table>
-
-                <p>Para establecer el período indemnizable se toman en cuenta los siguientes elementos: i) fecha de nacimiento; ii) fecha del estatus de pensionado en el RAIS (F.E.P.); iii) edad a F.E.P.; iv) expectativa de vida en años a F.E.P. (Resolución n.° 1555 de 2010 de la SFC); v) cantidad de pagos por cada vigencia anual; y, vi) monto del menor valor de mesada pensional a F.E.P.</p>
-
-                <table>
-                    <tr><th colspan="2" class="center">ASPECTOS A TENER EN CUENTA PARA ESTABLECER LA INCIDENCIA FUTURA DEL MENOR VALOR DE MESADA PENSIONAL CONCEDIDA EN RAIS FRENTE A LA CORRESPONDIENTE AL RSPMPD SEGÚN LA EXPECTATIVA DE VIDA</th></tr>
-                    <tr><td class="center bold">CONCEPTO</td><td class="center bold">VALOR</td></tr>
-                    <tr><td>Fecha de nacimiento</td><td class="center">${fechaNac}</td></tr>
-                    <tr><td>Fecha de inicio de estatus de pensionado(a) en RAIS (F.E.P.)</td><td class="center">${fechaNomina}</td></tr>
-                    <tr><td>Edad a la F.E.P.</td><td class="center">${edadNomina}</td></tr>
-                    <tr><td>Expectativa de vida en años a la F.E.P.</td><td class="center">${EV}</td></tr>
-                    <tr><td>Cantidad de pagos por cada vigencia anual</td><td class="center">13</td></tr>
-                    <tr><td>Monto de menor valor de mesada pensional a la F.E.P.</td><td class="center">${formatoMoneda.format(diferenciaMensual)}</td></tr>
-                    <tr><td class="bold">Valor Total de Diferencia Consolidada</td><td class="center bold">${formatoMoneda.format(bolsaTotal)}</td></tr>
-                </table>
-
-                <p>Al valor consolidado de la diferencia encontrada se aplicará el porcentaje de probabilidad pensional truncada del ${PP_porcentaje}, que viene a ser el daño previsional por pérdida de oportunidad, a efectos de estimar el valor de la reparación de los perjuicios causados:</p>
-
-                <table>
-                    <tr><td class="bold">VALOR INDEMNIZACIÓN (V. I.)</td><td class="center">${formatoMoneda.format(bolsaTotal)} X ${PP_porcentaje}</td></tr>
-                    <tr><td class="bold">V. I.</td><td class="center bold">${formatoMoneda.format(indemnizacionTotal)}</td></tr>
-                </table>
-
-                <p>La cuantía del perjuicio se sufraga en una suma única a título de indemnización de perjuicios por el incumplimiento del deber legal de información en el momento del traslado de régimen, valor que deberá ser indexado al momento de su pago efectivo. Se aclara que no habrá descuento alguno por concepto de aportes en salud, al no ser una mesada pensional o un pago diferencial, sino una indemnización de perjuicios.</p>
-            </body>
-            </html>
-            `;
-
-            // Proceso de exportación a Word
-            const blob = new Blob(['\ufeff', htmlWord], { type: 'application/msword' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `${obtenerNombreArchivo()}_Metodologia_SL168.doc`;
-            a.click();
-            URL.revokeObjectURL(url);
+            // Ejecutar la lectura del documento
+            reader.readAsArrayBuffer(file);
         }
     </script>
 </body>
