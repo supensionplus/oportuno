@@ -327,16 +327,16 @@
             <!-- RESULTADOS DEL DICTAMEN -->
             <div id="resultadoWrapper" style="display: none; flex-direction: column;">
                 
-                <!-- BARRA DE BOTONES DE EXPORTACIÓN (AQUÍ RECUPERAMOS EL BOTÓN AZUL) -->
+                <!-- BARRA DE BOTONES DE EXPORTACIÓN (CON AMBOS BOTONES RESTAURADOS Y CORREGIDOS) -->
                 <div class="export-bar" id="exportToolbar">
                     <button type="button" class="btn btn-pdf" onclick="exportarPDF()">📄 a PDF</button>
                     <button type="button" class="btn btn-doc" onclick="exportarDocs()">📝 a Docs</button>
                     <button type="button" class="btn btn-xls" onclick="exportarSheets()">📊 a Excel</button>
                     
-                    <!-- ESTE ES EL BOTÓN QUE SE HABÍA BORRADO: METODOLOGÍA OFICIAL CSJ -->
+                    <!-- BOTÓN METODOLOGÍA OFICIAL CSJ -->
                     <button type="button" class="btn btn-doc" style="background-color: #4F46E5; font-weight: bold;" onclick="exportarMetodologiaDocs()">📘 Metodología CSJ</button>
                     
-                    <!-- NUEVO MÓDULO PRO: CARGAR MODELO PROPIO EN WORD -->
+                    <!-- MÓDULO PRO: CARGAR MODELO PROPIO EN WORD -->
                     <input type="file" id="inputPlantillaWord" accept=".docx" style="display: none;" onchange="procesarPlantillaWord(event)">
                     <button type="button" class="btn btn-success" style="background-color: #8B5CF6; width:auto; padding: 8px 14px; margin:0;" onclick="document.getElementById('inputPlantillaWord').click()">📂 Subir mi Modelo (.docx)</button>
                 </div>
@@ -1305,7 +1305,7 @@ PRETENSIONES: Que se condene a la AFP a pagar un único desembolso global y defi
                 return;
             }
 
-            // CORRECCIÓN: Agregar  para leer el archivo correctamente
+            // CORRECCIÓN APLICADA AQUÍ: Se añade  para leer el archivo seleccionado
             const file = event.target.files; 
             if (!file) return;
 
@@ -1391,7 +1391,7 @@ PRETENSIONES: Que se condene a la AFP a pagar un único desembolso global y defi
                 alert("✅ ¡Magia completada! Tu archivo de Word ha sido diligenciado y se está descargando.");
             };
 
-            // Ejecutar la lectura del documento
+            // Ejecutar la lectura del documento (Ahora sí lee el blob correcto)
             reader.readAsArrayBuffer(file);
         }
     </script>
