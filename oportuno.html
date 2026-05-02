@@ -1,3 +1,4 @@
+con esta versión corregida:
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -203,7 +204,7 @@
          ========================================== -->
     <div class="top-navbar">
         <div class="nav-left">
-            <button class="hamburger-btn" onclick="toggleSidebar()" title="Ocultar/Mostrar Menú">☰</button>
+            <button type="button" class="hamburger-btn" onclick="toggleSidebar()" title="Ocultar/Mostrar Menú">☰</button>
             <div class="brand-container">
                 <img src="https://i.ibb.co/R49Ybz9S/Logo-Oportuno.webp" alt="Logo Oportuno">
                 <div class="brand-subtitle">Supension Plus</div>
@@ -211,24 +212,19 @@
         </div>
         
         <div class="nav-right">
-            <!-- BLOQUE DE USUARIO Y VENCIMIENTO -->
             <div class="user-profile">
                 <span class="user-name">👤 César Cano</span>
                 <span class="user-license">⏳ Vence: 31/12/2026</span>
             </div>
 
             <div class="nav-actions">
-                <button class="btn btn-secondary" onclick="nuevoCaso()">📄 Nuevo</button>
-                <button class="btn btn-secondary" onclick="cambiarCarpetaTrabajo()">📁 Carpeta Trabajo</button>
-                <button class="btn btn-secondary" onclick="guardarDictamen()">💾 Guardar</button>
-                <button class="btn btn-primary" style="width: auto; padding: 8px 14px;" onclick="mostrarDashboard()">🗂️ Casos Guardados</button>
-                
-                <button class="btn" id="btnUsuarios" style="display: none; background-color: var(--success-color); color: white;" onclick="abrirUsuarios()">👥 Usuarios</button>
-                
-                <button class="btn btn-secondary" onclick="toggleTheme()">🌗 Tema</button>
-                
-                <!-- BOTÓN CERRAR SESIÓN MODIFICADO -->
-                <button class="btn btn-danger" onclick="cerrarSesion()">🚪 Cerrar Sesión</button>
+                <button type="button" class="btn btn-secondary" onclick="nuevoCaso()">📄 Nuevo</button>
+                <button type="button" class="btn btn-secondary" onclick="cambiarCarpetaTrabajo()">📁 Carpeta Trabajo</button>
+                <button type="button" class="btn btn-secondary" onclick="guardarDictamen(event)">💾 Guardar</button>
+                <button type="button" class="btn btn-primary" style="width: auto; padding: 8px 14px;" onclick="mostrarDashboard()">🗂️ Casos Guardados</button>
+                <button type="button" class="btn" id="btnUsuarios" style="display: none; background-color: var(--success-color); color: white;" onclick="abrirUsuarios()">👥 Usuarios</button>
+                <button type="button" class="btn btn-secondary" onclick="toggleTheme()">🌗 Tema</button>
+                <button type="button" class="btn btn-danger" onclick="cerrarSesion()">🚪 Cerrar Sesión</button>
             </div>
         </div>
     </div>
@@ -241,7 +237,6 @@
         <!-- PANEL IZQUIERDO -->
         <div class="sidebar-panel" id="sidebar">
 
-            <!-- BOTÓN: KIT DE LITIGIO / DIAGNÓSTICO -->
             <button type="button" class="btn-success" onclick="abrirKitLitigio()">
                 🩺 Kit de Litigio (Diagnóstico CSJ)
             </button>
@@ -249,7 +244,7 @@
             <div class="card" style="margin-top: 0;">
                 <div class="card-header">1. Datos del Caso</div>
                 <div class="form-group">
-                    <label>Nombre del Cliente <button type="button" class="btn-help" onclick="mostrarAyuda('Nombre del Cliente', 'Nombre de tu cliente. Este nombre se usará para sugerir el nombre del archivo al guardar y mantener organizado el directorio.')">?</button></label>
+                    <label>Nombre del Cliente <span style="color:var(--danger-color); margin-left:4px;">*</span> <button type="button" class="btn-help" onclick="mostrarAyuda('Nombre del Cliente', 'Obligatorio. Este nombre se usará para nombrar el archivo al guardar y mantener organizado el directorio.')">?</button></label>
                     <input type="text" id="nombre" class="form-control" placeholder="Ej: Martha Briceño">
                 </div>
                 <div class="form-group">
@@ -328,9 +323,9 @@
             <!-- RESULTADOS DEL DICTAMEN -->
             <div id="resultadoWrapper" style="display: none; flex-direction: column;">
                 <div class="export-bar" id="exportToolbar">
-                    <button class="btn btn-pdf" onclick="exportarPDF()">📄 Exportar a PDF</button>
-                    <button class="btn btn-doc" onclick="exportarDocs()">📝 a Google Docs</button>
-                    <button class="btn btn-xls" onclick="exportarSheets()">📊 a Excel</button>
+                    <button type="button" class="btn btn-pdf" onclick="exportarPDF()">📄 Exportar a PDF</button>
+                    <button type="button" class="btn btn-doc" onclick="exportarDocs()">📝 a Google Docs</button>
+                    <button type="button" class="btn btn-xls" onclick="exportarSheets()">📊 a Excel</button>
                 </div>
 
                 <div class="card report-container" id="reporteContenido">
@@ -351,7 +346,8 @@
                             <th>Edad al Traslado (E)</th><td id="resE"></td>
                         </tr>
                         <tr>
-                            <th>Semanas Traslado (S)</th><td colspan="3" id="resS"></td>
+                            <th>Semanas Traslado (S)</th><td id="resS"></td>
+                            <th>Fecha Dictamen</th><td id="resFechaDictamen"></td>
                         </tr>
                     </table>
 
@@ -397,8 +393,8 @@
 
                 <div class="dashboard-controls">
                     <input type="text" id="buscadorCasos" class="search-bar" placeholder="🔍 Buscar por nombre, referencia o mesada..." onkeyup="renderizarDirectorio()">
-                    <button class="btn-help" style="width: 28px; height: 28px; font-size: 1.1rem;" title="Ayuda del Buscador" onclick="mostrarAyuda('Buscador Global (Filtro)', 'El sistema de búsqueda permite filtrar los registros guardados analizando en tiempo real CUALQUIER campo de la base de datos (observaciones, nombre, radicado, montos, fechas, etc.). Escribe aquí tu criterio de búsqueda para aislar un caso, o borra el texto para cerrar el filtro.')">?</button>
-                    <button class="btn btn-secondary" onclick="cambiarVistaDashboard()" id="btnVista" style="margin-left:auto;">📄 Vista Lista</button>
+                    <button type="button" class="btn-help" style="width: 28px; height: 28px; font-size: 1.1rem;" title="Ayuda del Buscador" onclick="mostrarAyuda('Buscador Global (Filtro)', 'El sistema de búsqueda permite filtrar los registros guardados analizando en tiempo real CUALQUIER campo de la base de datos (observaciones, nombre, radicado, montos, fechas, etc.). Escribe aquí tu criterio de búsqueda para aislar un caso, o borra el texto para cerrar el filtro.')">?</button>
+                    <button type="button" class="btn btn-secondary" onclick="cambiarVistaDashboard()" id="btnVista" style="margin-left:auto;">📄 Vista Lista</button>
                 </div>
 
                 <div class="case-list grid-view" id="contenedorCasos">
@@ -416,37 +412,37 @@
     <!-- MODAL DE DETALLES COMPLETOS DEL CASO -->
     <div class="modal-overlay" id="modalDetalle">
         <div class="modal-content">
-            <button class="close-modal" title="Cerrar ventana" onclick="document.getElementById('modalDetalle').style.display='none'">✖</button>
+            <button type="button" class="close-modal" title="Cerrar ventana" onclick="document.getElementById('modalDetalle').style.display='none'">✖</button>
             <h3 style="color: var(--primary-color); margin-top:0; border-bottom: 2px solid var(--border-color); padding-bottom: 10px;">🗂️ Detalles del Caso Guardado</h3>
             <div id="modalDetalleContenido"></div>
         </div>
     </div>
 
-    <!-- MODAL DE AYUDA (SISTEMA DE ASISTENCIA). Z-INDEX AJUSTADO A 10005 PARA EVITAR QUE QUEDE DETRÁS -->
+    <!-- MODAL DE AYUDA (SISTEMA DE ASISTENCIA) -->
     <div class="modal-overlay" id="modalAyuda">
         <div class="modal-content small-modal">
-            <button class="close-modal" title="Cerrar" onclick="document.getElementById('modalAyuda').style.display='none'">✖</button>
+            <button type="button" class="close-modal" title="Cerrar" onclick="document.getElementById('modalAyuda').style.display='none'">✖</button>
             <h3 style="color: var(--primary-color); margin-top:0;" id="modalAyudaTitulo">Ayuda</h3>
             <p id="modalAyudaTexto" style="line-height: 1.6; color: var(--text-main); font-size: 0.95rem; white-space: pre-line;"></p>
-            <button class="btn btn-primary" style="width: 100%; margin-top: 15px;" onclick="document.getElementById('modalAyuda').style.display='none'">Entendido</button>
+            <button type="button" class="btn btn-primary" style="width: 100%; margin-top: 15px;" onclick="document.getElementById('modalAyuda').style.display='none'">Entendido</button>
         </div>
     </div>
 
     <!-- MODAL DE VALIDACIÓN JUDICIAL (AL GENERAR DICTAMEN) -->
     <div class="modal-overlay" id="modalValidacion">
         <div class="modal-content" style="border-top: 5px solid var(--danger-color); max-width: 550px;">
-            <button class="close-modal" title="Cerrar" onclick="document.getElementById('modalValidacion').style.display='none'">✖</button>
+            <button type="button" class="close-modal" title="Cerrar" onclick="document.getElementById('modalValidacion').style.display='none'">✖</button>
             <h3 style="color: var(--danger-color); margin-top:0;" id="modalValidacionTitulo">⚠️ Faltan Datos Obligatorios</h3>
             <p style="color: var(--text-main); font-size: 0.95rem;">El cálculo pericial requiere rigor. Según los parámetros exigidos por la jurisprudencia de la Corte Suprema de Justicia, debes completar los siguientes datos:</p>
             <div id="listaValidacion" style="margin-top: 15px; margin-bottom: 25px;"></div>
-            <button class="btn btn-primary" style="background-color: var(--danger-color); width: 100%;" onclick="document.getElementById('modalValidacion').style.display='none'">Entendido, voy a completarlos</button>
+            <button type="button" class="btn btn-primary" style="background-color: var(--danger-color); width: 100%;" onclick="document.getElementById('modalValidacion').style.display='none'">Entendido, voy a completarlos</button>
         </div>
     </div>
 
     <!-- MODAL: KIT DE LITIGIO 2.0 -->
     <div class="modal-overlay" id="modalKitLitigio">
         <div class="modal-content large-modal" style="border-top: 5px solid var(--success-color);">
-            <button class="close-modal" title="Cerrar" onclick="document.getElementById('modalKitLitigio').style.display='none'">✖</button>
+            <button type="button" class="close-modal" title="Cerrar" onclick="document.getElementById('modalKitLitigio').style.display='none'">✖</button>
             
             <h2 style="color: var(--primary-color); margin-top:0; display:flex; align-items:center; gap:10px;">
                 🩺 Kit de Litigio Previsional 2.0
@@ -456,12 +452,9 @@
                 💡 <strong>¿Por qué usar este diagnóstico antes de calcular?</strong> (Ver justificación)
             </button>
 
-            <form id="formChecklist" onchange="evaluarChecklist()">
-                
-                <!-- SECCIÓN 1: DIAGNÓSTICO BÁSICO -->
+            <form id="formChecklist" onchange="evaluarChecklist()" onsubmit="event.preventDefault()">
                 <div class="checklist-group">
                     <h4>📋 Diagnóstico Básico</h4>
-                    
                     <div class="check-item">
                         <div class="check-text">
                             <strong>1. Estatus Pensional <button type="button" class="btn-help" onclick="mostrarAyuda('1. Estatus Pensional', 'Qué responder: SÍ (Para usar Oportuno).\n\nPor qué es importante: La Corte Suprema determinó que si el afiliado ya está pensionado y cobrando, es jurídicamente imposible declarar la ineficacia del traslado al ser una situación consolidada. La única vía judicial procedente para ellos es demandar la reparación plena mediante Indemnización de Perjuicios [CSJ 2026, SL168, SL169, SL177]. Si tu cliente NO está pensionado, la vía es buscar la Ineficacia para regresar a Colpensiones.')">?</button></strong>
@@ -472,7 +465,6 @@
                             <label class="radio-red"><input type="radio" name="chk_estatus" value="NO"> NO</label>
                         </div>
                     </div>
-
                     <div class="check-item">
                         <div class="check-text">
                             <strong>2. Prescripción <button type="button" class="btn-help" onclick="mostrarAyuda('2. Prescripción', 'Qué responder: SÍ (Es viable).\n\nPor qué es importante: La acción de indemnización prescribe en 3 años. La jurisprudencia unificada aclaró que ese término no corre desde que se aprobó la resolución ni desde el traslado, sino a partir del momento exacto en que el pensionado empezó a percibir su primera mesada, es decir, con la inclusión en nómina. Antes de eso, cualquier diferencia es una expectativa o hipótesis [CSJ 2026, SL169, SL170, SL177].')">?</button></strong>
@@ -483,7 +475,6 @@
                             <label class="radio-red"><input type="radio" name="chk_prescripcion" value="NO"> NO</label>
                         </div>
                     </div>
-
                     <div class="check-item">
                         <div class="check-text">
                             <strong>3. Deber de Información <button type="button" class="btn-help" onclick="mostrarAyuda('3. Deber de Información', 'Qué responder: SÍ (Para iniciar demanda).\n\nPor qué es importante: Alegar la falta de información es una negación indefinida. En materia previsional, la jurisprudencia establece que no se le exige al afiliado demostrar que no lo asesoraron; se invierte la carga de la prueba, obligando a las AFP a demostrar, mediante evidencia documental, que sí ilustraron y proyectaron claramente las pensiones futuras [CSJ 2026, SL168, SL169, SL170].')">?</button></strong>
@@ -496,7 +487,6 @@
                     </div>
                 </div>
 
-                <!-- SECCIÓN 2: LÍNEAS ROJAS -->
                 <div class="checklist-group" style="margin-bottom: 10px;">
                     <h4 style="color: var(--danger-color); border-color: var(--danger-color);">🚨 LÍNEAS ROJAS (Trampas de la AFP para no pagar)</h4>
                     <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 15px;">La Corte Suprema definió estos puntos como "Eximentes de Responsabilidad" (Hecho Exclusivo de la Víctima).</p>
@@ -511,7 +501,6 @@
                             <label class="radio-green"><input type="radio" name="chk_minima" value="NO"> NO</label>
                         </div>
                     </div>
-
                     <div class="check-item">
                         <div class="check-text">
                             <strong>5. Retiro de Excedentes <button type="button" class="btn-help" onclick="mostrarAyuda('5. Retiro de Excedentes', 'Qué responder: NO (Para que sea viable).\n\nPor qué es importante: Si el pensionado hizo uso del derecho a reclamar y gastarse los excedentes de libre disponibilidad de su cuenta de ahorro individual, la Corte Suprema sentenció que configura un acto de beneficio y un eximente de responsabilidad para la administradora privada [CSJ 2026, SL169, SL170, SL177].')">?</button></strong>
@@ -522,7 +511,6 @@
                             <label class="radio-green"><input type="radio" name="chk_excedentes" value="NO"> NO</label>
                         </div>
                     </div>
-
                     <div class="check-item">
                         <div class="check-text">
                             <strong>6. Pensión Anticipada <button type="button" class="btn-help" onclick="mostrarAyuda('6. Pensión Anticipada', 'Qué responder: NO (Para que sea viable).\n\nPor qué es importante: Otra línea roja fatal. Si el afiliado autorizó el inicio de negociación anticipada de su bono pensional para lograr retirarse antes de cumplir la edad legal (57 mujeres o 62 hombres) que se exigiría en Colpensiones, el fondo queda exonerado de indemnizar el menor valor de la mesada [CSJ 2026, SL169, SL170, SL177].')">?</button></strong>
@@ -539,7 +527,7 @@
 
             <div id="alertaDiagnostico" class="diagnostico-alerta"></div>
             
-            <button class="btn btn-secondary" style="width: 100%; margin-top: 10px;" onclick="document.getElementById('modalKitLitigio').style.display='none'">Cerrar Diagnóstico</button>
+            <button type="button" class="btn btn-secondary" style="width: 100%; margin-top: 10px;" onclick="document.getElementById('modalKitLitigio').style.display='none'">Cerrar Diagnóstico</button>
         </div>
     </div>
 
@@ -547,15 +535,11 @@
     <!-- SCRIPT DE BASE DE DATOS Y LOGICA -->
     <script>
         
-        // FUNCIÓN PARA CERRAR SESIÓN MODIFICADA
         function cerrarSesion() {
             if(confirm("¿Estás seguro de que deseas cerrar la sesión?")) {
-                // Limpiar variables de estado para mayor seguridad
                 window.indemnizacionActual = null;
                 window.fechaCreacionOriginal = null;
                 listaCasosGlobal = [];
-                
-                // Redirigir y terminar al menú index.html
                 window.location.href = "index.html";
             }
         }
@@ -599,7 +583,6 @@
             const alerta = document.getElementById('alertaDiagnostico');
             alerta.style.display = 'block';
 
-            // Evaluar Bloqueantes Básicos
             if (estatus === "NO") {
                 alerta.style.backgroundColor = "var(--danger-bg)";
                 alerta.style.borderColor = "var(--danger-color)";
@@ -616,25 +599,22 @@
                 return;
             }
 
-            // Evaluar Líneas Rojas (Eximentes)
             if (minima === "SI" || excedentes === "SI" || anticipada === "SI") {
                 alerta.style.backgroundColor = "var(--danger-bg)";
                 alerta.style.borderColor = "var(--danger-color)";
                 alerta.style.color = "var(--danger-color)";
-                alerta.innerHTML = "🚨 <b>PELIGRO: EXIMENTE DE RESPONSABILIDAD (Hecho Exclusivo de la Víctima).</b><br>La Corte Suprema (Ej: SL168, SL169, SL170) determinó que si el pensionado aceptó pensión mínima maliciosa, retiró excedentes o se pensionó anticipadamente negociando su bono, se configura un aprovechamiento intencional del RAIS. <b>La AFP no estará obligada a indemnizar. El caso tiene altísimo riesgo de pérdida.</b>";
+                alerta.innerHTML = "🚨 <b>PELIGRO: EXIMENTE DE RESPONSABILIDAD (Hecho Exclusivo de la Víctima).</b><br>La Corte Suprema determinó que si el pensionado aceptó pensión mínima maliciosa, retiró excedentes o se pensionó anticipadamente negociando su bono, se configura un aprovechamiento intencional del RAIS. <b>La AFP no estará obligada a indemnizar.</b>";
                 return;
             }
 
-            // Si todo está OK
             if (estatus === "SI" && prescripcion === "SI" && informacion === "SI" && minima === "NO" && excedentes === "NO" && anticipada === "NO") {
                 alerta.style.backgroundColor = "var(--success-bg)";
                 alerta.style.borderColor = "var(--success-color)";
                 alerta.style.color = "var(--success-color)";
-                alerta.innerHTML = "✅ <b>CASO VIABLE PARA INDEMNIZACIÓN.</b><br>Tu cliente cumple con todos los requisitos jurisprudenciales de la CSJ (2026). No cae en eximentes de responsabilidad y la carga de probar que SÍ se dio la información recaerá sobre la AFP (Negación Indefinida). <b>¡Puedes proceder con el cálculo del Liquidador!</b>";
+                alerta.innerHTML = "✅ <b>CASO VIABLE PARA INDEMNIZACIÓN.</b><br>Tu cliente cumple con todos los requisitos jurisprudenciales de la CSJ (2026). No cae en eximentes de responsabilidad y la carga de probar que SÍ se dio la información recaerá sobre la AFP. <b>¡Puedes proceder con el cálculo del Liquidador!</b>";
                 return;
             }
             
-            // Estado intermedio (llenando)
             alerta.style.display = 'none';
         }
 
@@ -743,21 +723,14 @@
             try {
                 await idb.init();
                 directorioHandle = await idb.get("carpetaTrabajo");
-
-                // Validación del campo "Tipo" desde la Base de Datos
                 let tipoUsuarioDB = await idb.get("Tipo");
-                
-                // Si la BD está vacía (primer ingreso), forzamos 'U' (usuario) o 'A' por defecto para las pruebas
                 if (!tipoUsuarioDB) {
-                    tipoUsuarioDB = 'A'; // Puedes cambiarlo a 'U' si deseas restringir por defecto
+                    tipoUsuarioDB = 'A'; 
                     await idb.set("Tipo", tipoUsuarioDB);
                 }
-
-                // Mostrar botón solo a usuarios Tipo A, restaurando el display flex nativo de '.btn'
                 if (tipoUsuarioDB === 'A') {
                     document.getElementById('btnUsuarios').style.display = 'inline-flex';
                 }
-
             } catch(e) {
                 console.warn("IndexedDB sin acceso local o inicialización fallida.", e);
             }
@@ -792,8 +765,14 @@
         }
 
         /* GUARDAR JSON */
-        async function guardarDictamen() {
-            const nombre = document.getElementById("nombre").value.trim() || "SinNombre";
+        async function guardarDictamen(e) {
+            if(e) e.preventDefault();
+            
+            const nombre = document.getElementById("nombre").value.trim();
+            if (!nombre) {
+                alert("⚠️ El nombre del cliente es obligatorio para poder guardar el caso.");
+                return;
+            }
             if (!window.indemnizacionActual) {
                 alert("⚠️ Genera el dictamen primero.");
                 return;
@@ -813,11 +792,11 @@
                 const fileHandle = await window.showSaveFilePicker(options);
                 const writable = await fileHandle.createWritable();
 
-                const fechaGuardado = window.fechaCreacionOriginal ? window.fechaCreacionOriginal : new Date().toISOString();
+                const fechaGuardado = window.fechaCreacionOriginal || new Date().toISOString();
 
                 const data = {
                     fechaCreacion: fechaGuardado,
-                    nombre: document.getElementById("nombre").value,
+                    nombre: nombre,
                     referencia: document.getElementById("referencia").value,
                     sexo: document.getElementById("sexo").value,
                     fechaNacimiento: document.getElementById("fechaNacimiento").value,
@@ -837,9 +816,15 @@
                 
                 window.fechaCreacionOriginal = fechaGuardado; 
                 alert(`✅ Caso guardado exitosamente.`);
-                if(document.getElementById("dashboardPanel").style.display === "flex") {
-                    cargarCasosDesdeDirectorio();
-                }
+                
+                // Mantenemos bloqueada la interfaz en el Dictamen (Evita que el navegador reinicie la vista)
+                document.getElementById("welcomePanel").style.display = "none";
+                document.getElementById("dashboardPanel").style.display = "none";
+                document.getElementById("resultadoWrapper").style.display = "flex";
+                
+                // Actualizar la base del directorio en segundo plano
+                cargarCasosDesdeDirectorio();
+                
             } catch (err) {
                 if (err.name !== 'AbortError') alert("❌ Error al guardar.");
             }
@@ -889,9 +874,6 @@
             `;
         }
 
-        /* ========================================================
-           VISTA DIRECTORIO
-           ======================================================== */
         function renderizarDirectorio() {
             const contenedor = document.getElementById("contenedorCasos");
             contenedor.className = "case-list " + vistaActual + "-view"; 
@@ -937,8 +919,8 @@
                             <td><span class="badge">${formatter.format(caso.indemnizacionTotal || 0)}</span></td>
                             <td>
                                 <div class="table-actions">
-                                    <button class="btn btn-primary btn-sm" onclick='cargarJSONalFormulario(${dataStr})' title="Cargar">📂</button>
-                                    <button class="btn btn-secondary btn-sm" onclick='abrirModalDetalle(${dataStr})' title="Ver">👁️</button>
+                                    <button type="button" class="btn btn-primary btn-sm" onclick='cargarJSONalFormulario(${dataStr})' title="Cargar">📂</button>
+                                    <button type="button" class="btn btn-secondary btn-sm" onclick='abrirModalDetalle(${dataStr})' title="Ver">👁️</button>
                                 </div>
                             </td>
                         </tr>
@@ -963,8 +945,8 @@
                             <div class="badge">${formatter.format(caso.indemnizacionTotal || 0)}</div>
                         </div>
                         <div class="case-actions">
-                            <button class="btn btn-primary btn-sm" style="flex:1;" onclick='cargarJSONalFormulario(${dataStr})'>📂 Cargar</button>
-                            <button class="btn btn-secondary btn-sm" style="flex:1;" onclick='abrirModalDetalle(${dataStr})'>👁️ Ver Ficha</button>
+                            <button type="button" class="btn btn-primary btn-sm" style="flex:1;" onclick='cargarJSONalFormulario(${dataStr})'>📂 Cargar</button>
+                            <button type="button" class="btn btn-secondary btn-sm" style="flex:1;" onclick='abrirModalDetalle(${dataStr})'>👁️ Ver Ficha</button>
                         </div>
                     `;
                     contenedor.appendChild(card);
@@ -980,7 +962,7 @@
                 <div class="modal-grid">
                     <div><strong>👤 Nombre:</strong><br>${caso.nombre || 'Anónimo'}</div>
                     <div><strong>📌 Referencia:</strong><br>${caso.referencia || 'N/A'}</div>
-                    <div><strong>📅 Fecha de Guardado:</strong><br>${fechaGuardadoFormat}</div>
+                    <div><strong>📅 Fecha de Creación:</strong><br>${fechaGuardadoFormat}</div>
                     <div><strong>🚻 Sexo:</strong><br>${sexoStr}</div>
                     <div><strong>🎂 Nacimiento:</strong><br>${caso.fechaNacimiento || 'N/A'}</div>
                     <div><strong>⏳ Semanas Traslado:</strong><br>${caso.semanasTraslado || 0} sem.</div>
@@ -1050,7 +1032,7 @@
         function liquidar() {
             actualizarEdades();
 
-            const nombre = document.getElementById("nombre").value || "Cliente Anónimo";
+            const nombre = document.getElementById("nombre").value.trim();
             const referencia = document.getElementById("referencia").value || "Sin Referencia";
             const sexo = document.getElementById("sexo").value;
             
@@ -1065,6 +1047,7 @@
             const mesadaRAIS = parseFloat(document.getElementById("mesadaRAIS").value);
 
             let erroresHTML = "";
+            if(!nombre) erroresHTML += `<div class="validacion-item"><strong>👤 Nombre del Cliente</strong><span>Es obligatorio ingresar un nombre (aunque sea ficticio) para identificar el caso y guardar el archivo correctamente.</span></div>`;
             if(!fechaNac) erroresHTML += `<div class="validacion-item"><strong>📅 Fecha de Nacimiento</strong><span><b>Justificación CSJ:</b> Indispensable para determinar en números enteros exactos (sin redondear) la edad al momento del traslado y de nómina.</span></div>`;
             if(!fechaTraslado) erroresHTML += `<div class="validacion-item"><strong>🗓️ Fecha Traslado al RAIS</strong><span><b>Justificación CSJ:</b> Marca el hito temporal originario donde se cercenó el derecho de información y se materializó el daño.</span></div>`;
             if(isNaN(S) || S <= 0) erroresHTML += `<div class="validacion-item"><strong>⏳ Semanas al Traslado (S)</strong><span><b>Justificación CSJ:</b> Pilar del cálculo probabilístico. Define qué proporción del capital existía en el régimen público frente a las 1300 sem requeridas.</span></div>`;
@@ -1079,6 +1062,12 @@
                 document.getElementById("modalValidacion").style.display = "flex";
                 return false;
             }
+
+            // MANTENER O CREAR FECHA DE ELABORACIÓN
+            if (!window.fechaCreacionOriginal) {
+                window.fechaCreacionOriginal = new Date().toISOString();
+            }
+            const fechaDictamenFormat = new Date(window.fechaCreacionOriginal).toLocaleDateString();
 
             const Er = (sexo === 'M') ? 62 : 57;
             const factorSemanas = Math.pow(S / 1300, 0.5);
@@ -1101,6 +1090,7 @@
             document.getElementById("resEr").innerText = Er + " años";
             document.getElementById("resE").innerText = E + " años";
             document.getElementById("resS").innerText = S + " sem.";
+            document.getElementById("resFechaDictamen").innerText = fechaDictamenFormat;
             document.getElementById("resPP").innerText = PP_porcentaje + "%";
             document.getElementById("resFechaNomina").innerText = fechaNomina;
             document.getElementById("resEdadNomina").innerText = edadNomina + " años";
