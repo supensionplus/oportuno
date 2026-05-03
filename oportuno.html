@@ -8,9 +8,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     
-    <!-- NUEVAS LIBRERÍAS PARA EL MÓDULO PRO (Word) -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/docxtemplater/3.37.11/docxtemplater.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pizzip/3.1.4/pizzip.min.js"></script>
+    <!-- NUEVAS LIBRERÍAS PARA EL MÓDULO PRO (Word) ACTUALIZADAS A UNPKG -->
+    <script src="https://unpkg.com/pizzip@3.1.4/dist/pizzip.js"></script>
+    <script src="https://unpkg.com/docxtemplater@3.37.11/build/docxtemplater.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
     
     <style>
@@ -336,7 +336,7 @@
                     <!-- BOTÓN METODOLOGÍA OFICIAL CSJ -->
                     <button type="button" class="btn btn-doc" style="background-color: #4F46E5; font-weight: bold;" onclick="exportarMetodologiaDocs()">📘 Metodología CSJ</button>
                     
-                    <!-- MÓDULO PRO: CARGAR MODELO PROPIO EN WORD (CON EL THIS EN ONCHANGE) -->
+                    <!-- MÓDULO PRO: CARGAR MODELO PROPIO EN WORD -->
                     <input type="file" id="inputPlantillaWord" accept=".docx" style="display: none;" onchange="procesarPlantillaWord(this)">
                     <button type="button" class="btn btn-success" style="background-color: #8B5CF6; width:auto; padding: 8px 14px; margin:0;" onclick="document.getElementById('inputPlantillaWord').click()">📂 Subir mi Modelo (.docx)</button>
                 </div>
@@ -1312,8 +1312,8 @@ PRETENSIONES: Que se condene a la AFP a pagar un único desembolso global y defi
                 return;
             }
 
-            // 🔥 CORRECCIÓN MICROSOFT/SENIOR: Extraemos el archivo real con 
-            const file = inputElement.files[0]; 
+            // 🔥 CORRECCIÓN DEFINITIVA SENIOR: Agregamos  para extraer el archivo de la lista
+            const file = inputElement.files; 
             
             // Verificación por consola para que puedas ver en F12 qué estamos capturando
             console.log("Archivo capturado:", file);
@@ -1330,7 +1330,8 @@ PRETENSIONES: Que se condene a la AFP a pagar un único desembolso global y defi
                 const content = e.target.result;
                 let zip;
                 try {
-                    zip = new PizZip(content);
+                    // 🔥 Llamado global a window.PizZip para evitar el ReferenceError
+                    zip = new window.PizZip(content);
                 } catch(err) {
                     console.error("Error de PizZip:", err);
                     alert("❌ Error al descomprimir el archivo. Asegúrate de que sea un .docx nativo y no esté abierto en tu computador.");
