@@ -1295,6 +1295,18 @@ PRETENSIONES: Que se condene a la AFP a pagar un único desembolso global y defi
             URL.revokeObjectURL(url);
         }
 
+        /* Función para convertir fechas de YYYY-MM-DD a texto largo en español */
+        function formatearFechaLarga(fechaIso) {
+            if (!fechaIso) return "N/A";
+            const partes = fechaIso.split('-');
+            if (partes.length !== 3) return fechaIso;
+            const meses = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"];
+            const anio = partes;
+            const mes = meses[parseInt(partes, 10) - 1];
+            const dia = parseInt(partes, 10);
+            return `${dia} de ${mes} de ${anio}`;
+        }
+
         /* ========================================================
            6. MÓDULO PRO: LECTURA E INYECCIÓN EN PLANTILLAS WORD (.docx)
            ======================================================== */
@@ -1359,25 +1371,36 @@ PRETENSIONES: Que se condene a la AFP a pagar un único desembolso global y defi
                 let ppPorcentaje = document.getElementById("resPP").innerText || "0";
                 ppPorcentaje = ppPorcentaje.replace('%', '').trim();
 
+                const fnacVal = document.getElementById("fechaNacimiento").value;
+                const ftraVal = document.getElementById("fechaTraslado").value;
+                const fepVal = document.getElementById("fechaNomina").value;
+
                 const data = {
                     nom: document.getElementById("nombre").value || "Sin Nombre",
                     ref: document.getElementById("referencia").value || "Sin Ref",
-                    fnac: document.getElementById("fechaNacimiento").value || "N/A",
                     sex: sexo,
                     er: (sexo === 'M') ? 62 : 57,
-                    ftra: document.getElementById("fechaTraslado").value || "N/A",
                     e: document.getElementById("edadTraslado").value || "0",
                     s: document.getElementById("semanasTraslado").value || "0",
                     mrpm: formatoMonedaSinSimbolo.format(mesadaRPM),
                     mrais: formatoMonedaSinSimbolo.format(mesadaRAIS),
                     dif: formatoMonedaSinSimbolo.format(dif),
-                    fep: document.getElementById("fechaNomina").value || "N/A",
                     efep: edadNomina,
                     ev: EV,
                     pagos: pagos.toFixed(1),
                     pp: ppPorcentaje,
                     bolsa: formatoMonedaSinSimbolo.format(bolsa),
-                    total: formatoMonedaSinSimbolo.format(window.indemnizacionActual || 0)
+                    total: formatoMonedaSinSimbolo.format(window.indemnizacionActual || 0),
+                    
+                    /* FECHAS EN FORMATO CORTO (Ej: 2025-07-02) */
+                    fnac: fnacVal || "N/A",
+                    ftra: ftraVal || "N/A",
+                    fep: fepVal || "N/A",
+                    
+                    /* NUEVAS: FECHAS EN FORMATO LARGO (Ej: 2 de julio de 2025) */
+                    fnac_texto: formatearFechaLarga(fnacVal),
+                    ftra_texto: formatearFechaLarga(ftraVal),
+                    fep_texto: formatearFechaLarga(fepVal)
                 };
 
                 try {
