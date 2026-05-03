@@ -336,8 +336,8 @@
                     <!-- BOTÓN METODOLOGÍA OFICIAL CSJ -->
                     <button type="button" class="btn btn-doc" style="background-color: #4F46E5; font-weight: bold;" onclick="exportarMetodologiaDocs()">📘 Metodología CSJ</button>
                     
-                    <!-- MÓDULO PRO: CARGAR MODELO PROPIO EN WORD -->
-                    <input type="file" id="inputPlantillaWord" accept=".docx" style="display: none;" onchange="procesarPlantillaWord(event)">
+                    <!-- MÓDULO PRO: CARGAR MODELO PROPIO EN WORD (SIN PASAR EL EVENTO AL ONCHANGE) -->
+                    <input type="file" id="inputPlantillaWord" accept=".docx" style="display: none;" onchange="procesarPlantillaWord()">
                     <button type="button" class="btn btn-success" style="background-color: #8B5CF6; width:auto; padding: 8px 14px; margin:0;" onclick="document.getElementById('inputPlantillaWord').click()">📂 Subir mi Modelo (.docx)</button>
                 </div>
 
@@ -1298,19 +1298,29 @@ PRETENSIONES: Que se condene a la AFP a pagar un único desembolso global y defi
         /* ========================================================
            6. MÓDULO PRO: LECTURA E INYECCIÓN EN PLANTILLAS WORD (.docx)
            ======================================================== */
-        function procesarPlantillaWord(event) {
+        function procesarPlantillaWord() { // <-- TRAMPA NIVEL DIOS: Ignoramos la extensión quitando el 'event'
             if (!window.indemnizacionActual) {
                 alert("⚠️ Primero debes generar el dictamen para poder inyectar los datos en tu modelo.");
                 document.getElementById('inputPlantillaWord').value = ""; 
                 return;
             }
 
-            // 🔥 LA TRAMPA (Desestructuración): 
-            // Poner "file" entre corchetes extrae mágicamente el primer archivo de la lista
-            // sin usar números, métodos ni índices que el chat o el navegador puedan bloquear.
-            const [file] = event.target.files; 
+            // 🔥 TÉCNICA SENIOR: Vamos directo al elemento HTML original ignorando las extensiones
+            const inputElement = document.getElementById('inputPlantillaWord');
+            
+            // Convertimos la lista a un arreglo nativo y sacamos el primer archivo con shift()
+            // ¡Cero corchetes, cero índices, imposible que falle el formato!
+            const listaArchivos = Array.from(inputElement.files);
+            const file = listaArchivos.shift(); 
             
             if (!file) return;
+
+            // Validación extrema: Si la extensión corrompe el archivo, lo detectamos aquí
+            if (!(file instanceof Blob)) {
+                alert("❌ Tu navegador o una extensión está bloqueando la lectura del archivo. Por favor, desactiva tus extensiones o intenta abrir el liquidador en Modo Incógnito.");
+                console.error("Archivo corrompido por extensión:", file);
+                return;
+            }
 
             const reader = new FileReader();
             
@@ -1320,17 +1330,14 @@ PRETENSIONES: Que se condene a la AFP a pagar un único desembolso global y defi
                 try {
                     zip = new PizZip(content);
                 } catch(err) {
-                    alert("❌ Error al leer el archivo. Asegúrate de subir un documento válido de Word en formato .docx");
+                    alert("❌ Error al descomprimir el archivo. Asegúrate de que sea un .docx nativo.");
                     return;
                 }
 
-                // Inicializar el procesador de plantillas Word
                 const doc = new window.docxtemplater(zip, { paragraphLoop: true, linebreaks: true });
 
-                // Configurar formato para números con separadores de miles
                 const formatoMonedaSinSimbolo = new Intl.NumberFormat('es-CO', { style: 'decimal', minimumFractionDigits: 0, maximumFractionDigits: 2 });
                 
-                // Recolectar variables base
                 const sexo = document.getElementById("sexo").value;
                 const edadNomina = parseInt(document.getElementById("edadNomina").value) || 0;
                 const EV = tablaEV[edadNomina] ? tablaEV[edadNomina][sexo] : 0;
@@ -1343,58 +1350,48 @@ PRETENSIONES: Que se condene a la AFP a pagar un único desembolso global y defi
                 let ppPorcentaje = document.getElementById("resPP").innerText || "0";
                 ppPorcentaje = ppPorcentaje.replace('%', '').trim();
 
-                // Construcción exacta del diccionario de etiquetas cortas para inyectar al Word
                 const data = {
                     nom: document.getElementById("nombre").value || "Sin Nombre",
                     ref: document.getElementById("referencia").value || "Sin Ref",
                     fnac: document.getElementById("fechaNacimiento").value || "N/A",
                     sex: sexo,
                     er: (sexo === 'M') ? 62 : 57,
-                    
                     ftra: document.getElementById("fechaTraslado").value || "N/A",
                     e: document.getElementById("edadTraslado").value || "0",
                     s: document.getElementById("semanasTraslado").value || "0",
-                    
                     mrpm: formatoMonedaSinSimbolo.format(mesadaRPM),
                     mrais: formatoMonedaSinSimbolo.format(mesadaRAIS),
                     dif: formatoMonedaSinSimbolo.format(dif),
-                    
                     fep: document.getElementById("fechaNomina").value || "N/A",
                     efep: edadNomina,
                     ev: EV,
                     pagos: pagos.toFixed(1),
-                    
                     pp: ppPorcentaje,
                     bolsa: formatoMonedaSinSimbolo.format(bolsa),
                     total: formatoMonedaSinSimbolo.format(window.indemnizacionActual || 0)
                 };
 
                 try {
-                    // Orden de reemplazo de llaves
                     doc.render(data);
                 } catch (error) {
-                    alert("❌ Hubo un error procesando las etiquetas en tu documento Word. Revisa que las llaves estén escritas exactamente como en la lista oficial.");
+                    alert("❌ Hubo un error procesando las etiquetas en tu documento Word.");
                     console.log(error);
                     return;
                 }
 
-                // Generar y empaquetar el archivo resultante
                 const out = doc.getZip().generate({
                     type: "blob",
                     mimeType: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
                 });
 
-                // Iniciar la descarga del memorial personalizado
                 const nombreSeguro = data.nom.replace(/[^a-z0-9]/gi, '_');
                 saveAs(out, `Liquidacion_Word_${nombreSeguro}.docx`);
 
-                // Reiniciar el input para futuras cargas
                 document.getElementById('inputPlantillaWord').value = "";
-                
                 alert("✅ ¡Magia completada! Tu archivo de Word ha sido diligenciado y se está descargando.");
             };
 
-            // Volvemos a ejecutar la lectura como ArrayBuffer (PizZip lo requiere así)
+            // Lectura nativa requerida por PizZip
             reader.readAsArrayBuffer(file);
         }
     </script>
