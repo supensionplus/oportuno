@@ -38,9 +38,6 @@
         .brand-subtitle { font-size: 0.65rem; font-weight: 600; color: var(--primary-color); margin-top: 2px; text-transform: uppercase; letter-spacing: 0.5px;}
 
         .nav-right { display: flex; align-items: center; gap: 20px; }
-        .user-profile { text-align: right; line-height: 1.3; border-right: 1px solid var(--border-color); padding-right: 15px;}
-        .user-profile .user-name { font-size: 0.9rem; font-weight: 700; color: var(--primary-color); display: block;}
-        .user-profile .user-license { font-size: 0.75rem; font-weight: 600; color: var(--success-color); display: block;}
         .nav-actions { display: flex; gap: 8px; flex-wrap: wrap; }
 
         .app-container { display: flex; flex: 1; overflow: hidden; }
@@ -61,9 +58,7 @@
         .btn-sm { padding: 6px 10px; font-size: 0.8rem; }
         .btn-primary { background-color: var(--primary-color); color: #FFF; width: 100%; padding: 14px; font-size: 1rem;}
         .btn-secondary { background-color: var(--surface-color); color: var(--text-main); border: 1px solid var(--border-color); }
-        .btn-danger { background-color: var(--danger-color); color: #FFF;}
         .btn-success { background-color: var(--success-color); color: white; width: 100%; padding: 12px; font-size: 1rem; margin-bottom: 15px; border-radius: 8px; border: none; font-weight: bold; cursor: pointer; box-shadow: 0 4px 6px rgba(5, 150, 105, 0.2); transition: all 0.2s;}
-        .btn-help { background-color: var(--accent-color); color: white; border: none; border-radius: 50%; width: 18px; height: 18px; font-size: 0.7rem; font-weight: bold; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; margin-left: 8px; padding: 0;}
         
         .export-bar { display: flex; gap: 10px; justify-content: flex-end; margin-bottom: 15px;}
         .report-container { font-family: 'Inter', sans-serif; color: var(--text-main); background: var(--surface-color); padding: 30px;}
@@ -72,36 +67,16 @@
         th { background-color: var(--highlight-bg); font-weight: 600; color: var(--text-muted); }
         .copy-paste-box { background-color: var(--bg-color); border: 1px dashed var(--border-color); padding: 16px; border-radius: 8px; font-family: Georgia, serif; font-size: 0.9rem; line-height: 1.6; white-space: pre-wrap; color: var(--text-main); }
         
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 9999; display: none; justify-content: center; align-items: center; backdrop-filter: blur(5px); }
-        .modal-content { background: var(--surface-color); width: 90%; max-width: 650px; border-radius: 12px; padding: 30px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); max-height: 90vh; overflow-y: auto; position: relative;}
-        .close-modal { position: absolute; top: 15px; right: 15px; background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--text-muted);}
-
-        .validacion-item { margin-bottom: 12px; padding: 12px; background: var(--bg-color); border-left: 4px solid var(--danger-color); border-radius: 4px;}
-        .validacion-item strong { color: var(--danger-color); display: block; margin-bottom: 5px; font-size: 1rem;}
-        
         .welcome-panel { background-color: var(--primary-color); color: #FFF; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 50px 40px; text-align: center; border-radius: 12px; min-height: calc(100vh - var(--navbar-height) - 40px); }
         .welcome-panel h2 { font-size: 1.7rem; color: var(--accent-color); margin-bottom: 15px; margin-top: 0; }
         .welcome-panel > p { font-size: 0.95rem; color: #CBD5E1; max-width: 80%; line-height: 1.6; margin-bottom: 35px; }
 
         /* DASHBOARD ESTILOS */
         #dashboardPanel { display: none; flex-direction: column; gap: 20px; }
-        .stats-container { display: flex; gap: 15px; margin-bottom: 10px; flex-wrap: wrap;}
-        .stat-box { background: var(--surface-color); border: 1px solid var(--border-color); padding: 15px 20px; border-radius: 8px; flex: 1; min-width: 150px; text-align: center;}
-        .stat-box h4 { margin: 0; font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase;}
-        .stat-box .number { font-size: 1.8rem; font-weight: 700; color: var(--primary-color); margin-top: 5px;}
         .search-bar { flex: 1; padding: 12px 16px; font-size: 1rem; border: 1px solid var(--primary-color); border-radius: 8px; background: var(--surface-color); color: var(--text-main); min-width: 250px;}
         .case-list.grid-view { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 15px; }
         .case-card { background: var(--surface-color); border: 1px solid var(--border-color); border-radius: 8px; padding: 16px; display: flex; flex-direction: column; justify-content: space-between;}
         .badge { display: inline-block; background: var(--success-bg); color: var(--success-color); padding: 4px 8px; border-radius: 12px; font-size: 0.8rem; font-weight: 600; margin-top: 8px;}
-        .case-list.list-view { display: block; overflow-x: auto; }
-        .directory-table { width: 100%; border-collapse: collapse; background: var(--surface-color); border-radius: 8px; overflow: hidden; margin: 0; }
-        .directory-table th, .directory-table td { padding: 12px 10px; text-align: left; border-bottom: 1px solid var(--border-color); font-size: 0.85rem; vertical-align: middle;}
-        .directory-table th { background-color: var(--primary-color); color: white; border-bottom: none;}
-        .modal-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; font-size: 0.95rem; margin-top: 15px;}
-        .modal-grid > div { background: var(--bg-color); padding: 12px; border-radius: 8px; border: 1px solid var(--border-color);}
-        .modal-grid .full-width { grid-column: 1 / -1; }
-        .modal-grid .highlight { background: var(--success-bg); color: var(--success-color); border-color: var(--success-color); font-weight: bold; text-align: center; font-size: 1.1rem;}
-        
         .cargando-ipc { display:inline-block; font-size: 0.8rem; color: var(--accent-color); margin-left: 10px; font-weight: normal; }
     </style>
 </head>
@@ -112,7 +87,7 @@
             <button type="button" class="hamburger-btn" onclick="toggleSidebar()">☰</button>
             <div class="brand-container">
                 <h2 style="margin:0; color:var(--primary-color);">Oportuno <span style="color:var(--accent-color);">PRO</span></h2>
-                <div class="brand-subtitle">Liquidación & Indexación CSJ 2026</div>
+                <div class="brand-subtitle">Liquidación & Indexación CSJ</div>
             </div>
         </div>
         
@@ -135,7 +110,7 @@
             <div class="card" style="margin-top: 0;">
                 <div class="card-header">1. Datos del Caso</div>
                 <div class="form-group">
-                    <label>Nombre del Cliente <span style="color:var(--danger-color);">*</span></label>
+                    <label>Nombre del Cliente</label>
                     <input type="text" id="nombre" class="form-control" placeholder="Ej: Martha Briceño">
                 </div>
                 <div class="form-group">
@@ -183,11 +158,10 @@
                 </div>
             </div>
 
-            <!-- MÓDULO DE INDEXACIÓN -->
             <div class="card">
                 <div class="card-header">4. Indexación y Fechas (Nómina)</div>
                 <div class="form-group">
-                    <label>F.E.P. (Ingreso a Nómina) <button type="button" class="btn-help" onclick="mostrarAyuda('Fecha F.E.P.', 'Fecha base de inicio del daño. El sistema extraerá automáticamente de la nube el IPC Inicial (Histórico) correspondiente a esta fecha para aplicar la fórmula de indexación de la Corte Suprema.')">?</button></label>
+                    <label>F.E.P. (Ingreso a Nómina)</label>
                     <input type="date" id="fechaNomina" class="form-control" onchange="actualizarEdades(); buscarIPCs();">
                 </div>
                 <div class="form-group">
@@ -223,8 +197,8 @@
         <div class="main-panel" id="mainContent">
             
             <div id="welcomePanel" class="welcome-panel">
-                <h2>Liquidador Pericial PRO (CSJ 2026)</h2>
-                <p>Módulo de Indexación Conectado: Las fórmulas se ajustan al precedente CSJ y se ha conectado el motor a tu base de datos centralizada de IPC en Google Sheets para indexar la condena de forma autónoma.</p>
+                <h2>Liquidador Pericial Base</h2>
+                <p>Módulo de Pérdida de Oportunidad e Indexación CSJ. Se ha conectado a tu base de datos de IPC en Google Sheets.</p>
             </div>
 
             <div id="resultadoWrapper" style="display: none; flex-direction: column;">
@@ -232,7 +206,6 @@
                 <!-- BOTONES EXPORTACIÓN -->
                 <div class="export-bar" id="exportToolbar">
                     <button type="button" class="btn btn-pdf" style="background-color: #EF4444; color:white;" onclick="exportarPDF()">📄 PDF</button>
-                    <button type="button" class="btn btn-doc" style="background-color: #4F46E5; color:white; font-weight: bold;" onclick="exportarMetodologiaDocs()">📘 Metodología CSJ</button>
                     
                     <input type="file" id="inputPlantillaWord" accept=".docx" style="display: none;" onchange="procesarPlantillaWord(this)">
                     <button type="button" class="btn btn-success" style="background-color: #8B5CF6; width:auto; padding: 8px 14px; margin:0;" onclick="document.getElementById('inputPlantillaWord').click()">📂 Subir Modelo Word (.docx)</button>
@@ -240,7 +213,7 @@
 
                 <div class="card report-container" id="reporteContenido">
                     <h2 style="color: var(--primary-color); text-align: center; margin-bottom: 5px;">DICTAMEN PERICIAL ACTUARIAL</h2>
-                    <p style="text-align: center; font-size: 0.85rem; margin-top: 0; margin-bottom: 30px;">Liquidación e Indexación de Perjuicios por Pérdida de Oportunidad (Sentencias CSJ 2026)</p>
+                    <p style="text-align: center; font-size: 0.85rem; margin-top: 0; margin-bottom: 30px;">Liquidación de Perjuicios por Pérdida de Oportunidad e Indexación</p>
                     
                     <table border="1" cellpadding="8" cellspacing="0" bordercolor="#dddddd">
                         <tr bgcolor="#f0f4f8"><th>Afiliado(a)</th><td id="resNombre"></td><th>Referencia</th><td id="resReferencia"></td></tr>
@@ -265,18 +238,17 @@
                         <tr><td>Bolsa Consolidada Proyectada (Dif * EV * 13)</td><td colspan="3" id="resBolsa"></td></tr>
                     </table>
 
-                    <h3>FASE 4: Indexación Automática de la Condena (Fórmula CSJ)</h3>
-                    <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom:10px;">Aplicación de IPC Histórico a la fecha de preparación de la demanda. *Deberá ser indexado ulteriormente al momento de su pago efectivo.</p>
+                    <h3>FASE 4: Cuadro de Indexación</h3>
                     <table border="1" cellpadding="8" cellspacing="0" bordercolor="#dddddd">
-                        <tr bgcolor="#f0f4f8"><th>Base Indemnización (Bolsa * PP)</th><td id="resBaseIndem"></td></tr>
-                        <tr><th>Fecha F.E.P (IPC Inicial)</th><td id="resFEP_IPC"></td></tr>
-                        <tr bgcolor="#f0f4f8"><th>Fecha Indexación (IPC Final)</th><td id="resFIndex_IPC"></td></tr>
+                        <tr bgcolor="#f0f4f8"><th>Vr Indemnización (Base Bolsa * PP)</th><td id="resBaseIndem"></td></tr>
+                        <tr><th>Fecha FEP (IPC Inicial)</th><td id="resFEP_IPC"></td></tr>
+                        <tr bgcolor="#f0f4f8"><th>Fecha de Indexación (IPC Final)</th><td id="resFIndex_IPC"></td></tr>
                     </table>
 
                     <table border="1" cellpadding="10" cellspacing="0" bordercolor="#059669" style="margin-top: 15px;">
                         <tr bgcolor="#D1FAE5">
                             <td style="color:#059669; font-size:1.1rem;"><strong>VALOR TOTAL INDEXADO A DEMANDAR</strong></td>
-                            <td style="color:#059669; font-size:1.1rem;"><strong id="resTotalIndexado"></strong></td>
+                            <td style="color:#059669; font-size:1.1rem;"><strong id="resTotal"></strong></td>
                         </tr>
                     </table>
 
@@ -288,40 +260,12 @@
             <!-- DASHBOARD -->
             <div id="dashboardPanel">
                 <h2 style="color: var(--primary-color); margin-top: 0;">🗂️ Directorio de Casos Guardados</h2>
-                <div class="stats-container" id="estadisticasPanel"></div>
                 <div class="dashboard-controls">
                     <input type="text" id="buscadorCasos" class="search-bar" placeholder="🔍 Buscar por nombre o referencia..." onkeyup="renderizarDirectorio()">
-                    <button type="button" class="btn btn-secondary" onclick="cambiarVistaDashboard()" id="btnVista" style="margin-left:auto;">📄 Vista Lista</button>
                 </div>
                 <div class="case-list grid-view" id="contenedorCasos"></div>
             </div>
 
-        </div>
-    </div>
-
-    <!-- MODALES -->
-    <div class="modal-overlay" id="modalDetalle">
-        <div class="modal-content">
-            <button type="button" class="close-modal" onclick="document.getElementById('modalDetalle').style.display='none'">✖</button>
-            <h3 style="color: var(--primary-color); margin-top:0;">🗂️ Detalles del Caso</h3>
-            <div id="modalDetalleContenido"></div>
-        </div>
-    </div>
-    
-    <div class="modal-overlay" id="modalAyuda">
-        <div class="modal-content small-modal">
-            <button type="button" class="close-modal" onclick="document.getElementById('modalAyuda').style.display='none'">✖</button>
-            <h3 style="color: var(--primary-color); margin-top:0;" id="modalAyudaTitulo">Ayuda</h3>
-            <p id="modalAyudaTexto" style="line-height: 1.6; color: var(--text-main); font-size: 0.95rem;"></p>
-        </div>
-    </div>
-
-    <div class="modal-overlay" id="modalValidacion">
-        <div class="modal-content" style="border-top: 5px solid var(--danger-color); max-width: 550px;">
-            <button type="button" class="close-modal" onclick="document.getElementById('modalValidacion').style.display='none'">✖</button>
-            <h3 style="color: var(--danger-color); margin-top:0;" id="modalValidacionTitulo">⚠️ Faltan Datos</h3>
-            <div id="listaValidacion" style="margin-top: 15px; margin-bottom: 25px;"></div>
-            <button type="button" class="btn btn-danger" style="width: 100%;" onclick="document.getElementById('modalValidacion').style.display='none'">Entendido</button>
         </div>
     </div>
 
@@ -354,7 +298,7 @@
                     if(cols.length >= 2) {
                         const fecha = cols.trim(); 
                         let ipcStr = cols.trim();
-                        ipcStr = ipcStr.replace(',', '.'); // Soporte para decimales latinos
+                        ipcStr = ipcStr.replace(',', '.');
                         const ipc = parseFloat(ipcStr);
                         if(fecha && !isNaN(ipc)) {
                             baseIPC[fecha] = ipc;
@@ -363,7 +307,7 @@
                 }
                 document.getElementById("lblCargandoIPC").innerText = "✅ IPC Sincronizado";
                 document.getElementById("lblCargandoIPC").style.color = "var(--success-color)";
-                buscarIPCs(); // Llenar campos si ya hay fechas ingresadas
+                buscarIPCs(); 
             } catch(e) {
                 console.error("Error obteniendo IPC de G-Sheets:", e);
                 document.getElementById("lblCargandoIPC").innerText = "❌ Falló conexión. Ingreso Manual habilitado.";
@@ -403,6 +347,7 @@
             }
         }
 
+        /* CORRECCIÓN FECHAS LARGAS EXACTA MATEMÁTICAMENTE */
         function formatearFechaLarga(fechaIso) {
             if (!fechaIso) return "N/A";
             const partes = fechaIso.split('-');
@@ -419,10 +364,6 @@
             return `${y}-${m}-${d}`;
         }
 
-        /* ========================================================
-           LÓGICA GENERAL DE LA APP
-           ======================================================== */
-        let vistaActual = "grid";
         let directorioHandle = null;
         let listaCasosGlobal = [];
         window.indemnizacionIndexadaActual = null;
@@ -438,11 +379,6 @@
         };
 
         function toggleSidebar() { document.getElementById("sidebar").classList.toggle("collapsed"); }
-        function mostrarAyuda(titulo, texto) {
-            document.getElementById("modalAyudaTitulo").innerText = titulo;
-            document.getElementById("modalAyudaTexto").innerText = texto;
-            document.getElementById("modalAyuda").style.display = "flex";
-        }
 
         function calcularEdadEntera(fechaNac, fechaEv) {
             if(!fechaNac || !fechaEv) return "";
@@ -468,7 +404,7 @@
             }
         }
 
-        /* MOTOR DE CÁLCULO E INDEXACIÓN (FÓRMULA CSJ) */
+        /* MOTOR DE CÁLCULO BASE CSJ CON INDEXACIÓN */
         function liquidar() {
             actualizarEdades();
 
@@ -489,15 +425,8 @@
             const ipcIni = parseFloat(document.getElementById("ipcInicial").value);
             const ipcFin = parseFloat(document.getElementById("ipcFinal").value);
 
-            let erroresHTML = "";
-            if(!nombre) erroresHTML += `<div class="validacion-item"><strong>👤 Nombre del Cliente</strong><span>Es obligatorio.</span></div>`;
-            if(!fechaNomina || isNaN(edadNomina)) erroresHTML += `<div class="validacion-item"><strong>📅 Fecha Nómina (F.E.P.)</strong><span>Requerido para EV e IPC Histórico.</span></div>`;
-            if(!fechaIndex) erroresHTML += `<div class="validacion-item"><strong>📅 Fecha Indexación</strong><span>Requerido para proyectar el IPC actual.</span></div>`;
-            if(isNaN(ipcIni) || isNaN(ipcFin) || ipcIni <= 0) erroresHTML += `<div class="validacion-item"><strong>📈 Faltan IPCs</strong><span>Verifica que la fecha nómina y de indexación estén completas para que el sistema traiga los índices.</span></div>`;
-
-            if(erroresHTML !== "") {
-                document.getElementById("listaValidacion").innerHTML = erroresHTML;
-                document.getElementById("modalValidacion").style.display = "flex";
+            if(!nombre || !fechaNomina || isNaN(edadNomina) || isNaN(ipcIni) || isNaN(ipcFin) || ipcIni <= 0) {
+                alert("Faltan datos obligatorios (Nombre, Fechas e IPCs completas).");
                 return false;
             }
 
@@ -515,24 +444,26 @@
             const EV = tablaEV[edadNomina] ? tablaEV[edadNomina][sexo] : 0;
             const pagosFuturos = EV * 13;
             const bolsaTotal = diferenciaMensual * pagosFuturos;
-            const baseIndemnizacion = bolsaTotal * (PP_porcentaje / 100); // Base sin indexar
+            
+            // FASE 3: Total Indemnización (Base sin indexar)
+            const baseIndemnizacion = bolsaTotal * (PP_porcentaje / 100); 
 
-            // FASE 3: INDEXACIÓN (CSJ)
+            // FASE 4: Indexación Automática
             const valorIndexado = baseIndemnizacion * (ipcFin / ipcIni);
             window.indemnizacionIndexadaActual = valorIndexado;
 
             // RENDERIZAR RESULTADOS
             document.getElementById("resNombre").innerText = nombre;
             document.getElementById("resReferencia").innerText = referencia;
-            document.getElementById("resFechaNac").innerText = fechaNac;
-            document.getElementById("resFechaTraslado").innerText = fechaTraslado;
+            document.getElementById("resFechaNac").innerText = formatearFechaLarga(fechaNac);
+            document.getElementById("resFechaTraslado").innerText = formatearFechaLarga(fechaTraslado);
             document.getElementById("resEr").innerText = Er + " años";
             document.getElementById("resE").innerText = E + " años";
             document.getElementById("resS").innerText = S + " sem.";
-            document.getElementById("resFechaDictamen").innerText = new Date().toLocaleDateString();
+            document.getElementById("resFechaDictamen").innerText = formatearFechaLarga(obtenerFechaHoyISO());
             
             document.getElementById("resPP").innerText = PP_porcentaje + "%";
-            document.getElementById("resFechaNomina").innerText = fechaNomina;
+            document.getElementById("resFechaNomina").innerText = formatearFechaLarga(fechaNomina);
             document.getElementById("resEdadNomina").innerText = edadNomina + " años";
             document.getElementById("resRPM").innerText = formatter.format(mesadaRPM);
             document.getElementById("resRAIS").innerText = formatter.format(mesadaRAIS);
@@ -540,24 +471,17 @@
             document.getElementById("resEV").innerText = EV + " años (" + pagosFuturos.toFixed(1) + " pagos)";
             document.getElementById("resBolsa").innerText = formatter.format(bolsaTotal);
             
-            // RENDERS DE INDEXACIÓN
             document.getElementById("resBaseIndem").innerText = formatter.format(baseIndemnizacion);
-            document.getElementById("resFEP_IPC").innerHTML = `${fechaNomina} <br><small>IPC: ${formatterDec.format(ipcIni)}</small>`;
-            document.getElementById("resFIndex_IPC").innerHTML = `${fechaIndex} <br><small>IPC: ${formatterDec.format(ipcFin)}</small>`;
-            document.getElementById("resTotalIndexado").innerText = formatter.format(valorIndexado);
+            document.getElementById("resFEP_IPC").innerHTML = `${formatearFechaLarga(fechaNomina)} <br><small>IPC: ${formatterDec.format(ipcIni)}</small>`;
+            document.getElementById("resFIndex_IPC").innerHTML = `${formatearFechaLarga(fechaIndex)} <br><small>IPC: ${formatterDec.format(ipcFin)}</small>`;
+            document.getElementById("resTotal").innerText = formatter.format(valorIndexado);
 
+            // TEXTO RECUPERADO DE TU ARCHIVO ORIGINAL (Con fechas largas e indemnización indexada)
             document.getElementById("copyPasteText").innerText = 
-`REF: ${referencia}
-
-HECHOS RELEVANTES:
-1. Al momento de efectuarse el traslado desinformado el ${formatearFechaLarga(fechaTraslado)}, mi poderdante se encontraba con una edad de ${E} años exactos, y un capital acumulado de ${S} semanas cotizadas en el régimen público, lo que le otorgaba una Probabilidad Pensional matemática del ${PP_porcentaje}%.
-2. El daño previsional se consolidó y se hizo jurídicamente resarcible al adquirir el estatus de pensionado(a) e ingresar en nómina el ${formatearFechaLarga(fechaNomina)}, contando con ${edadNomina} años exactos, momento desde el cual desapareció definitivamente la posibilidad de retornar al Régimen de Prima Media. 
-3. Como consecuencia de lo anterior, padeció una pérdida de oportunidad equivalente a la diferencia patrimonial entre la mesada concedida en el RAIS de ${formatter.format(mesadaRAIS)} y la que le habría correspondido en el RSPMPD de ${formatter.format(mesadaRPM)}.
-
-PRETENSIONES INDEMNIZATORIAS:
-Que conforme a los parámetros jurisprudenciales de la Sala de Casación Laboral de la Corte Suprema de Justicia (Sentencias SL168-2026 y SL169-2026), se condene a la AFP accionada a sufragar la cuantía del perjuicio mediante una suma única a título de indemnización por Pérdida de Oportunidad, valor que liquidado a la fecha asciende a ${formatter.format(valorIndexado)} (mediante la fórmula V.I. = Base * IPC Final / IPC Inicial). 
-
-Se solicita expresamente al Despacho que en la condena se ordene que este valor deberá ser nuevamente indexado al momento de su pago efectivo, aclarando que sobre el mismo no habrá descuento alguno por concepto de aportes en salud, al no tratarse de un pago diferencial de mesadas, sino de una indemnización autónoma de perjuicios.`;
+`REF: ${referencia} 
+HECHO: Al momento de efectuarse el traslado desinformado el ${formatearFechaLarga(fechaTraslado)}, mi poderdante se encontraba en una posición fáctica idónea con una edad calculada en números enteros de ${E} años, y un capital de ${S} semanas en el régimen público. 
+HECHO: De no haber mediado el incumplimiento del deber de información de la AFP, mi poderdante habría conservado la probabilidad de pensionarse con una mesada aproximada de ${formatter.format(mesadaRPM)}. Al pensionarse en el RAIS y ser incluido en nómina el ${formatearFechaLarga(fechaNomina)}, contando con ${edadNomina} años exactos, el daño se hizo irreversible y cuantificable en la vía judicial, percibiendo una mesada inferior de ${formatter.format(mesadaRAIS)}. 
+PRETENSIONES: Que se condene a la AFP a pagar un único desembolso global y definitivo por la suma de ${formatter.format(valorIndexado)} a título de reparación por la Pérdida de Oportunidad, aplicando la probabilidad pensional truncada del ${PP_porcentaje}%.`;
 
             document.getElementById("welcomePanel").style.display = "none";
             document.getElementById("dashboardPanel").style.display = "none";
@@ -566,7 +490,7 @@ Se solicita expresamente al Despacho que en la condena se ordene que este valor 
         }
 
         /* ========================================================
-           WORD EXPORT Y MÓDULO PRO (.docx) - CON CORRECCIÓN DE LLAVES
+           WORD EXPORT Y MÓDULO PRO (.docx) SOLUCIÓN DE LLAVES
            ======================================================== */
         function procesarPlantillaWord(inputElement) { 
             if (!window.indemnizacionIndexadaActual) {
@@ -590,11 +514,11 @@ Se solicita expresamente al Despacho que en la condena se ordene que este valor 
                     return;
                 }
 
-                // AQUÍ ESTÁ LA SOLUCIÓN AL ERROR DE DUPLICATE OPEN TAG
+                // SOLUCIÓN A TUS LLAVES DOBLES (Evita el Duplicate Open Tag)
                 const doc = new window.docxtemplater(zip, { 
                     paragraphLoop: true, 
                     linebreaks: true,
-                    delimiters: { start: '{{', end: '}}' }
+                    delimiters: { start: '{{', end: '}}' } 
                 });
 
                 const fMoneda = new Intl.NumberFormat('es-CO', { style: 'decimal', minimumFractionDigits: 0, maximumFractionDigits: 2 });
@@ -632,18 +556,14 @@ Se solicita expresamente al Despacho que en la condena se ordene que este valor 
                     pagos: pagos.toFixed(1),
                     pp: ppStr,
                     bolsa: fMoneda.format(bolsa),
+                    total: fMoneda.format(window.indemnizacionIndexadaActual),
                     
-                    fnac: fnacVal || "N/A", ftra: ftraVal || "N/A", fep: fepVal || "N/A",
-                    fnac_texto: formatearFechaLarga(fnacVal),
-                    ftra_texto: formatearFechaLarga(ftraVal),
-                    fep_texto: formatearFechaLarga(fepVal),
+                    fnac: formatearFechaLarga(fnacVal) || "N/A", 
+                    fep: formatearFechaLarga(fepVal) || "N/A",
                     
-                    /* NUEVAS VARIABLES DE INDEXACIÓN */
                     ipc_ini: document.getElementById("ipcInicial").value || "0",
                     ipc_fin: document.getElementById("ipcFinal").value || "0",
-                    f_index: findexVal || "N/A",
-                    f_index_texto: formatearFechaLarga(findexVal),
-                    v_index: fMoneda.format(window.indemnizacionIndexadaActual || 0)
+                    f_index_texto: formatearFechaLarga(findexVal)
                 };
 
                 try {
@@ -652,93 +572,11 @@ Se solicita expresamente al Despacho que en la condena se ordene que este valor 
                     saveAs(out, `Demanda_${data.nom.replace(/[^a-z0-9]/gi, '_')}.docx`);
                     inputElement.value = "";
                 } catch (error) {
-                    alert("❌ Hubo un error de sintaxis en tu Word. Verifica que las llaves estén bien escritas.");
+                    alert("❌ Hubo un error procesando el archivo. Verifica las etiquetas en el Word.");
                     console.error(error);
                 }
             };
             reader.readAsArrayBuffer(file);
-        }
-
-        /* ========================================================
-           METODOLOGÍA CSJ 2026 (WORD) ACTUALIZADO
-           ======================================================== */
-        function exportarMetodologiaDocs() {
-            if (!window.indemnizacionIndexadaActual) { alert("⚠️ Genera el dictamen primero."); return; }
-
-            const nombre = document.getElementById("nombre").value || "Cliente";
-            const referencia = document.getElementById("referencia").value || "Sin Ref";
-            const S = parseFloat(document.getElementById("semanasTraslado").value) || 0;
-            const E = parseInt(document.getElementById("edadTraslado").value) || 0;
-            const sexo = document.getElementById("sexo").value;
-            const Er = (sexo === 'M') ? 62 : 57;
-            const PP_porcentaje = document.getElementById("resPP").innerText;
-            
-            const mesadaRPM = parseFloat(document.getElementById("mesadaRPM").value) || 0;
-            const mesadaRAIS = parseFloat(document.getElementById("mesadaRAIS").value) || 0;
-            const diferenciaMensual = mesadaRPM - mesadaRAIS;
-            
-            const fechaNac = document.getElementById("fechaNacimiento").value;
-            const fechaNomina = document.getElementById("fechaNomina").value;
-            const edadNomina = parseInt(document.getElementById("edadNomina").value) || 0;
-            const EV = (tablaEV[edadNomina] && tablaEV[edadNomina][sexo]) ? tablaEV[edadNomina][sexo] : 0;
-            
-            const ipcIni = document.getElementById("ipcInicial").value;
-            const ipcFin = document.getElementById("ipcFinal").value;
-            const fIndex = document.getElementById("fechaIndexacion").value;
-
-            const pagosFuturos = EV * 13;
-            const bolsaTotal = diferenciaMensual * pagosFuturos;
-            const baseIndem = bolsaTotal * (parseFloat(PP_porcentaje.replace('%','')) / 100);
-            
-            const fmt = new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', minimumFractionDigits: 0, maximumFractionDigits: 2 });
-
-            const htmlWord = `
-            <html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
-            <head><meta charset='utf-8'><title>Anexo CSJ</title><style>body {font-family: Arial; font-size:11pt; text-align:justify;} table{width:100%; border-collapse:collapse;} th,td{border:1px solid #000; padding:6px;}</style></head>
-            <body>
-                <h2 style="text-align:center;">ANEXO METODOLÓGICO: PÉRDIDA DE OPORTUNIDAD E INDEXACIÓN<br>(Aplicación Sentencias CSJ SL168-2026 y SL169-2026)</h2>
-                <p><strong>Ref:</strong> ${referencia} <br><strong>Afiliado(a):</strong> ${nombre}</p>
-                <p>Conforme a los lineamientos jurisprudenciales establecidos por la Corte Suprema de Justicia (CSJ), la indemnización por pérdida de oportunidad previsional se calcula multiplicando tres componentes estructurales: la Probabilidad Pensional (PP), la diferencia de mesadas (RPM-RAIS) y el factor de expectativa de vida (EV*13).</p>
-                
-                <table>
-                    <tr><th colspan="2" style="text-align:center;">FÓRMULA PROBABILIDAD PENSIONAL (PP)</th></tr>
-                    <tr><td># de semanas al traslado (S)</td><td style="text-align:center;">${S}</td></tr>
-                    <tr><td>Edad al traslado (E)</td><td style="text-align:center;">${E}</td></tr>
-                    <tr><td>Edad de Ley (Er)</td><td style="text-align:center;">${Er}</td></tr>
-                    <tr><td><strong>PROBABILIDAD PENSIONAL (PP)</strong></td><td style="text-align:center;"><strong>${PP_porcentaje}</strong></td></tr>
-                </table>
-
-                <p>Al aplicar este porcentaje a la bolsa de pérdida consolidada obtenemos el capital base indemnizatorio:</p>
-                <table>
-                    <tr><td>Mesada Hipotética RPM</td><td>${fmt.format(mesadaRPM)}</td></tr>
-                    <tr><td>Mesada Real RAIS</td><td>${fmt.format(mesadaRAIS)}</td></tr>
-                    <tr><td>Diferencia Pensional</td><td><strong>${fmt.format(diferenciaMensual)}</strong></td></tr>
-                    <tr><td>Expectativa de Vida (EV) a Nómina</td><td>${EV} años (${pagosFuturos.toFixed(1)} pagos)</td></tr>
-                    <tr><td>Bolsa Total Proyectada</td><td>${fmt.format(bolsaTotal)}</td></tr>
-                    <tr><td><strong>Base Indemnización (Bolsa * PP)</strong></td><td><strong>${fmt.format(baseIndem)}</strong></td></tr>
-                </table>
-
-                <h3 style="text-align:center;">ACTUALIZACIÓN MONETARIA (INDEXACIÓN)</h3>
-                <p>De conformidad con las sentencias CSJ SL168-2026, SL169-2026 y concordantes, la cuantía del perjuicio se sufraga en una suma única a título de indemnización, valor que debe ser debidamente indexado. La Sala de Casación Laboral señala categóricamente que "es a partir de ese instante [Inclusión en nómina] en el que el actor pudo dimensionar con certeza las consecuencias de la afectación patrimonial sufrida", debiéndose actualizar dicho capital a la fecha.</p>
-                
-                <table>
-                    <tr><th colspan="2" style="text-align:center;">CUADRO DE INDEXACIÓN FINANCIERA</th></tr>
-                    <tr><td>Capital Base Indemnizatorio</td><td>${fmt.format(baseIndem)}</td></tr>
-                    <tr><td>Fecha Inclusión a Nómina (F.E.P.)</td><td>${formatearFechaLarga(fechaNomina)}</td></tr>
-                    <tr><td>IPC Inicial (Histórico)</td><td>${ipcIni}</td></tr>
-                    <tr><td>Fecha de Indexación (Liquidación)</td><td>${formatearFechaLarga(fIndex)}</td></tr>
-                    <tr><td>IPC Final (Actual)</td><td>${ipcFin}</td></tr>
-                    <tr><td><strong>VALOR TOTAL INDEXADO A DEMANDAR</strong></td><td><strong>${fmt.format(window.indemnizacionIndexadaActual)}</strong></td></tr>
-                </table>
-
-                <p><em>*Nota: De conformidad con la orden inquebrantable de la CSJ, esta suma única de ${fmt.format(window.indemnizacionIndexadaActual)} calculada a la fecha, <strong>deberá ser indexada ulteriormente al momento de su pago efectivo</strong>, y sobre la misma no habrá descuento alguno por concepto de aportes en salud.</em></p>
-            </body>
-            </html>`;
-
-            const a = document.createElement('a');
-            a.href = URL.createObjectURL(new Blob(['\ufeff', htmlWord], { type: 'application/msword' }));
-            a.download = `Metodologia_Indexada_${nombre.replace(/[^a-z0-9]/gi, '_')}.doc`;
-            a.click();
         }
 
         /* ========================================================
@@ -812,8 +650,6 @@ Se solicita expresamente al Despacho que en la condena se ordene que este valor 
             document.getElementById("fechaNacimiento").value = data.fechaNacimiento || '';
             document.getElementById("fechaTraslado").value = data.fechaTraslado || '';
             document.getElementById("fechaNomina").value = data.fechaNomina || '';
-            
-            // Cargar fecha indexación guardada o usar la de hoy si no existe
             document.getElementById("fechaIndexacion").value = data.fechaIndexacion || obtenerFechaHoyISO();
             
             actualizarEdades();
@@ -840,7 +676,7 @@ Se solicita expresamente al Despacho que en la condena se ordene que este valor 
 
         function renderizarDirectorio() {
             const cont = document.getElementById("contenedorCasos");
-            cont.className = "case-list " + vistaActual + "-view"; 
+            cont.className = "case-list grid-view"; 
             cont.innerHTML = "";
             listaCasosGlobal.forEach(c => {
                 const jsonStr = JSON.stringify(c).replace(/'/g, "&apos;");
@@ -860,11 +696,7 @@ Se solicita expresamente al Despacho que en la condena se ordene que este valor 
             cargarCasosDesdeDirectorio();
         }
         function nuevoCaso() { if(confirm("¿Limpiar formulario?")) location.reload(); }
-        function cambiarVistaDashboard() { vistaActual = vistaActual === "grid" ? "list" : "grid"; renderizarDirectorio(); }
-
-        /* Funciones Genéricas de Exportación Directa a PDF y Simple Docs */
         function exportarPDF() { html2pdf().set({margin:10, filename: `Dictamen.pdf`, html2canvas:{scale:2}, jsPDF:{unit:'mm', format:'letter'}}).from(document.getElementById('reporteContenido')).save(); }
-        function exportarDocs() { const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob(['\ufeff', `<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'><head><meta charset='utf-8'></head><body>${document.getElementById('reporteContenido').innerHTML}</body></html>`], { type: 'application/msword' })); a.download = `Dictamen.doc`; a.click(); }
     </script>
 </body>
 </html>
