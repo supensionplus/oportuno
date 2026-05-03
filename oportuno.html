@@ -461,7 +461,7 @@
                 🩺 Kit de Litigio Previsional 2.0
             </h2>
             
-            <button class="btn btn-secondary" type="button" style="width: 100%; text-align: left; margin-bottom: 20px; font-weight: normal;" onclick="mostrarAyuda('¿Por qué usar este Kit?', 'Justificación Estratégica: Este filtro inicial es indispensable para el litigante porque previene el desgaste judicial al iniciar demandas irremediablemente perdidas. La Corte Suprema (2026) unificó el criterio diferenciando tajantemente la Ineficacia (para no pensionados) de la Indemnización (para pensionados), defini strictamente desde cuándo corre la prescripción, y demarcó las Líneas Rojas que liberan totalmente a la AFP de indemnizar, al considerarlas un aprovechamiento exclusivo de la víctima. Responder este test asegura la viabilidad técnica del cálculo posterior.')">
+            <button class="btn btn-secondary" type="button" style="width: 100%; text-align: left; margin-bottom: 20px; font-weight: normal;" onclick="mostrarAyuda('¿Por qué usar este Kit?', 'Justificación Estratégica: Este filtro inicial es indispensable para el litigante porque previene el desgaste judicial al iniciar demandas irremediablemente perdidas. La Corte Suprema (2026) unificó el criterio diferenciando tajantemente la Ineficacia (para no pensionados) de la Indemnización (para pensionados), definió estrictamente desde cuándo corre la prescripción, y demarcó las Líneas Rojas que liberan totalmente a la AFP de indemnizar, al considerarlas un aprovechamiento exclusivo de la víctima. Responder este test asegura la viabilidad técnica del cálculo posterior.')">
                 💡 <strong>¿Por qué usar este diagnóstico antes de calcular?</strong> (Ver justificación)
             </button>
 
@@ -1331,7 +1331,13 @@ PRETENSIONES: Que se condene a la AFP a pagar un único desembolso global y defi
                     return;
                 }
 
-                const doc = new window.docxtemplater(zip, { paragraphLoop: true, linebreaks: true });
+                // 🔥 CORRECCIÓN FINAL: Le decimos explícitamente a docxtemplater que tú estás usando
+                // llaves dobles {{ y }} en lugar de llaves simples { }.
+                const doc = new window.docxtemplater(zip, { 
+                    paragraphLoop: true, 
+                    linebreaks: true,
+                    delimiters: { start: '{{', end: '}}' }
+                });
 
                 const formatoMonedaSinSimbolo = new Intl.NumberFormat('es-CO', { style: 'decimal', minimumFractionDigits: 0, maximumFractionDigits: 2 });
                 
