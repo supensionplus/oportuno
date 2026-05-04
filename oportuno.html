@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <script>
-    // GUARDIA DE SEGURIDAD: Verifica acceso antes de cargar cualquier contenido[cite: 3]
+    // GUARDIA DE SEGURIDAD: Verifica acceso antes de cargar cualquier contenido
     (function() {
         const acceso = sessionStorage.getItem("acceso_oportuno");
         if (acceso !== "autorizado") {
@@ -185,7 +185,9 @@
         .directory-table { width: 100%; border-collapse: collapse; background: var(--surface-color); border-radius: 8px; overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.02); margin: 0; }
         .directory-table th, .directory-table td { padding: 12px 10px; text-align: left; border-bottom: 1px solid var(--border-color); font-size: 0.85rem; vertical-align: middle;}
         .directory-table th { background-color: var(--primary-color); color: white; font-weight: 600; white-space: nowrap; border-bottom: none;}
+        .directory-table tr:last-child td { border-bottom: none; }
         .directory-table tr:hover { background-color: var(--highlight-bg); }
+        .directory-table .badge { margin-top: 0; }
         .table-actions { display: flex; gap: 5px; flex-wrap: nowrap;}
 
         .modal-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; font-size: 0.95rem; margin-top: 15px;}
@@ -197,10 +199,10 @@
 </head>
 <body>
 
-    <!-- NAVBAR[cite: 3] -->
+    <!-- TOP NAVBAR -->
     <div class="top-navbar">
         <div class="nav-left">
-            <button type="button" class="hamburger-btn" onclick="toggleSidebar()">☰</button>
+            <button type="button" class="hamburger-btn" onclick="toggleSidebar()" title="Ocultar/Mostrar Menú">☰</button>
             <div class="brand-container">
                 <img src="https://i.ibb.co/R49Ybz9S/Logo-Oportuno.webp" alt="Logo Oportuno">
                 <div class="brand-subtitle">Supension Plus</div>
@@ -217,7 +219,7 @@
                 <button type="button" class="btn btn-secondary" onclick="nuevoCaso()">📄 Nuevo</button>
                 <button type="button" class="btn btn-secondary" onclick="cambiarCarpetaTrabajo()">📁 Carpeta Trabajo</button>
                 <button type="button" class="btn btn-secondary" onclick="guardarDictamen(event)">💾 Guardar</button>
-                <button type="button" class="btn btn-primary" onclick="mostrarDashboard()">🗂️ Lista de Casos</button>
+                <button type="button" class="btn btn-primary" style="width: auto; padding: 8px 14px;" onclick="mostrarDashboard()">🗂️ Lista de Casos</button>
                 <button type="button" class="btn" id="btnUsuarios" style="display: none; background-color: var(--success-color); color: white;" onclick="abrirUsuarios()">👥 Usuarios</button>
                 <button type="button" class="btn btn-secondary" onclick="toggleTheme()">🌗 Tema</button>
                 <button type="button" class="btn btn-danger" onclick="cerrarSesion()">🚪 Cerrar Sesión</button>
@@ -225,7 +227,7 @@
         </div>
     </div>
 
-    <!-- CONTENEDOR PRINCIPAL[cite: 3] -->
+    <!-- CONTENEDOR PRINCIPAL -->
     <div class="app-container">
         
         <div class="sidebar-panel" id="sidebar">
@@ -237,22 +239,22 @@
             <div class="card" style="margin-top: 0;">
                 <div class="card-header">1. Datos del Caso</div>
                 <div class="form-group">
-                    <label>Nombre del Cliente <span style="color:var(--danger-color); margin-left:4px;">*</span></label>
+                    <label>Nombre del Cliente <span style="color:var(--danger-color); margin-left:4px;">*</span> <button type="button" class="btn-help" onclick="mostrarAyuda('Nombre del Cliente', 'Obligatorio.')">?</button></label>
                     <input type="text" id="nombre" class="form-control" placeholder="Ej: Martha Briceño">
                 </div>
                 <div class="form-group">
-                    <label>Referencia (Radicado)</label>
+                    <label>Referencia (Radicado) <button type="button" class="btn-help" onclick="mostrarAyuda('Referencia', 'Número de radicado.')">?</button></label>
                     <input type="text" id="referencia" class="form-control" placeholder="Ej: Rad 2023-00404">
                 </div>
                 <div class="form-group">
-                    <label>Sexo</label>
+                    <label>Sexo <button type="button" class="btn-help" onclick="mostrarAyuda('Sexo (Edad Ley)', 'Define la Edad Ley.')">?</button></label>
                     <select id="sexo" class="form-control">
-                        <option value="M">Masculino (62)</option>
-                        <option value="F">Femenino (57)</option>
+                        <option value="M">Masculino (Edad Ley: 62)</option>
+                        <option value="F">Femenino (Edad Ley: 57)</option>
                     </select>
                 </div>
                 <div class="form-group">
-                    <label>Fecha de Nacimiento</label>
+                    <label>Fecha de Nacimiento <button type="button" class="btn-help" onclick="mostrarAyuda('Fecha de Nacimiento', 'La jurisprudencia exige usar números enteros.')">?</button></label>
                     <input type="date" id="fechaNacimiento" class="form-control" onchange="actualizarEdades()">
                 </div>
             </div>
@@ -260,48 +262,48 @@
             <div class="card">
                 <div class="card-header">2. Variables de Traslado (PP)</div>
                 <div class="form-group">
-                    <label>Fecha Traslado al RAIS</label>
+                    <label>Fecha Traslado al RAIS <button type="button" class="btn-help" onclick="mostrarAyuda('Fecha Traslado al RAIS', 'Hito temporal originario.')">?</button></label>
                     <input type="date" id="fechaTraslado" class="form-control" onchange="actualizarEdades()">
                 </div>
                 <div class="form-group">
-                    <label>Edad al Traslado (E)</label>
+                    <label>Edad al Traslado (E) <button type="button" class="btn-help" onclick="mostrarAyuda('Edad al Traslado', 'Variable (E).')">?</button></label>
                     <input type="number" id="edadTraslado" class="form-control" readonly placeholder="Calculado automáticamente">
                 </div>
                 <div class="form-group">
-                    <label>Semanas al traslado (S)</label>
+                    <label>Semanas al traslado (S) <button type="button" class="btn-help" onclick="mostrarAyuda('Semanas Cotizadas (Traslado)', 'Variable (S).')">?</button></label>
                     <input type="number" step="0.01" id="semanasTraslado" class="form-control" placeholder="Ej: 766.71">
                 </div>
             </div>
 
             <div class="card">
-                <div class="card-header">3. Variables Financieras e Indexación[cite: 3]</div>
+                <div class="card-header">3. Variables Financieras e Indexación</div>
                 <div class="form-group">
-                    <label>Mesada Hipotética RPM</label>
+                    <label>Mesada Hipotética RPM <button type="button" class="btn-help" onclick="mostrarAyuda('Mesada Hipotética RPM', 'Tope de lo que pudo recibir.')">?</button></label>
                     <input type="number" id="mesadaRPM" class="form-control" placeholder="Ej: 1409812">
                 </div>
                 <div class="form-group">
-                    <label>Mesada Real RAIS</label>
+                    <label>Mesada Real RAIS <button type="button" class="btn-help" onclick="mostrarAyuda('Mesada Real RAIS', 'Monto concedido en el RAIS.')">?</button></label>
                     <input type="number" id="mesadaRAIS" class="form-control" placeholder="Ej: 877803">
                 </div>
                 <div class="form-group">
-                    <label>Ingreso a Nómina (F.E.P.)</label>
+                    <label>Ingreso a Nómina (F.E.P.) <button type="button" class="btn-help" onclick="mostrarAyuda('Fecha Ingreso Nómina (F.E.P.)', 'Momento crítico del daño.')">?</button></label>
                     <input type="date" id="fechaNomina" class="form-control" onchange="actualizarIPCs()">
                 </div>
                 <div class="form-group">
-                    <label>Edad Ingreso Nómina</label>
+                    <label>Edad Ingreso Nómina <button type="button" class="btn-help" onclick="mostrarAyuda('Edad Ingreso Nómina', 'Factor (EV).')">?</button></label>
                     <input type="number" id="edadNomina" class="form-control" readonly placeholder="Calculado automáticamente">
                 </div>
                 <div class="form-group">
-                    <label>Fecha de Indexación</label>
+                    <label>Fecha de Indexación <button type="button" class="btn-help" onclick="mostrarAyuda('Fecha de Indexación', 'Fecha a la cual se actualizará el valor histórico.')">?</button></label>
                     <input type="date" id="fechaIndexacion" class="form-control" onchange="actualizarIPCs()">
                 </div>
                 <div class="form-group">
                     <label>IPC Inicial (F.E.P.)</label>
-                    <input type="text" id="ipcInicial" class="form-control" readonly placeholder="Buscando IPC...">
+                    <input type="text" id="ipcInicial" class="form-control" readonly placeholder="Buscando IPC inicial...">
                 </div>
                 <div class="form-group">
                     <label>IPC Final</label>
-                    <input type="text" id="ipcFinal" class="form-control" readonly placeholder="Buscando IPC...">
+                    <input type="text" id="ipcFinal" class="form-control" readonly placeholder="Buscando IPC final...">
                 </div>
             </div>
 
@@ -315,7 +317,6 @@
             </div>
         </div>
 
-        <!-- PANEL DERECHO[cite: 3] -->
         <div class="main-panel" id="mainContent">
             
             <div id="welcomePanel" class="welcome-panel">
@@ -336,8 +337,8 @@
                 </div>
 
                 <div class="card report-container" id="reporteContenido">
-                    <h2 style="color: var(--primary-color); text-align: center; margin-bottom: 5px;">DICTAMEN PERICIAL ACTUARIAL INDEXADO[cite: 3]</h2>
-                    <p style="text-align: center; font-size: 0.85rem; margin-top: 0; margin-bottom: 30px;">Liquidación de Perjuicios por Pérdida de Oportunidad e Indexación (Sentencias CSJ 2026)</p>
+                    <h2 style="color: var(--primary-color); text-align: center; margin-bottom: 5px;">DICTAMEN PERICIAL ACTUARIAL INDEXADO</h2>
+                    <p style="text-align: center; font-size: 0.85rem; margin-top: 0; margin-bottom: 30px;">Liquidación de Perjuicios por Pérdida de Oportunidad (Sentencias CSJ 2026)</p>
                     
                     <table border="1" cellpadding="8" cellspacing="0" bordercolor="#dddddd">
                         <tr bgcolor="#f0f4f8">
@@ -350,20 +351,24 @@
                         </tr>
                     </table>
 
-                    <h3>FASE 1: Probabilidad Pensional Truncada (PP)</h3>
+                    <h3>PROBABILIDAD PENSIONAL TRUNCADA (PP)</h3>
                     <table>
-                        <tr bgcolor="#f0f4f8"><td>Probabilidad Pensional Truncada (PP)</td><td id="resPP" style="font-weight:bold;"></td></tr>
+                        <tr bgcolor="#f0f4f8"><td><strong>Probabilidad Pensional Truncada (PP)</strong></td><td><strong id="resPP"></strong></td></tr>
                     </table>
 
-                    <h3>CUADRO DE INDEXACIÓN Y LIQUIDACIÓN[cite: 3]</h3>
+                    <h3>CUADRO DE INDEXACIÓN Y LIQUIDACIÓN FINAL</h3>
                     <table border="1" cellpadding="8" cellspacing="0" bordercolor="#dddddd">
+                        <tr bgcolor="#f0f4f8">
+                            <th>Concepto</th><th>Valor / Fecha</th>
+                        </tr>
                         <tr><td>Indemnización Histórica (Bolsa)</td><td id="resHistorial"></td></tr>
                         <tr><td>Fecha F.E.P. (IPC Inicial)</td><td id="resFEP"></td></tr>
                         <tr><td>Fecha Indexación (IPC Final)</td><td id="resFIndex"></td></tr>
                         <tr><td>Valor IPC Inicial</td><td id="resIPCIni"></td></tr>
                         <tr><td>Valor IPC Final</td><td id="resIPCFin"></td></tr>
-                        <tr bgcolor="#D1FAE5" style="color:#059669; font-size:1.1rem; font-weight:bold;">
-                            <td>INDEMNIZACIÓN TOTAL INDEXADA</td><td id="resTotal"></td>
+                        <tr bgcolor="#D1FAE5">
+                            <td style="color:#059669; font-size:1.1rem;"><strong>INDEMNIZACIÓN TOTAL INDEXADA</strong></td>
+                            <td style="color:#059669; font-size:1.1rem;"><strong id="resTotal"></strong></td>
                         </tr>
                     </table>
 
@@ -372,7 +377,6 @@
                 </div>
             </div>
 
-            <!-- DASHBOARD[cite: 3] -->
             <div id="dashboardPanel">
                 <h2 style="color: var(--primary-color); margin-top: 0;">🗂️ Directorio de Casos Guardados</h2>
                 <div class="stats-container" id="estadisticasPanel"></div>
@@ -385,11 +389,11 @@
         </div>
     </div>
 
-    <!-- MODALES[cite: 3] -->
+    <!-- MODAL KIT DE LITIGIO -->
     <div class="modal-overlay" id="modalKitLitigio">
         <div class="modal-content large-modal" style="border-top: 5px solid var(--success-color);">
             <button type="button" class="close-modal" onclick="document.getElementById('modalKitLitigio').style.display='none'">✖</button>
-            <h2 style="color: var(--primary-color);">🩺 Kit de Litigio Previsional 2.0</h2>
+            <h2 style="color: var(--primary-color); margin-top:0;">🩺 Kit de Litigio Previsional 2.0</h2>
             <form id="formChecklist" onchange="evaluarChecklist()" onsubmit="event.preventDefault()">
                 <div class="checklist-group">
                     <h4>📋 Diagnóstico Básico</h4>
@@ -403,12 +407,12 @@
                 </div>
             </form>
             <div id="alertaDiagnostico" class="diagnostico-alerta"></div>
-            <button type="button" class="btn btn-secondary" style="width: 100%;" onclick="document.getElementById('modalKitLitigio').style.display='none'">Cerrar</button>
+            <button type="button" class="btn btn-secondary" style="width: 100%; margin-top: 10px;" onclick="document.getElementById('modalKitLitigio').style.display='none'">Cerrar Diagnóstico</button>
         </div>
     </div>
 
+    <!-- SCRIPTS DE LÓGICA -->
     <script>
-        // CONFIGURACIÓN IPC[cite: 3]
         const IPC_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTdNthPefIWQeMwHGvb9u28aPwn6tCOgTXpirgCAZVDzm4_LK51uTNsA70BhZg37581zj9k2SaC-UKa/pub?output=csv";
         let tablaIPC = [];
         const formatter = new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', minimumFractionDigits: 0 });
@@ -447,7 +451,6 @@
             document.getElementById("ipcFinal").value = buscarIPC(findex) || "N/A";
         }
 
-        /* LÓGICA DE NAVEGACIÓN[cite: 3] */
         function toggleSidebar() { document.getElementById("sidebar").classList.toggle("collapsed"); }
         function toggleTheme() { document.body.setAttribute("data-theme", document.body.getAttribute("data-theme") === "dark" ? "light" : "dark"); }
         function cerrarSesion() { sessionStorage.clear(); window.location.href = "index.html"; }
@@ -506,13 +509,14 @@
         function liquidarYOcultarSidebar() { if (liquidar()) document.getElementById("sidebar").classList.add("collapsed"); }
         async function guardarDictamen(e) { 
             if(e) e.preventDefault();
-            const data = { nombre: document.getElementById("nombre").value, fechaIndexacion: document.getElementById("fechaIndexacion").value, indemnizacionTotal: window.indemnizacionActual };
+            const data = { 
+                nombre: document.getElementById("nombre").value, 
+                fechaIndexacion: document.getElementById("fechaIndexacion").value, 
+                indemnizacionTotal: window.indemnizacionActual 
+            };
             const blob = new Blob([JSON.stringify(data, null, 2)], {type: "application/json"});
             saveAs(blob, `Oportuno_${data.nombre}.json`);
         }
     </script>
 </body>
 </html>
-```[cite: 3]
-
-¿Hay algún otro detalle de las sentencias 2026 que desees que ajustemos en este bloque?
