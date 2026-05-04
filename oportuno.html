@@ -153,6 +153,7 @@
         .check-text p { margin: 0; font-size: 0.85rem; color: var(--text-muted); line-height: 1.4;}
         .check-options { display: flex; gap: 10px; align-items: center; }
         .check-options label { font-size: 0.9rem; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 4px; padding: 6px 12px; border-radius: 6px; border: 1px solid var(--border-color); background: var(--surface-color); transition: all 0.2s;}
+        .check-options input[type="radio"] { cursor: pointer; }
         
         .radio-green:has(input:checked) { background: var(--success-bg); border-color: var(--success-color); color: var(--success-color); }
         .radio-red:has(input:checked) { background: var(--danger-bg); border-color: var(--danger-color); color: var(--danger-color); }
@@ -196,6 +197,7 @@
 </head>
 <body>
 
+    <!-- NAVBAR[cite: 3] -->
     <div class="top-navbar">
         <div class="nav-left">
             <button type="button" class="hamburger-btn" onclick="toggleSidebar()">☰</button>
@@ -223,6 +225,7 @@
         </div>
     </div>
 
+    <!-- CONTENEDOR PRINCIPAL[cite: 3] -->
     <div class="app-container">
         
         <div class="sidebar-panel" id="sidebar">
@@ -244,8 +247,8 @@
                 <div class="form-group">
                     <label>Sexo</label>
                     <select id="sexo" class="form-control">
-                        <option value="M">Masculino (Edad Ley: 62)</option>
-                        <option value="F">Femenino (Edad Ley: 57)</option>
+                        <option value="M">Masculino (62)</option>
+                        <option value="F">Femenino (57)</option>
                     </select>
                 </div>
                 <div class="form-group">
@@ -312,12 +315,13 @@
             </div>
         </div>
 
+        <!-- PANEL DERECHO[cite: 3] -->
         <div class="main-panel" id="mainContent">
             
             <div id="welcomePanel" class="welcome-panel">
                 <img src="https://i.ibb.co/R49Ybz9S/Logo-Oportuno.webp" alt="Logo Oportuno">
-                <h2>Liquidador Pericial CSJ 2026[cite: 3]</h2>
-                <p>Usa el menú lateral (☰) para ingresar las fechas y datos. El sistema cuenta con un motor de validación basado en la jurisprudencia de la Corte y cálculo de indexación automático.</p>
+                <h2>Liquidador Pericial CSJ 2026</h2>
+                <p>Usa el menú lateral (☰) para ingresar las fechas y datos. El sistema cuenta con cálculo de indexación automático basado en la jurisprudencia de la Corte.</p>
             </div>
 
             <div id="resultadoWrapper" style="display: none; flex-direction: column;">
@@ -344,25 +348,22 @@
                             <th>Fecha Nacimiento</th><td id="resFechaNac"></td>
                             <th>Edad Ley (Er)</th><td id="resEr"></td>
                         </tr>
-                        <tr bgcolor="#f0f4f8">
-                            <th>Semanas Traslado (S)</th><td id="resS"></td>
-                            <th>Probabilidad Truncada (PP)</th><td id="resPP" style="font-weight:bold;"></td>
-                        </tr>
+                    </table>
+
+                    <h3>FASE 1: Probabilidad Pensional Truncada (PP)</h3>
+                    <table>
+                        <tr bgcolor="#f0f4f8"><td>Probabilidad Pensional Truncada (PP)</td><td id="resPP" style="font-weight:bold;"></td></tr>
                     </table>
 
                     <h3>CUADRO DE INDEXACIÓN Y LIQUIDACIÓN[cite: 3]</h3>
                     <table border="1" cellpadding="8" cellspacing="0" bordercolor="#dddddd">
-                        <tr bgcolor="#f0f4f8">
-                            <th>Concepto</th><th>Dato</th>
-                        </tr>
                         <tr><td>Indemnización Histórica (Bolsa)</td><td id="resHistorial"></td></tr>
                         <tr><td>Fecha F.E.P. (IPC Inicial)</td><td id="resFEP"></td></tr>
                         <tr><td>Fecha Indexación (IPC Final)</td><td id="resFIndex"></td></tr>
                         <tr><td>Valor IPC Inicial</td><td id="resIPCIni"></td></tr>
                         <tr><td>Valor IPC Final</td><td id="resIPCFin"></td></tr>
-                        <tr bgcolor="#D1FAE5">
-                            <td style="color:#059669; font-size:1.1rem;"><strong>INDEMNIZACIÓN TOTAL INDEXADA</strong></td>
-                            <td style="color:#059669; font-size:1.1rem;"><strong id="resTotal"></strong></td>
+                        <tr bgcolor="#D1FAE5" style="color:#059669; font-size:1.1rem; font-weight:bold;">
+                            <td>INDEMNIZACIÓN TOTAL INDEXADA</td><td id="resTotal"></td>
                         </tr>
                     </table>
 
@@ -371,6 +372,7 @@
                 </div>
             </div>
 
+            <!-- DASHBOARD[cite: 3] -->
             <div id="dashboardPanel">
                 <h2 style="color: var(--primary-color); margin-top: 0;">🗂️ Directorio de Casos Guardados</h2>
                 <div class="stats-container" id="estadisticasPanel"></div>
@@ -380,36 +382,31 @@
                 </div>
                 <div class="case-list grid-view" id="contenedorCasos"></div>
             </div>
-
         </div>
     </div>
 
-    <!-- MODALES INTACTOS[cite: 3] -->
-    <div class="modal-overlay" id="modalDetalle">
-        <div class="modal-content">
-            <button type="button" class="close-modal" onclick="document.getElementById('modalDetalle').style.display='none'">✖</button>
-            <h3 style="color: var(--primary-color); margin-top:0;">🗂️ Detalles del Caso</h3>
-            <div id="modalDetalleContenido"></div>
+    <!-- MODALES[cite: 3] -->
+    <div class="modal-overlay" id="modalKitLitigio">
+        <div class="modal-content large-modal" style="border-top: 5px solid var(--success-color);">
+            <button type="button" class="close-modal" onclick="document.getElementById('modalKitLitigio').style.display='none'">✖</button>
+            <h2 style="color: var(--primary-color);">🩺 Kit de Litigio Previsional 2.0</h2>
+            <form id="formChecklist" onchange="evaluarChecklist()" onsubmit="event.preventDefault()">
+                <div class="checklist-group">
+                    <h4>📋 Diagnóstico Básico</h4>
+                    <div class="check-item">
+                        <div class="check-text"><strong>1. Estatus Pensional</strong><p>¿Está pensionado y cobrando?</p></div>
+                        <div class="check-options">
+                            <label class="radio-green"><input type="radio" name="chk_estatus" value="SI"> SÍ</label>
+                            <label class="radio-red"><input type="radio" name="chk_estatus" value="NO"> NO</label>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <div id="alertaDiagnostico" class="diagnostico-alerta"></div>
+            <button type="button" class="btn btn-secondary" style="width: 100%;" onclick="document.getElementById('modalKitLitigio').style.display='none'">Cerrar</button>
         </div>
     </div>
 
-    <div class="modal-overlay" id="modalAyuda">
-        <div class="modal-content small-modal">
-            <button type="button" class="close-modal" onclick="document.getElementById('modalAyuda').style.display='none'">✖</button>
-            <h3 id="modalAyudaTitulo">Ayuda</h3>
-            <p id="modalAyudaTexto" style="white-space: pre-line;"></p>
-        </div>
-    </div>
-
-    <div class="modal-overlay" id="modalValidacion">
-        <div class="modal-content" style="border-top: 5px solid var(--danger-color);">
-            <h3 style="color: var(--danger-color);" id="modalValidacionTitulo">⚠️ Error</h3>
-            <div id="listaValidacion"></div>
-            <button type="button" class="btn btn-primary" style="background-color: var(--danger-color); width: 100%;" onclick="document.getElementById('modalValidacion').style.display='none'">Cerrar</button>
-        </div>
-    </div>
-
-    <!-- SCRIPTS ACTUALIZADOS[cite: 3] -->
     <script>
         // CONFIGURACIÓN IPC[cite: 3]
         const IPC_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTdNthPefIWQeMwHGvb9u28aPwn6tCOgTXpirgCAZVDzm4_LK51uTNsA70BhZg37581zj9k2SaC-UKa/pub?output=csv";
@@ -419,10 +416,7 @@
         window.onload = async () => {
             document.getElementById("fechaIndexacion").valueAsDate = new Date();
             await cargarIPCs();
-            try {
-                await idb.init();
-                directorioHandle = await idb.get("carpetaTrabajo");
-            } catch(e) {}
+            try { await idb.init(); directorioHandle = await idb.get("carpetaTrabajo"); } catch(e) {}
         };
 
         async function cargarIPCs() {
@@ -453,10 +447,13 @@
             document.getElementById("ipcFinal").value = buscarIPC(findex) || "N/A";
         }
 
-        /* LÓGICA ORIGINAL RESTAURADA[cite: 3] */
+        /* LÓGICA DE NAVEGACIÓN[cite: 3] */
         function toggleSidebar() { document.getElementById("sidebar").classList.toggle("collapsed"); }
         function toggleTheme() { document.body.setAttribute("data-theme", document.body.getAttribute("data-theme") === "dark" ? "light" : "dark"); }
         function cerrarSesion() { sessionStorage.clear(); window.location.href = "index.html"; }
+        function abrirKitLitigio() { document.getElementById('modalKitLitigio').style.display = 'flex'; }
+        function mostrarDashboard() { document.getElementById("welcomePanel").style.display = "none"; document.getElementById("dashboardPanel").style.display = "flex"; }
+        function nuevoCaso() { location.reload(); }
 
         function actualizarEdades() {
             const fn = document.getElementById("fechaNacimiento").value;
@@ -485,8 +482,6 @@
             const ipcI = parseFloat(document.getElementById("ipcInicial").value);
             const ipcF = parseFloat(document.getElementById("ipcFinal").value);
 
-            if(isNaN(S) || isNaN(E)) return false;
-
             const pp = (0.5 * Math.pow(S/1300, 0.5)) * Math.pow(2, -Math.abs(E-Er)/100);
             const diferencia = parseFloat(document.getElementById("mesadaRPM").value) - parseFloat(document.getElementById("mesadaRAIS").value);
             const ev = tablaEV[enom] ? tablaEV[enom][sexo] : 22;
@@ -509,17 +504,9 @@
         }
 
         function liquidarYOcultarSidebar() { if (liquidar()) document.getElementById("sidebar").classList.add("collapsed"); }
-
-        /* PERSISTENCIA JSON ACTUALIZADA[cite: 3] */
-        async function guardarDictamen(e) {
+        async function guardarDictamen(e) { 
             if(e) e.preventDefault();
-            const data = {
-                nombre: document.getElementById("nombre").value,
-                fechaIndexacion: document.getElementById("fechaIndexacion").value,
-                fechaNomina: document.getElementById("fechaNomina").value,
-                indemnizacionTotal: window.indemnizacionActual,
-                // ...otros campos se añaden aquí[cite: 3]
-            };
+            const data = { nombre: document.getElementById("nombre").value, fechaIndexacion: document.getElementById("fechaIndexacion").value, indemnizacionTotal: window.indemnizacionActual };
             const blob = new Blob([JSON.stringify(data, null, 2)], {type: "application/json"});
             saveAs(blob, `Oportuno_${data.nombre}.json`);
         }
@@ -527,3 +514,5 @@
 </body>
 </html>
 ```[cite: 3]
+
+¿Hay algún otro detalle de las sentencias 2026 que desees que ajustemos en este bloque?
