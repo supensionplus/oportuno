@@ -1,24 +1,24 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+<script>
+    // GUARDIA DE SEGURIDAD: Verifica acceso antes de cargar cualquier contenido[cite: 3]
+    (function() {
+        const acceso = sessionStorage.getItem("acceso_oportuno");
+        if (acceso !== "autorizado") {
+            alert("⚠️ Acceso no autorizado. Por favor, inicia sesión.");
+            window.location.href = "index.html";
+        }
+    })();
+</script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Oportuno - Liquidador Previsional</title>
 
-    <script>
-        // GUARDIA DE SEGURIDAD: Verifica acceso antes de cargar contenido
-        (function() {
-            const acceso = sessionStorage.getItem("acceso_oportuno");
-            if (acceso !== "autorizado") {
-                window.location.href = "index.html";
-            }
-        })();
-    </script>
-
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     
-    <!-- LIBRERÍAS PARA EL MÓDULO PRO (Word)[cite: 1, 2] -->
+    <!-- LIBRERÍAS PARA EL MÓDULO PRO (Word)[cite: 3] -->
     <script src="https://unpkg.com/pizzip@3.1.4/dist/pizzip.js"></script>
     <script src="https://unpkg.com/docxtemplater@3.37.11/build/docxtemplater.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
@@ -69,6 +69,7 @@
 
         h1, h2, h3, h4 { margin-top: 0; color: var(--text-main); }
         
+        /* ====== TOP NAVBAR ====== */
         .top-navbar {
             display: flex; justify-content: space-between; align-items: center;
             height: var(--navbar-height); padding: 0 20px; background-color: var(--surface-color);
@@ -76,7 +77,7 @@
         }
 
         .nav-left { display: flex; align-items: center; gap: 15px; }
-        .hamburger-btn { background: none; border: none; font-size: 1.8rem; color: var(--text-main); cursor: pointer; padding: 5px; border-radius: 6px; display: flex; align-items: center; justify-content: center; }
+        .hamburger-btn { background: none; border: none; font-size: 1.8rem; color: var(--text-main); cursor: pointer; padding: 5px; border-radius: 6px; transition: background 0.2s; display: flex; align-items: center; justify-content: center; }
         .hamburger-btn:hover { background-color: var(--highlight-bg); }
         .brand-container { display: flex; flex-direction: column; justify-content: center;}
         .brand-container img { max-height: 40px; width: auto; }
@@ -89,6 +90,7 @@
 
         .nav-actions { display: flex; gap: 8px; flex-wrap: wrap; }
 
+        /* ====== DISTRIBUCIÓN PRINCIPAL ====== */
         .app-container { display: flex; flex: 1; overflow: hidden; }
 
         .sidebar-panel {
@@ -99,7 +101,7 @@
 
         .main-panel { flex: 1; padding: 20px; overflow-y: auto; background-color: var(--bg-color); transition: all 0.3s ease; }
 
-        .card { background-color: var(--surface-color); border: 1px solid var(--border-color); border-radius: 12px; padding: 24px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); margin-bottom: 20px; }
+        .card { background-color: var(--surface-color); border: 1px solid var(--border-color); border-radius: 12px; padding: 24px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); margin-bottom: 20px; transition: background-color 0.3s, border-color 0.3s; }
         .card-header { font-size: 1.1rem; font-weight: 600; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--border-color); color: var(--primary-color); }
         .form-group { margin-bottom: 16px; }
         .form-group label { display: flex; align-items: center; font-size: 0.85rem; font-weight: 600; color: var(--text-muted); margin-bottom: 6px; }
@@ -109,31 +111,42 @@
 
         .btn { padding: 8px 14px; font-size: 0.85rem; font-weight: 600; border: none; border-radius: 6px; cursor: pointer; transition: all 0.2s; display: inline-flex; align-items: center; justify-content: center; gap: 6px; }
         .btn-primary { background-color: var(--primary-color); color: #FFF; width: 100%; padding: 14px; font-size: 1rem;}
-        .btn-success { background-color: var(--success-color); color: white; width: 100%; padding: 12px; font-size: 1rem; margin-bottom: 15px; border-radius: 8px; border: none; font-weight: bold; cursor: pointer; }
+        .btn-success { background-color: var(--success-color); color: white; width: 100%; padding: 12px; font-size: 1rem; margin-bottom: 15px; border-radius: 8px; border: none; font-weight: bold; cursor: pointer; box-shadow: 0 4px 6px rgba(5, 150, 105, 0.2); transition: all 0.2s;}
         
+        .btn-help { background-color: var(--accent-color); color: white; border: none; border-radius: 50%; width: 18px; height: 18px; font-size: 0.7rem; font-weight: bold; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; margin-left: 8px; padding: 0; box-shadow: 0 2px 4px rgba(0,0,0,0.1); transition: transform 0.2s;}
+
+        .export-bar { display: flex; gap: 10px; justify-content: flex-end; margin-bottom: 15px;}
+        .btn-pdf { background-color: #EF4444; color: white; }
+        .btn-doc { background-color: #3B82F6; color: white; }
+        .btn-xls { background-color: #10B981; color: white; }
+
         .report-container { font-family: 'Inter', sans-serif; color: var(--text-main); background: var(--surface-color); padding: 30px;}
         table { width: 100%; border-collapse: collapse; margin-bottom: 20px; font-size: 0.9rem; }
         th, td { padding: 12px; text-align: left; border-bottom: 1px solid var(--border-color); }
         th { background-color: var(--highlight-bg); font-weight: 600; color: var(--text-muted); }
+        .copy-paste-box { background-color: var(--bg-color); border: 1px dashed var(--border-color); padding: 16px; border-radius: 8px; font-family: Georgia, serif; font-size: 0.9rem; line-height: 1.6; white-space: pre-wrap; color: var(--text-main); }
         
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 9999; display: none; justify-content: center; align-items: center; backdrop-filter: blur(5px); }
         .modal-content { background: var(--surface-color); width: 90%; max-width: 650px; border-radius: 12px; padding: 30px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); max-height: 90vh; overflow-y: auto; position: relative;}
+        .modal-content.small-modal { max-width: 450px; padding: 25px;}
+        .modal-content.large-modal { max-width: 800px; padding: 35px;}
+        .close-modal { position: absolute; top: 15px; right: 15px; background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--text-muted); transition: color 0.2s;}
 
-        .welcome-panel { background-color: var(--primary-color); color: #FFF; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 50px 40px; text-align: center; border-radius: 12px; min-height: calc(100vh - var(--navbar-height) - 40px); }
-        .welcome-panel img { max-width: 280px; margin-bottom: 25px; }
-
-        .diagnostico-alerta { display: none; padding: 15px; margin-top: 20px; border-radius: 8px; font-weight: 600; font-size: 0.95rem; border-left: 5px solid;}
-
-        /* Estilos Dashboard */
         #dashboardPanel { display: none; flex-direction: column; gap: 20px; }
         .stats-container { display: flex; gap: 15px; margin-bottom: 10px; flex-wrap: wrap;}
-        .stat-box { background: var(--surface-color); border: 1px solid var(--border-color); padding: 15px 20px; border-radius: 8px; flex: 1; min-width: 150px; text-align: center;}
-        .stat-box .number { font-size: 1.8rem; font-weight: 700; color: var(--primary-color); }
+        .stat-box { background: var(--surface-color); border: 1px solid var(--border-color); padding: 15px 20px; border-radius: 8px; flex: 1; min-width: 150px; text-align: center; box-shadow: 0 2px 4px rgba(0,0,0,0.02);}
+        .stat-box .number { font-size: 1.8rem; font-weight: 700; color: var(--primary-color); margin-top: 5px;}
+        
+        .case-list.grid-view { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 15px; }
+        .case-card { background: var(--surface-color); border: 1px solid var(--border-color); border-radius: 8px; padding: 16px; box-shadow: 0 2px 4px rgba(0,0,0,0.02); display: flex; flex-direction: column; justify-content: space-between; transition: all 0.2s;}
+        .badge { display: inline-block; background: var(--success-bg); color: var(--success-color); padding: 4px 8px; border-radius: 12px; font-size: 0.8rem; font-weight: 600; margin-top: 8px;}
+
+        .welcome-panel { background-color: var(--primary-color); color: #FFF; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 50px 40px; text-align: center; border-radius: 12px; min-height: calc(100vh - var(--navbar-height) - 40px); }
+        .welcome-panel img { max-width: 280px; margin-bottom: 25px; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3)); }
     </style>
 </head>
 <body>
 
-    <!-- NAVBAR[cite: 2] -->
     <div class="top-navbar">
         <div class="nav-left">
             <button type="button" class="hamburger-btn" onclick="toggleSidebar()">☰</button>
@@ -149,7 +162,7 @@
             </div>
             <div class="nav-actions">
                 <button type="button" class="btn btn-secondary" onclick="nuevoCaso()">📄 Nuevo</button>
-                <button type="button" class="btn btn-secondary" onclick="guardarDictamen()">💾 Guardar</button>
+                <button type="button" class="btn btn-secondary" onclick="guardarDictamen(event)">💾 Guardar</button>
                 <button type="button" class="btn btn-primary" onclick="mostrarDashboard()">🗂️ Lista de Casos</button>
                 <button type="button" class="btn btn-danger" onclick="cerrarSesion()">🚪 Cerrar Sesión</button>
             </div>
@@ -157,8 +170,6 @@
     </div>
 
     <div class="app-container">
-        
-        <!-- SIDEBAR[cite: 2] -->
         <div class="sidebar-panel" id="sidebar">
             <button type="button" class="btn-success" onclick="abrirKitLitigio()">🩺 Kit de Litigio (Diagnóstico CSJ)</button>
 
@@ -177,75 +188,72 @@
             </div>
 
             <div class="card">
-                <div class="card-header">2. Traslado (PP)</div>
+                <div class="card-header">2. Variables Traslado (PP)</div>
                 <div class="form-group"><label>Fecha Traslado</label><input type="date" id="fechaTraslado" class="form-control" onchange="actualizarEdades()"></div>
                 <div class="form-group"><label>Edad al Traslado (E)</label><input type="number" id="edadTraslado" class="form-control" readonly></div>
                 <div class="form-group"><label>Semanas Traslado (S)</label><input type="number" step="0.01" id="semanasTraslado" class="form-control"></div>
             </div>
 
             <div class="card">
-                <div class="card-header">3. Finanzas e Indexación[cite: 2]</div>
-                <div class="form-group"><label>Fecha Nómina (F.E.P.)</label><input type="date" id="fechaNomina" class="form-control" onchange="actualizarIPCs()"></div>
-                <div class="form-group"><label>Edad en Nómina</label><input type="number" id="edadNomina" class="form-control" readonly></div>
+                <div class="card-header">3. Finanzas e Indexación[cite: 3]</div>
+                <div class="form-group"><label>Mesada RPM</label><input type="number" id="mesadaRPM" class="form-control"></div>
+                <div class="form-group"><label>Mesada RAIS</label><input type="number" id="mesadaRAIS" class="form-control"></div>
+                <div class="form-group"><label>Ingreso Nómina (F.E.P.)</label><input type="date" id="fechaNomina" class="form-control" onchange="actualizarIPCs()"></div>
+                <div class="form-group"><label>Edad Ingreso Nómina</label><input type="number" id="edadNomina" class="form-control" readonly></div>
                 <div class="form-group"><label>Fecha Indexación</label><input type="date" id="fechaIndexacion" class="form-control" onchange="actualizarIPCs()"></div>
                 <div class="form-group"><label>IPC Inicial (F.E.P.)</label><input type="text" id="ipcInicial" class="form-control" readonly></div>
                 <div class="form-group"><label>IPC Final</label><input type="text" id="ipcFinal" class="form-control" readonly></div>
-                <div class="form-group"><label>Mesada RPM</label><input type="number" id="mesadaRPM" class="form-control"></div>
-                <div class="form-group"><label>Mesada RAIS</label><input type="number" id="mesadaRAIS" class="form-control"></div>
-                <div class="form-group"><label>Observaciones</label><textarea id="observaciones" class="form-control" rows="2"></textarea></div>
-                <button type="button" class="btn btn-primary" onclick="liquidar()">Generar Liquidación</button>
+                <div class="form-group"><label>Observaciones</label><textarea id="observaciones" class="form-control" rows="3"></textarea></div>
+                <button type="button" class="btn btn-primary" onclick="liquidarYOcultarSidebar()">Generar Liquidación</button>
             </div>
         </div>
 
         <div class="main-panel" id="mainContent">
-            
             <div id="welcomePanel" class="welcome-panel">
                 <img src="https://i.ibb.co/R49Ybz9S/Logo-Oportuno.webp" alt="Logo">
-                <h2>Liquidador Pericial Indexado 2026[cite: 2]</h2>
-                <p>Usa el menú lateral para ingresar datos y calcular automáticamente la pérdida de oportunidad indexada.</p>
+                <h2>Liquidador Pericial Indexado 2026[cite: 3]</h2>
+                <p>Usa el menú lateral (☰) para ingresar las fechas y datos. El sistema calculará la indexación automáticamente basado en las sentencias de la CSJ.</p>
             </div>
 
             <div id="resultadoWrapper" style="display: none; flex-direction: column;">
+                <div class="export-bar">
+                    <button class="btn btn-pdf" onclick="exportarPDF()">📄 PDF</button>
+                    <button class="btn btn-doc" onclick="exportarDocs()">📝 Word</button>
+                    <button class="btn btn-doc" style="background-color: #4F46E5;" onclick="exportarMetodologiaDocs()">📘 Metodología</button>
+                </div>
                 <div class="card report-container" id="reporteContenido">
                     <h2 style="color: var(--primary-color); text-align: center;">DICTAMEN PERICIAL ACTUARIAL INDEXADO</h2>
                     <table>
                         <tr><th>Afiliado(a)</th><td id="resNombre"></td><th>Referencia</th><td id="resReferencia"></td></tr>
-                        <tr><th>Fecha Nacimiento</th><td id="resFechaNac"></td><th>Edad Ley (Er)</th><td id="resEr"></td></tr>
                     </table>
-
-                    <h3>FASE 1: Probabilidad Pensional Truncada (PP)[cite: 2]</h3>
+                    <h3>PROBABILIDAD PENSIONAL (PP)[cite: 3]</h3>
                     <table>
-                        <tr bgcolor="#f0f4f8"><td><strong>Probabilidad Pensional Truncada (PP)</strong></td><td><strong style="color:#0F2B46" id="resPP"></strong></td></tr>
+                        <tr><td>Probabilidad Pensional Truncada (PP)</td><td id="resPP" style="font-weight:bold;"></td></tr>
                     </table>
-
-                    <h3>FASE DE INDEXACIÓN (Sentencias 2026)[cite: 2]</h3>
+                    <h3>CUADRO DE INDEXACIÓN (Sentencias 2026)[cite: 3]</h3>
                     <table>
-                        <tr bgcolor="#f0f4f8"><th>Concepto</th><th>Valor / Fecha</th></tr>
-                        <tr><td>Indemnización Histórica (Sin Indexar)</td><td id="resHistorial"></td></tr>
+                        <tr><td>Indemnización Histórica (Bolsa)</td><td id="resHistorial"></td></tr>
                         <tr><td>Fecha F.E.P. (IPC Inicial)</td><td id="resFEP"></td></tr>
                         <tr><td>Fecha Indexación (IPC Final)</td><td id="resFIndex"></td></tr>
                         <tr><td>IPC Inicial</td><td id="resIPCIni"></td></tr>
                         <tr><td>IPC Final</td><td id="resIPCFin"></td></tr>
-                        <tr bgcolor="#D1FAE5" style="color:#059669; font-size:1.1rem; font-weight:bold;">
+                        <tr style="background:var(--success-bg); font-weight:bold; font-size:1.1rem; color:var(--success-color);">
                             <td>TOTAL INDEMNIZACIÓN INDEXADA</td><td id="resTotal"></td>
                         </tr>
                     </table>
+                    <div class="copy-paste-box" id="copyPasteText"></div>
                 </div>
             </div>
 
             <div id="dashboardPanel">
-                <h2 style="color: var(--primary-color);">🗂️ Directorio de Casos Guardados[cite: 2]</h2>
+                <h2 style="color: var(--primary-color);">🗂️ Directorio de Casos Guardados</h2>
                 <div class="stats-container" id="estadisticasPanel"></div>
-                <div id="contenedorCasos" class="case-list grid-view"></div>
+                <div class="case-list grid-view" id="contenedorCasos"></div>
             </div>
         </div>
     </div>
 
-    <!-- MODALES[cite: 2] -->
-    <div class="modal-overlay" id="modalKitLitigio"><div class="modal-content">... (Contenido KitLitigio)</div></div>
-
     <script>
-        // CONFIGURACIÓN IPC[cite: 2]
         const IPC_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTdNthPefIWQeMwHGvb9u28aPwn6tCOgTXpirgCAZVDzm4_LK51uTNsA70BhZg37581zj9k2SaC-UKa/pub?output=csv";
         let tablaIPC = [];
         const formatter = new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', minimumFractionDigits: 0 });
@@ -264,13 +272,13 @@
                     const cols = f.split(',');
                     return { fecha: cols[0].trim(), valor: parseFloat(cols[1]) };
                 });
-            } catch (e) { console.error("Error cargando IPC:", e); }
+            } catch (e) { console.error("Error IPC:", e); }
         }
 
         function buscarIPC(fechaInput) {
             if (!fechaInput) return null;
-            const partes = fechaInput.split('-'); // yyyy-mm-dd
-            const fechaBusqueda = `01/${partes[1]}/${partes[0]}`; 
+            const partes = fechaInput.split('-');
+            const fechaBusqueda = `01/${partes[1]}/${partes[0]}`;
             const registro = tablaIPC.find(r => r.fecha === fechaBusqueda);
             return registro ? registro.valor : null;
         }
@@ -300,27 +308,23 @@
             }
         }
 
+        const tablaEV = { 57:{M:25.50,F:29.70}, 62:{M:21.30,F:25.30} }; // Simplificada[cite: 3]
+
         function liquidar() {
+            const S = parseFloat(document.getElementById("semanasTraslado").value);
+            const E = parseInt(document.getElementById("edadTraslado").value);
+            const enom = parseInt(document.getElementById("edadNomina").value);
             const sexo = document.getElementById("sexo").value;
             const Er = (sexo === 'M') ? 62 : 57;
-            const E = parseInt(document.getElementById("edadTraslado").value);
-            const S = parseFloat(document.getElementById("semanasTraslado").value);
-            const mRPM = parseFloat(document.getElementById("mesadaRPM").value);
-            const mRAIS = parseFloat(document.getElementById("mesadaRAIS").value);
             const ipcI = parseFloat(document.getElementById("ipcInicial").value);
             const ipcF = parseFloat(document.getElementById("ipcFinal").value);
 
-            // FÓRMULA PP[cite: 2]
             const pp = (0.5 * Math.pow(S/1300, 0.5)) * Math.pow(2, -Math.abs(E-Er)/100);
-            
-            // CÁLCULO BOLSA (Expectativa simplificada para el ejemplo)[cite: 2]
-            const diferencia = mRPM - mRAIS;
-            const historial = diferencia * 13 * 22 * pp; 
-
-            // INDEXACIÓN[cite: 2]
+            const diferencia = parseFloat(document.getElementById("mesadaRPM").value) - parseFloat(document.getElementById("mesadaRAIS").value);
+            const ev = tablaEV[enom] ? tablaEV[enom][sexo] : 22;
+            const historial = diferencia * ev * 13 * pp;
             const totalIndexado = isNaN(ipcI) || isNaN(ipcF) ? historial : historial * (ipcF / ipcI);
 
-            // RENDERIZADO[cite: 2]
             document.getElementById("resNombre").innerText = document.getElementById("nombre").value;
             document.getElementById("resPP").innerText = (pp * 100).toFixed(2) + "%";
             document.getElementById("resHistorial").innerText = formatter.format(historial);
@@ -330,23 +334,24 @@
             document.getElementById("resIPCFin").innerText = ipcF || "N/A";
             document.getElementById("resTotal").innerText = formatter.format(totalIndexado);
 
+            window.indemnizacionActual = totalIndexado;
             document.getElementById("welcomePanel").style.display = "none";
             document.getElementById("resultadoWrapper").style.display = "flex";
+            return true;
         }
 
+        function liquidarYOcultarSidebar() { if (liquidar()) document.getElementById("sidebar").classList.add("collapsed"); }
         function toggleSidebar() { document.getElementById("sidebar").classList.toggle("collapsed"); }
         function cerrarSesion() { sessionStorage.clear(); window.location.href = "index.html"; }
         function nuevoCaso() { location.reload(); }
-        function mostrarDashboard() { document.getElementById("welcomePanel").style.display = "none"; document.getElementById("dashboardPanel").style.display = "flex"; }
         
-        async function guardarDictamen() {
+        async function guardarDictamen(e) {
+            if(e) e.preventDefault();
             const data = {
                 nombre: document.getElementById("nombre").value,
-                referencia: document.getElementById("referencia").value,
                 fechaIndexacion: document.getElementById("fechaIndexacion").value,
                 fechaNomina: document.getElementById("fechaNomina").value,
-                semanasTraslado: document.getElementById("semanasTraslado").value,
-                // ...otros campos se mapean aquí para el JSON[cite: 2]
+                indemnizacionTotal: window.indemnizacionActual
             };
             const blob = new Blob([JSON.stringify(data)], {type: "application/json"});
             saveAs(blob, `Oportuno_${data.nombre}.json`);
@@ -354,3 +359,4 @@
     </script>
 </body>
 </html>
+```[cite: 3]
