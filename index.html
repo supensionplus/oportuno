@@ -262,18 +262,18 @@
 
                 loaderDiv.style.display = "none";
 
-                if (accesoConcedido) {
-                    // SE OTORGA EL PASE VIP DE SEGURIDAD
-                    sessionStorage.setItem("acceso_oportuno", "autorizado");
-                    
-                    alert(mensajeExito);
-                    // TELETRANSPORTA EXACTAMENTE AL ARCHIVO OPORT04.HTML
-                    window.location.href = "oportuno.html"; 
-                } else {
-                    errorDiv.innerText = "❌ Usuario o contraseña incorrectos.";
-                    errorDiv.style.display = "block";
-                }
-
+if (accesoConcedido) {
+    // 1. Guardamos el pase de acceso
+    sessionStorage.setItem("acceso_oportuno", "autorizado");
+    
+    // 2. GUARDAMOS EL TIPO Y EL USUARIO PARA QUE OPORTUNO.HTML LOS LEA
+    // Usamos localStorage porque es más persistente y fácil de leer después
+    localStorage.setItem("usuarioLogueado", dbUser);
+    localStorage.setItem("tipoUsuario", dbTipo); 
+    
+    alert(mensajeExito);
+    window.location.href = "oportuno.html"; 
+}
             } catch (error) {
                 loaderDiv.style.display = "none";
                 errorDiv.innerText = "❌ Error de conexión con el servidor. Revisa tu internet e intenta de nuevo.";
