@@ -262,18 +262,14 @@
 
                 loaderDiv.style.display = "none";
 
-if (accesoConcedido) {
-    // 1. Guardamos el pase de acceso
-    sessionStorage.setItem("acceso_oportuno", "autorizado");
-    
-    // 2. GUARDAMOS EL TIPO Y EL USUARIO PARA QUE OPORTUNO.HTML LOS LEA
-    // Usamos localStorage porque es más persistente y fácil de leer después
-    localStorage.setItem("usuarioLogueado", dbUser);
-    localStorage.setItem("tipoUsuario", dbTipo); 
-    
-    alert(mensajeExito);
-    window.location.href = "oportuno.html"; 
-}
+            if (accesoConcedido) {
+                sessionStorage.setItem("acceso_oportuno", "autorizado");
+                
+                // Esto es lo único que necesita el nuevo código de oportuno.html
+                localStorage.setItem("tipoUsuario", dbTipo); 
+                
+                window.location.href = "oportuno.html"; 
+            }
             } catch (error) {
                 loaderDiv.style.display = "none";
                 errorDiv.innerText = "❌ Error de conexión con el servidor. Revisa tu internet e intenta de nuevo.";
