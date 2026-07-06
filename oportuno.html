@@ -732,23 +732,30 @@
             }
         };
 
-        window.onload = async () => {
-            try {
-                await idb.init();
-                directorioHandle = await idb.get("carpetaTrabajo");
-                let tipoUsuarioDB = await idb.get("Tipo");
-                if (!tipoUsuarioDB) {
-                    tipoUsuarioDB = 'A'; 
-                    await idb.set("Tipo", tipoUsuarioDB);
-                }
-                if (tipoUsuarioDB === 'A') {
-                    document.getElementById('btnUsuarios').style.display = 'inline-flex';
-                }
-            } catch(e) {
-                console.warn("IndexedDB sin acceso local o inicialización fallida.", e);
-            }
-        };
+window.onload = async () => {
+    try {
+        await idb.init();
+        directorioHandle = await idb.get("carpetaTrabajo");
+        
+        // 1. Obtenemos el usuario de la base de datos (IndexedDB)
+        let tipoUsuarioDB = await idb.get("Tipo");
+        let nombreUsuario = await idb.get("Usuario"); // Asegúrate de tener guardado el nombre aquí
 
+        // 2. Referencia al botón
+        const btnUsuarios = document.getElementById('btnUsuarios');
+
+        // 3. Validación lógica: 
+        // Solo mostramos si el tipo es 'A' Y el nombre es 'canoasesor'
+        if (tipoUsuarioDB === 'A' && nombreUsuario === "canoasesor") {
+            btnUsuarios.style.display = 'inline-flex';
+        } else {
+            btnUsuarios.style.display = 'none';
+        }
+
+    } catch(e) {
+        console.warn("Error en la inicialización:", e);
+    }
+};
         async function cambiarCarpetaTrabajo() {
             try {
                 directorioHandle = await window.showDirectoryPicker({ mode: "readwrite" });
