@@ -203,8 +203,7 @@
 
             loaderDiv.style.display = "block";
 
-            try {
-                // Descargamos tu base de datos pasando por el nuevo puente
+            try { // <--- ESTA LLAVE DE APERTURA ES LA QUE FALTABA
                 const response = await fetch(dbUrl);
                 
                 if (!response.ok) {
@@ -215,13 +214,13 @@
                 const filas = data.split('\n');
                 let accesoConcedido = false;
                 let mensajeExito = "";
+                let dbTipoCapturado = ""; // Variable temporal para guardar el tipo
 
                 const hoy = new Date();
                 hoy.setHours(0,0,0,0);
 
                 let numeroFila = 0;
                 for (const fila of filas) {
-                    // Saltamos la fila 0 porque tiene los títulos
                     if (numeroFila === 0) { 
                         numeroFila++; 
                         continue; 
@@ -230,7 +229,6 @@
                     const columnas = fila.split(',');
                     
                     if (columnas.length >= 5) {
-                        // Usamos .at() para extraer los datos de forma segura
                         const dbCliente = columnas.at(0).trim();       
                         const dbUser = columnas.at(1).trim();          
                         const dbPass = columnas.at(2).trim();          
@@ -238,22 +236,20 @@
                         const dbVencimiento = columnas.at(4).trim();   
 
                         if (userIngresado === dbUser && passIngresado === dbPass) {
-                            
                             const partesFecha = dbVencimiento.split('/');
                             if(partesFecha.length === 3) {
-                                // Evaluamos la columna 'Vence'
                                 const fechaVencimiento = new Date(partesFecha.at(2), partesFecha.at(1) - 1, partesFecha.at(0));
                                 
                                 if (hoy > fechaVencimiento) {
-                                    errorDiv.innerText = `❌ Tu suscripción venció el ${dbVencimiento}. Por favor, renueva tu acceso.`;
+                                    errorDiv.innerText = `❌ Tu suscripción venció el ${dbVencimiento}.`;
                                     errorDiv.style.display = "block";
                                     loaderDiv.style.display = "none";
                                     return; 
                                 }
                             }
-
                             accesoConcedido = true;
-                            mensajeExito = `✅ ¡Bienvenido(a), ${dbCliente}!\nRedirigiendo a Oportuno...`;
+                            dbTipoCapturado = dbTipo; // Capturamos el tipo aquí
+                            mensajeExito = `✅ ¡Bienvenido(a), ${dbCliente}!`;
                             break;
                         }
                     }
@@ -262,18 +258,18 @@
 
                 loaderDiv.style.display = "none";
 
-            if (accesoConcedido) {
-                sessionStorage.setItem("acceso_oportuno", "autorizado");
-                
-                // Esto es lo único que necesita el nuevo código de oportuno.html
-                localStorage.setItem("tipoUsuario", dbTipo); 
-                
-                window.location.href = "oportuno.html"; 
-            }
-            }
-            catch (error) {
+                if (accesoConcedido) {
+                    sessionStorage.setItem("acceso_oportuno", "autorizado");
+                    localStorage.setItem("tipoUsuario", dbTipoCapturado); 
+                    alert(mensajeExito);
+                    window.location.href = "oportuno.html"; 
+                } else {
+                    errorDiv.innerText = "❌ Usuario o contraseña incorrectos.";
+                    errorDiv.style.display = "block";
+                }
+            } catch (error) { // <--- AQUÍ SE CIERRA EL TRY Y COMIENZA EL CATCH
                 loaderDiv.style.display = "none";
-                errorDiv.innerText = "❌ Error de conexión con el servidor. Revisa tu internet e intenta de nuevo.";
+                errorDiv.innerText = "❌ Error de conexión con el servidor.";
                 errorDiv.style.display = "block";
                 console.error(error);
             }
